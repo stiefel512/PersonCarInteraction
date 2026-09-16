@@ -70,10 +70,12 @@ class MatchResult:
 
 
 # How far outside a predicted box a GT anchor may fall and still be taken to
-# refer to the same actor, as a fraction of the box's own size. Generous,
-# because the anchors are spatial hints placed by hand, sometimes on a frame a
-# few frames outside the event span (see the labeling-protocol audit log).
-ANCHOR_TOL = 0.5
+# refer to the same actor, as a fraction of the box's own size. Some slack is
+# needed because the anchors are hand-placed hints, sometimes set on a frame a
+# few outside the event span (labeling-protocol audit log). It stays modest
+# because the prediction side is already a UNION box over the whole span, which
+# is generous on its own.
+ANCHOR_TOL = 0.25
 
 
 def anchors_agree(pred: Interaction, gt: GTEvent, tol: float = ANCHOR_TOL) -> bool:

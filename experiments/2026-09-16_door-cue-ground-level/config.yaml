@@ -1,0 +1,42 @@
+experiment: open-vocab door cue on ground-level clips
+date: '2026-09-16'
+seed: 0
+model_id: IDEA-Research/grounding-dino-base
+revision: 12bdfa3120f3e7ec7b434d90674b3396eccf88eb
+prompt: open car door. person. car.
+box_threshold: 0.27
+text_threshold: 0.25
+frames:
+  HIu4lM4B8hA_1:
+  - 0
+  - 10
+  - 20
+  - 30
+  - 38
+  - 87
+  - 88
+  - 94
+  - 100
+  - 106
+  - 136
+  - 185
+  iMGR_0AG3a8_2_3:
+  - 21
+  - 36
+  - 51
+  - 66
+  - 99
+  - 100
+  - 101
+  - 102
+  - 105
+  - 130
+  - 155
+  - 180
+  mKzCQKTHizw_1:
+  - 118
+  - 145
+  - 172
+  - 199
+rationale: arm C on gt1125_06 tested the model's weakest regime (aerial, small objects);
+  this tests the regime the cue would actually be adopted for

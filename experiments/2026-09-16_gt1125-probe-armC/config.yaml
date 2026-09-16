@@ -1,0 +1,24 @@
+experiment: gt1125_06 three-arm detection probe
+date: '2026-09-16'
+clip: gt1125_06
+seed: 0
+frames:
+- 0
+- 120
+- 222
+- 239
+- 360
+- 480
+- 599
+det_conf: 0.35
+tile: 704
+overlap: 0.25
+detector_model_id: Roboflow/rf-detr-large
+openvocab_model_id: IDEA-Research/grounding-dino-base
+openvocab_phrases:
+- open car door
+- person
+- car
+device: cuda:0
+decodes_from: Videos/gt1125_06.mp4 at native 3840x2160 (NOT data/frames/, which is
+  downscaled to 1600 wide)

@@ -92,7 +92,7 @@ def near_spans(pf: PairFeatures, tau_near: float, tau_far: float) -> list[Span]:
 
 def propose_pair(pf: PairFeatures, person: Track, meta: ClipMeta,
                  tau_near: float, tau_far: float, min_dwell_s: float,
-                 door_delta_thresh: float) -> list[Candidate]:
+                 door_conf_thresh: float) -> list[Candidate]:
     """Apply all four rules to one pair and merge the spans they produce."""
     spans = near_spans(pf, tau_near, tau_far)
     if not spans:
@@ -114,9 +114,13 @@ def propose_pair(pf: PairFeatures, person: Track, meta: ClipMeta,
         if abs(person.birth_frame - sp[0]) <= tol:
             hits.append(R3_BIRTH_NEAR)
 
+        # R4's feature is now an open-vocabulary "open car door" confidence,
+        # not a pixel-change statistic (see the door-cue findings). NaN still
+        # means "not measured" -- the cue did not run -- and is skipped rather
+        # than read as zero.
         dd = pf.door_delta[sp[0]:sp[1] + 1]
         if dd.size and not np.all(np.isnan(dd)):
-            if float(np.nanmax(dd)) >= door_delta_thresh:
+            if float(np.nanmax(dd)) >= door_conf_thresh:
                 hits.append(R4_DOOR_CHANGE)
 
         if hits:
@@ -159,11 +163,11 @@ def propose_pair(pf: PairFeatures, person: Track, meta: ClipMeta,
 
 def propose(pairs: Sequence[tuple[PairFeatures, Track]], meta: ClipMeta,
             tau_near: float, tau_far: float, min_dwell_s: float,
-            door_delta_thresh: float) -> list[Candidate]:
+            door_conf_thresh: float) -> list[Candidate]:
     out: list[Candidate] = []
     for pf, person in pairs:
         out.extend(propose_pair(pf, person, meta, tau_near, tau_far,
-                                min_dwell_s, door_delta_thresh))
+                                min_dwell_s, door_conf_thresh))
     # Deterministic ordering: the pipeline's output order must not depend on
     # dict iteration or track-creation order.
     out.sort(key=lambda c: (c.frame_start, c.frame_end, c.person_id, c.vehicle_id))

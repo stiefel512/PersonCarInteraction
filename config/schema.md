@@ -48,7 +48,7 @@ Searched by LOCO threshold selection and any later sweep.
 | `tau_far` | float | 0.30 | [0.10, 0.80] | contact-leave (hysteresis) |
 | `min_dwell_s` | float | 0.5 | [0.3, 0.7] | R1 dwell trigger, seconds |
 | `smooth_window_s` | float | 0.4 | [0.0, 0.8] | feature smoothing, seconds |
-| `door_delta_thresh` | float | 0.12 | [0.04, 0.40] | R4 vehicle-region change |
+| `door_conf_thresh` | float | 0.30 | [0.20, 0.70] | R4 open-vocab 'open car door' confidence. Replaced `door_delta_thresh` (pixel-change) after the door-cue probe; observed hits cluster at 0.28-0.60, so the usable range is narrow. |
 | `context_pad_s` | float | 1.0 | [0.0, 3.0] | span padding for the VLM |
 | `n_vlm_frames` | int | 12 | [4, 24] | frames sampled per candidate |
 | `crop_margin` | float | 0.25 | [0.0, 0.6] | box dilation before crop |

@@ -14,7 +14,7 @@ import math
 import numpy as np
 
 from ..config import smooth_frames
-from ..geometry import Box, d_norm, iou, speed_bl_s
+from ..geometry import Box, area, d_norm, iou, speed_bl_s
 from ..schema import ClipMeta
 from .spans import moving_average
 
@@ -137,10 +137,52 @@ def pair_features(person: Track, vehicle: Track, meta: ClipMeta,
     )
 
 
+def door_cue_series(door_dets: dict[int, list[tuple[Box, float]]], vehicle: Track,
+                    n_frames: int, min_ios: float = 0.5) -> np.ndarray:
+    """Per-frame open-door confidence for one vehicle, from open-vocab detections.
+
+    Replaces `door_delta_series` as R4's feature (see
+    `experiments/2026-09-16_door-cue-ground-level/findings.md`). The pixel-change
+    heuristic needed a static camera *and* a parked vehicle, which after the
+    camera-motion correction left R4 dead on 3 of 8 clips -- including
+    `mKzCQKTHizw_1`, which contains a door event. A text-prompted detector is
+    camera-motion-independent, so R4 now fires on 7 of 8 clips and the
+    static-camera branch is gone.
+
+    `door_dets` maps frame index to (box, confidence) pairs. A detection is
+    attributed to this vehicle when it is mostly *inside* the vehicle's box --
+    intersection over the door box's own area, not IoU, because an open door is
+    a small region of a large vehicle and their IoU is necessarily tiny.
+
+    Frames with no detection are 0.0, not NaN: the detector ran and found no
+    door, which is evidence of absence. NaN is reserved for "not measured",
+    which is now only the case where the cue was never run.
+    """
+    out = np.zeros(n_frames)
+    vbox_at = dict(zip(vehicle.frames, vehicle.boxes))
+    for f, dets in door_dets.items():
+        if not (0 <= f < n_frames):
+            continue
+        vb = vbox_at.get(f)
+        if vb is None:
+            continue
+        best = 0.0
+        for box, conf in dets:
+            ix = max(0.0, min(vb[2], box[2]) - max(vb[0], box[0]))
+            iy = max(0.0, min(vb[3], box[3]) - max(vb[1], box[1]))
+            a = area(box)
+            if a > 0 and (ix * iy) / a >= min_ios:
+                best = max(best, conf)
+        out[f] = best
+    return out
+
+
 def door_delta_series(frames_gray: dict[int, np.ndarray], vehicle: Track,
                       n_frames: int, static_camera: bool,
                       scale: float = 1.0) -> np.ndarray:
-    """Mean absolute deviation of the vehicle-box region from its temporal median.
+    """RETIRED -- superseded by `door_cue_series`. Kept for the ablation only.
+
+    Mean absolute deviation of the vehicle-box region from its temporal median.
 
     Valid ONLY when the camera is static and the vehicle is parked. Otherwise
     every pixel in the box changes for reasons that have nothing to do with a

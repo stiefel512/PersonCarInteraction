@@ -48,7 +48,7 @@ tunable:
   tau_far: 0.30          # constraint: must exceed tau_near
   min_dwell_s: 0.5       # constraint: must be < 0.75 (shortest GT positive)
   smooth_window_s: 0.4   # floored at 3 frames per clip at runtime
-  door_delta_thresh: 0.12
+  door_conf_thresh: 0.30    # open-vocab 'open car door' confidence
   context_pad_s: 1.0
   n_vlm_frames: 12
   crop_margin: 0.25

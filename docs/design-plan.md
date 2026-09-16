@@ -295,7 +295,38 @@ Each one corrects a statement above.
    establishes that the failure mode is silent corruption rather than graceful
    degradation, which is what the "costs almost nothing" claim assumed away.)
 
-4. **`ffmpeg 9` removed `-vsync`.** Both `pvi/video.py` and the existing
+4. **§6.7 is RESOLVED: R4 becomes the open-vocabulary text prompt.** This was
+   the one decision the plan deferred to evidence, and the evidence is in
+   (`experiments/2026-09-16_door-cue-ground-level/findings.md`).
+   The answer is not the binary the plan expected. Grounding DINO grounds
+   `"open car door"` reliably on **ground-level** clips — 24/28 frames across
+   three clips, boxes verified by eye to land on the actual open door, including
+   on the 352×288 grayscale clip — and **fails on the aerial clip**, where it
+   missed a clearly open door and returned the token fragment `open`.
+   Adopted anyway, because the incumbent heuristic is worse off: needing a static
+   camera *and* a parked vehicle, it is dead on 3 of 8 clips after the
+   camera-motion correction, one of which contains a door event. The text prompt
+   lifts R4 from 5/8 clips to 7/8 and deletes the static-camera branch.
+   The heuristic is retired rather than kept as a fallback — the two fail on
+   *disjoint* clips, so keeping both would preserve the branch the change exists
+   to remove, for one clip's benefit. `gt1125_06` simply has no door cue, which
+   costs no recall against the current GT (its 2 positives are both
+   `enter_vehicle`) but is a stated limitation.
+   Consequences: `door_delta_thresh` (pixel change, [0.04, 0.40]) is replaced by
+   `door_conf_thresh` (detector confidence, default 0.30, [0.20, 0.70]); the cue
+   runs only on frames already inside a near-span, so it costs a Grounding DINO
+   pass over a fraction of frames rather than all of them.
+
+5. **Evaluation matching needed the GT anchors, and the box statistic matters.**
+   `problem-definition.md` §3 always required a match to share the
+   person-vehicle pair; it was simply unimplemented, and on `NmlzoaDcOuI_6` a
+   prediction about a *different vehicle* won a match on temporal overlap alone.
+   Implemented via the normalized anchors. The prediction side must be the
+   **union** box over the span, not the median: on the panning `mKzCQKTHizw_1`
+   the median person box missed the frame-118 anchor by 0.004 in x and discarded
+   a tIoU-0.81 correct match.
+
+6. **`ffmpeg 9` removed `-vsync`.** Both `pvi/video.py` and the existing
    `tools/extract_frames.py` used `-vsync 0`, which now fails with
    "Unrecognized option" and yields **zero frames** rather than an error the
    caller notices. Both use `-fps_mode passthrough`.

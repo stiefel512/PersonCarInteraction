@@ -6,7 +6,7 @@
     "width": 1280,
     "height": 720
   },
-  "config_hash": "sha256:b2ad72e0a6f0c6df3ce50883fec14b6c5e39ed49442a8241a4a2ef56c3595dbc",
+  "config_hash": "sha256:986e4a01bac1f4f801529d6bb83649a44d8f02509da3e18fffb9df2a228076f8",
   "interactions": [
     {
       "interaction_id": "NmlzoaDcOuI_6__i001",
@@ -38,16 +38,16 @@
         "death_at_clip_end": false,
         "max_iou": 0.3239,
         "person_box_norm": [
-          0.27669,
-          0.16229,
-          0.40248,
-          0.67321
+          0.20317,
+          0.13653,
+          0.76623,
+          0.73692
         ],
         "vehicle_box_norm": [
-          0.0013,
-          0.20485,
-          0.4497,
-          0.69628
+          0.00079,
+          0.18244,
+          0.47932,
+          0.6992
         ]
       }
     },
@@ -81,23 +81,23 @@
         "death_at_clip_end": false,
         "max_iou": 0.0039,
         "person_box_norm": [
-          0.26089,
-          0.16236,
-          0.38827,
-          0.67318
+          0.20317,
+          0.13708,
+          0.52846,
+          0.69059
         ],
         "vehicle_box_norm": [
-          0.15856,
-          0.001,
-          0.43791,
-          0.12563
+          -0.0001,
+          0.00023,
+          0.6092,
+          0.17658
         ]
       }
     },
     {
       "interaction_id": "NmlzoaDcOuI_6__i003",
       "event_group_id": "NmlzoaDcOuI_6__g003",
-      "type": "attend_vehicle",
+      "type": "open_close_door",
       "frame_start": 71,
       "frame_end": 91,
       "time_start_s": 11.833,
@@ -111,10 +111,10 @@
         "description": "car track 10000, moving",
         "class": "car"
       },
-      "note": "accepted by R1_dwell (geometric ablation arm; no semantic check)",
+      "note": "accepted by R4_door_change (geometric ablation arm; no semantic check)",
       "confidence": 0.5,
       "evidence": {
-        "rule": "R1_dwell",
+        "rule": "R4_door_change",
         "min_d_norm": 0.0,
         "dwell_s": 3.5,
         "vehicle_is_static": false,
@@ -124,16 +124,16 @@
         "death_at_clip_end": true,
         "max_iou": 0.1199,
         "person_box_norm": [
-          0.88047,
-          0.03229,
-          0.95518,
-          0.37014
+          0.83123,
+          0.00191,
+          1.00025,
+          0.43932
         ],
         "vehicle_box_norm": [
-          0.70519,
-          0.0006,
-          0.90914,
-          0.1547
+          0.5248,
+          -0.00011,
+          0.99891,
+          0.25545
         ]
       }
     },
@@ -167,16 +167,16 @@
         "death_at_clip_end": true,
         "max_iou": 0.2326,
         "person_box_norm": [
-          0.81506,
-          0.00734,
-          0.88372,
-          0.33168
+          0.80008,
+          0.00052,
+          0.89787,
+          0.35632
         ],
         "vehicle_box_norm": [
-          0.77177,
-          0.00044,
-          0.96822,
-          0.11823
+          0.69451,
+          -0.00011,
+          0.99891,
+          0.16474
         ]
       }
     },
@@ -210,16 +210,16 @@
         "death_at_clip_end": false,
         "max_iou": 0.0288,
         "person_box_norm": [
-          0.95703,
-          0.08666,
-          0.99988,
-          0.37666
+          0.95648,
+          0.06948,
+          1.00015,
+          0.43905
         ],
         "vehicle_box_norm": [
-          0.77177,
-          0.00043,
-          0.96822,
-          0.11823
+          0.73664,
+          -0.00011,
+          0.99235,
+          0.13246
         ]
       }
     },
@@ -253,16 +253,16 @@
         "death_at_clip_end": false,
         "max_iou": 0.0927,
         "person_box_norm": [
-          0.85027,
-          0.04796,
-          0.88343,
-          0.2053
+          0.84989,
+          0.04249,
+          0.88718,
+          0.20535
         ],
         "vehicle_box_norm": [
-          0.81907,
-          0.00048,
-          0.99561,
-          0.08854
+          0.80119,
+          0.00044,
+          0.99891,
+          0.09907
         ]
       }
     }

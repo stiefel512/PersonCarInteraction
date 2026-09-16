@@ -1,0 +1,650 @@
+{
+  "HIu4lM4B8hA_1": {
+    "resolution": "352x288",
+    "n_frames": 12,
+    "frames_with_a_door_hit": 12,
+    "total_door_hits": 17,
+    "per_frame": {
+      "0": {
+        "by_label": {
+          "open car door": 1,
+          "car": 6
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.6036,
+            "box": [
+              60.3,
+              23.7,
+              126.8,
+              105.4
+            ]
+          }
+        ]
+      },
+      "10": {
+        "by_label": {
+          "open car door": 1,
+          "car": 6,
+          "person": 2
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.5025,
+            "box": [
+              52.8,
+              22.9,
+              124.3,
+              101.6
+            ]
+          }
+        ]
+      },
+      "20": {
+        "by_label": {
+          "person": 1,
+          "car": 6,
+          "open car door": 1,
+          "open door": 1
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.4306,
+            "box": [
+              51.7,
+              20.6,
+              133.5,
+              101.1
+            ]
+          },
+          {
+            "label": "open door",
+            "conf": 0.2725,
+            "box": [
+              52.6,
+              21.0,
+              104.0,
+              101.5
+            ]
+          }
+        ]
+      },
+      "30": {
+        "by_label": {
+          "person": 2,
+          "car": 6,
+          "open car door": 3
+        },
+        "n_door_hits": 3,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3499,
+            "box": [
+              51.8,
+              20.7,
+              128.7,
+              102.2
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.3151,
+            "box": [
+              52.2,
+              20.9,
+              141.3,
+              106.8
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.2905,
+            "box": [
+              52.2,
+              20.1,
+              134.3,
+              141.5
+            ]
+          }
+        ]
+      },
+      "38": {
+        "by_label": {
+          "person": 2,
+          "car": 5,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.4023,
+            "box": [
+              51.2,
+              20.5,
+              134.8,
+              101.2
+            ]
+          }
+        ]
+      },
+      "87": {
+        "by_label": {
+          "person": 2,
+          "car": 7,
+          "open car door": 2
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.4103,
+            "box": [
+              51.8,
+              20.5,
+              130.6,
+              98.7
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.3006,
+            "box": [
+              49.1,
+              21.3,
+              147.1,
+              189.1
+            ]
+          }
+        ]
+      },
+      "88": {
+        "by_label": {
+          "person": 2,
+          "car": 7,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3378,
+            "box": [
+              60.2,
+              21.1,
+              130.9,
+              98.5
+            ]
+          }
+        ]
+      },
+      "94": {
+        "by_label": {
+          "person": 4,
+          "car": 6,
+          "open car door": 2
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3328,
+            "box": [
+              51.4,
+              22.7,
+              128.2,
+              104.1
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.312,
+            "box": [
+              49.4,
+              20.4,
+              145.9,
+              99.0
+            ]
+          }
+        ]
+      },
+      "100": {
+        "by_label": {
+          "open car door": 1,
+          "person": 3,
+          "car": 6
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.5254,
+            "box": [
+              52.4,
+              21.3,
+              112.6,
+              100.0
+            ]
+          }
+        ]
+      },
+      "106": {
+        "by_label": {
+          "person": 2,
+          "open car door": 1,
+          "car": 7
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.6618,
+            "box": [
+              52.0,
+              21.0,
+              129.4,
+              100.1
+            ]
+          }
+        ]
+      },
+      "136": {
+        "by_label": {
+          "person": 1,
+          "open car door": 1,
+          "car": 5
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.6859,
+            "box": [
+              51.9,
+              21.7,
+              133.5,
+              101.2
+            ]
+          }
+        ]
+      },
+      "185": {
+        "by_label": {
+          "person": 3,
+          "car": 2,
+          "car car": 2,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.2922,
+            "box": [
+              295.4,
+              58.2,
+              352.3,
+              168.8
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "iMGR_0AG3a8_2_3": {
+    "resolution": "960x720",
+    "n_frames": 12,
+    "frames_with_a_door_hit": 8,
+    "total_door_hits": 10,
+    "per_frame": {
+      "21": {
+        "by_label": {
+          "person": 1,
+          "car car": 2,
+          "car": 3,
+          "open car door": 2
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.298,
+            "box": [
+              -0.2,
+              166.7,
+              239.7,
+              329.9
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.2763,
+            "box": [
+              -0.3,
+              418.3,
+              120.5,
+              717.2
+            ]
+          }
+        ]
+      },
+      "36": {
+        "by_label": {
+          "person": 1,
+          "car car": 2,
+          "car": 2,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.2802,
+            "box": [
+              -0.3,
+              418.5,
+              120.5,
+              716.8
+            ]
+          }
+        ]
+      },
+      "51": {
+        "by_label": {
+          "person": 1,
+          "car": 3,
+          "car car": 1,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3738,
+            "box": [
+              0.1,
+              419.4,
+              120.0,
+              717.8
+            ]
+          }
+        ]
+      },
+      "66": {
+        "by_label": {
+          "person": 2,
+          "car car": 1,
+          "car": 3,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.4019,
+            "box": [
+              -0.5,
+              419.6,
+              120.9,
+              717.9
+            ]
+          }
+        ]
+      },
+      "99": {
+        "by_label": {
+          "person": 2,
+          "car car": 1,
+          "car": 2,
+          "open car car": 1
+        },
+        "n_door_hits": 0,
+        "door_hits": []
+      },
+      "100": {
+        "by_label": {
+          "person": 2,
+          "car car": 1,
+          "car": 2,
+          "open car car": 1
+        },
+        "n_door_hits": 0,
+        "door_hits": []
+      },
+      "101": {
+        "by_label": {
+          "person": 2,
+          "car car": 1,
+          "car": 3,
+          "open car car": 1
+        },
+        "n_door_hits": 0,
+        "door_hits": []
+      },
+      "102": {
+        "by_label": {
+          "person": 2,
+          "car": 4,
+          "car car": 1
+        },
+        "n_door_hits": 0,
+        "door_hits": []
+      },
+      "105": {
+        "by_label": {
+          "person": 1,
+          "car car": 2,
+          "car": 3,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3334,
+            "box": [
+              -0.5,
+              420.4,
+              120.9,
+              718.0
+            ]
+          }
+        ]
+      },
+      "130": {
+        "by_label": {
+          "person": 1,
+          "open car door": 1,
+          "car": 8
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.446,
+            "box": [
+              101.2,
+              209.1,
+              147.2,
+              302.8
+            ]
+          }
+        ]
+      },
+      "155": {
+        "by_label": {
+          "car": 5,
+          "open car door": 2,
+          "person": 5
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.4597,
+            "box": [
+              498.3,
+              299.9,
+              588.3,
+              447.1
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.3184,
+            "box": [
+              101.7,
+              207.6,
+              154.7,
+              300.1
+            ]
+          }
+        ]
+      },
+      "180": {
+        "by_label": {
+          "person": 2,
+          "open car door car": 1,
+          "car": 4
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door car",
+            "conf": 0.4816,
+            "box": [
+              0.5,
+              164.9,
+              241.8,
+              346.6
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "mKzCQKTHizw_1": {
+    "resolution": "640x360",
+    "n_frames": 4,
+    "frames_with_a_door_hit": 4,
+    "total_door_hits": 7,
+    "per_frame": {
+      "118": {
+        "by_label": {
+          "person": 1,
+          "car": 1,
+          "open car door": 1
+        },
+        "n_door_hits": 1,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3142,
+            "box": [
+              293.7,
+              -0.0,
+              334.1,
+              60.6
+            ]
+          }
+        ]
+      },
+      "145": {
+        "by_label": {
+          "car": 1,
+          "person": 1,
+          "open car door": 2
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3688,
+            "box": [
+              208.7,
+              -1.7,
+              300.3,
+              101.3
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.345,
+            "box": [
+              210.4,
+              1.2,
+              265.0,
+              89.4
+            ]
+          }
+        ]
+      },
+      "172": {
+        "by_label": {
+          "car": 1,
+          "person": 1,
+          "open car door": 2
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3193,
+            "box": [
+              219.7,
+              -0.6,
+              288.2,
+              93.9
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.2799,
+            "box": [
+              162.4,
+              38.9,
+              232.1,
+              128.3
+            ]
+          }
+        ]
+      },
+      "199": {
+        "by_label": {
+          "car": 1,
+          "open car door": 2
+        },
+        "n_door_hits": 2,
+        "door_hits": [
+          {
+            "label": "open car door",
+            "conf": 0.3884,
+            "box": [
+              156.3,
+              8.7,
+              258.2,
+              112.7
+            ]
+          },
+          {
+            "label": "open car door",
+            "conf": 0.3076,
+            "box": [
+              185.2,
+              35.5,
+              254.4,
+              110.4
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

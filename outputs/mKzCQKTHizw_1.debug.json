@@ -1,0 +1,40 @@
+{
+  "clip_id": "mKzCQKTHizw_1",
+  "judge": "geometric",
+  "detector_revision": "f62f7dd5252b61097cbace33886045816dadbde9",
+  "static_camera": false,
+  "tiled": false,
+  "cmc_enabled": true,
+  "n_detections": 415,
+  "n_person_tracks": 1,
+  "n_vehicle_tracks": 1,
+  "n_door_cue_frames": 138,
+  "n_door_detections": 255,
+  "n_candidates": 1,
+  "n_accepted": 1,
+  "tracks": [
+    {
+      "id": 0,
+      "cls": "person",
+      "birth": 116,
+      "death": 185,
+      "n_observed": 70,
+      "span_frames": 70,
+      "gap_frames": 0,
+      "centroid_motion": 0.3968,
+      "is_static": false
+    },
+    {
+      "id": 10000,
+      "cls": "car",
+      "birth": 0,
+      "death": 275,
+      "n_observed": 276,
+      "span_frames": 276,
+      "gap_frames": 0,
+      "centroid_motion": 0.1628,
+      "is_static": false
+    }
+  ],
+  "rejected": []
+}

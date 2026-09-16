@@ -85,7 +85,7 @@ class Tunables:
     tau_far: float = 0.30
     min_dwell_s: float = 0.5
     smooth_window_s: float = 0.4
-    door_delta_thresh: float = 0.12
+    door_conf_thresh: float = 0.30
     context_pad_s: float = 1.0
     n_vlm_frames: int = 12
     crop_margin: float = 0.25
@@ -100,7 +100,7 @@ TUNABLE_RANGES: dict[str, tuple[float, float]] = {
     "tau_far": (0.10, 0.80),
     "min_dwell_s": (0.3, 0.7),
     "smooth_window_s": (0.0, 0.8),
-    "door_delta_thresh": (0.04, 0.40),
+    "door_conf_thresh": (0.20, 0.70),
     "context_pad_s": (0.0, 3.0),
     "n_vlm_frames": (4, 24),
     "crop_margin": (0.0, 0.6),

@@ -42,7 +42,7 @@ def far_series():
 def test_r1_fires_on_sustained_contact():
     d = far_series()
     d[30:60] = [0.05] * 30     # 3.0 s of contact at 10 fps
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert len(out) == 1
     assert R1_DWELL in out[0].rules
 
@@ -50,7 +50,7 @@ def test_r1_fires_on_sustained_contact():
 def test_r1_does_not_fire_below_min_dwell():
     d = far_series()
     d[30:33] = [0.05] * 3      # 0.3 s, under a 0.5 s dwell
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out == []
 
 
@@ -59,7 +59,7 @@ def test_r1_fires_on_the_shortest_gt_positive_duration():
     0.5 s must let it through."""
     d = far_series()
     d[30:38] = [0.05] * 8      # 0.8 s
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R1_DWELL in out[0].rules
 
 
@@ -71,14 +71,14 @@ def test_r2_fires_when_the_person_track_ends_at_the_vehicle():
     d[40:61] = [0.05] * 21
     for i in range(61, N):
         d[i] = np.nan          # track gone
-    out = propose_pair(pf(d), track(0, 60), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, 60), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R2_DEATH_NEAR in out[0].rules
 
 
 def test_r3_fires_when_the_person_track_starts_at_the_vehicle():
     """Exit: the person appears already in contact."""
     d = [np.nan] * 40 + [0.05] * 21 + [5.0] * (N - 61)
-    out = propose_pair(pf(d), track(40, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(40, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R3_BIRTH_NEAR in out[0].rules
 
 
@@ -87,7 +87,7 @@ def test_pass_by_does_not_fire_r2_or_r3():
     dead far from the vehicle, and never in contact long enough for R1."""
     d = far_series()
     d[48:52] = [0.10] * 4      # 0.4 s brush past, under the 0.5 s dwell
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out == []
 
 
@@ -96,7 +96,7 @@ def test_long_pass_by_fires_r1_but_not_r2_r3():
     and the judge is what rejects it -- but it must not be typed enter/exit."""
     d = far_series()
     d[30:60] = [0.10] * 30
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out
     assert out[0].rules == [R1_DWELL]
     assert primary_rule(out[0]) == R1_DWELL
@@ -108,7 +108,7 @@ def test_track_born_in_contact_at_frame_zero_still_fires_r3():
     43% of the exit class. A track born already in contact with the vehicle is
     what an exit looks like."""
     d = [0.05] * 30 + far_series()[30:]
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R3_BIRTH_NEAR in out[0].rules
     assert out[0].evidence["birth_at_clip_start"] is True
 
@@ -116,7 +116,7 @@ def test_track_born_in_contact_at_frame_zero_still_fires_r3():
 def test_track_dying_in_contact_at_the_last_frame_still_fires_r2():
     d = far_series()
     d[70:] = [0.05] * (N - 70)
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R2_DEATH_NEAR in out[0].rules
     assert out[0].evidence["death_at_clip_end"] is True
 
@@ -125,7 +125,7 @@ def test_clip_edge_is_recorded_in_evidence_for_the_judge():
     """The proposer no longer decides this, so the fact must stay visible."""
     d = far_series()
     d[40:61] = [0.05] * 21
-    out = propose_pair(pf(d), track(35, 60), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(35, 60), META, 0.15, 0.30, 0.5, 0.30)
     assert out[0].evidence["birth_at_clip_start"] is False
     assert out[0].evidence["death_at_clip_end"] is False
 
@@ -135,7 +135,7 @@ def test_pass_by_still_does_not_fire_r2_r3_despite_no_edge_guard():
     what R2/R3 exist for."""
     d = far_series()
     d[48:52] = [0.10] * 4
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out == []
 
 
@@ -144,9 +144,9 @@ def test_pass_by_still_does_not_fire_r2_r3_despite_no_edge_guard():
 def test_r4_fires_on_a_door_delta_spike_while_near():
     d = far_series()
     d[30:60] = [0.05] * 30
-    door = np.full(N, 0.01)
-    door[40:45] = 0.25
-    out = propose_pair(pf(d, door), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    door = np.full(N, 0.05)
+    door[40:45] = 0.45
+    out = propose_pair(pf(d, door), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R4_DOOR_CHANGE in out[0].rules
 
 
@@ -155,15 +155,15 @@ def test_r4_is_skipped_when_door_delta_is_nan():
     not read as zero change."""
     d = far_series()
     d[30:60] = [0.05] * 30
-    out = propose_pair(pf(d, None), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d, None), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R4_DOOR_CHANGE not in out[0].rules
 
 
 def test_r4_does_not_fire_below_threshold():
     d = far_series()
     d[30:60] = [0.05] * 30
-    door = np.full(N, 0.02)
-    out = propose_pair(pf(d, door), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    door = np.full(N, 0.10)
+    out = propose_pair(pf(d, door), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert out and R4_DOOR_CHANGE not in out[0].rules
 
 
@@ -173,7 +173,7 @@ def test_hysteresis_yields_one_candidate_not_many():
     d = far_series()
     for i in range(30, 60):
         d[i] = 0.10 if i % 2 else 0.20   # oscillating inside the band
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     assert len(out) == 1
 
 
@@ -182,7 +182,7 @@ def test_primary_rule_prefers_enter_over_dwell():
     system would report attend_vehicle for everything."""
     d = far_series()
     d[40:61] = [0.05] * 21
-    out = propose_pair(pf(d), track(0, 60), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, 60), META, 0.15, 0.30, 0.5, 0.30)
     assert R1_DWELL in out[0].rules and R2_DEATH_NEAR in out[0].rules
     assert primary_rule(out[0]) == R2_DEATH_NEAR
 
@@ -190,7 +190,7 @@ def test_primary_rule_prefers_enter_over_dwell():
 def test_evidence_records_min_d_norm_and_dwell():
     d = far_series()
     d[30:60] = [0.05] * 30
-    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.12)
+    out = propose_pair(pf(d), track(0, N - 1), META, 0.15, 0.30, 0.5, 0.30)
     ev = out[0].evidence
     assert ev["min_d_norm"] == pytest.approx(0.05, abs=0.02)
     assert ev["dwell_s"] > 0.5
@@ -198,4 +198,4 @@ def test_evidence_records_min_d_norm_and_dwell():
 
 def test_no_contact_yields_no_candidates():
     assert propose_pair(pf(far_series()), track(0, N - 1), META,
-                        0.15, 0.30, 0.5, 0.12) == []
+                        0.15, 0.30, 0.5, 0.30) == []

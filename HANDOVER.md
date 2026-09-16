@@ -18,7 +18,7 @@ Task statement in `HomeTask.docx` (extract with `unzip` + strip XML).
 ## Where we are
 
 **The design plan is APPROVED (2026-09-16) and implementation is well underway.**
-The `pvi/` package is built, 181 tests pass, and the pipeline runs end to end on
+The `pvi/` package is built, 190 tests pass, and the pipeline runs end to end on
 a real clip with the geometric (ablation) judge. The VLM arm is not yet
 exercised — weights were still downloading.
 
@@ -39,8 +39,9 @@ pvi/track/    tracker.py gmc.py
 pvi/propose/  spans.py features.py rules.py
 pvi/judge/    base.py vlm.py geometric.py prompt.py
 pvi/evaluate/ match.py metrics.py run.py
-tests/        181 passing
-tools/        probe_gt1125.py camera_motion_report.py (+ the pre-existing three)
+tests/        190 passing
+tools/        probe_gt1125.py probe_door_cue.py camera_motion_report.py
+              (+ the pre-existing extract_frames / label_gt / validate_gt)
 ```
 
 Run: `.venv/bin/python -m pvi.cli --clip Videos/<clip>.mp4 [--judge geometric|vlm]`
@@ -83,9 +84,16 @@ Each is written up where it belongs; this is the index.
 9. **Matching now checks actor identity** via the GT anchors. Temporal overlap
    alone let a prediction about a *different vehicle* win a match on
    `NmlzoaDcOuI_6`. `problem-definition.md` §3 always required this; it was
-   simply unimplemented.
+   simply unimplemented. The prediction side must be a **union** box over the
+   span: on the panning `mKzCQKTHizw_1` a median box missed the anchor by 0.004
+   and threw away a tIoU-0.81 correct match.
+10. **R4 now uses the open-vocabulary door cue** (design-plan §6c.4). Grounding
+   DINO grounds `"open car door"` on 24/28 ground-level frames with boxes on the
+   actual door, and fails on the aerial clip. Adopted because the retired
+   pixel-change heuristic was dead on 3 clips; R4 goes from 5/8 clips to 7/8 and
+   the static-camera branch is gone. `door_delta_thresh` -> `door_conf_thresh`.
 
-### Probe results (design-plan §6.2)
+### Probe results
 
 `experiments/2026-09-16_gt1125-probe/findings.md`. Arms A and B are decided:
 
@@ -95,31 +103,34 @@ Each is written up where it belongs; this is the index.
   (`pvi.cli.TILE_MIN_WIDTH = 1920`). It raises anchor confidence 0.66/0.84 →
   0.92/0.93 and finds persons the plain pass misses, at 2.3× runtime.
 
-### First end-to-end run
+**Arm C is decided too** — `experiments/2026-09-16_door-cue-ground-level/findings.md`.
+The open-vocab door cue is adopted; see finding 10 above.
 
-`NmlzoaDcOuI_6`, geometric judge: 6 candidates → 6 interactions, P=0.167,
-R=1.000, and it fired on **both** labeled `pass_by` events. That is the control
-arm behaving exactly as designed — it accepts everything, so the false-positive
-count is the number the VLM has to buy back.
+### End-to-end runs (geometric / ablation judge)
+
+| clip | P | R | tp/fp/fn | pass_by fired |
+|---|---|---|---|---|
+| `NmlzoaDcOuI_6` | 0.167 | 1.000 | 1/5/0 | 2/2 |
+| `mKzCQKTHizw_1` | **1.000** | **1.000** | 1/0/0 | 0/0 |
+| pooled | 0.286 | 1.000 | 2/5/0 | 2/2 |
+
+Recall 1.0 with precision 0.286 is the control arm behaving exactly as designed:
+it accepts every proposal, so the false-positive count is the number the VLM has
+to buy back. `mKzCQKTHizw_1` is a clean single-event clip and the pipeline gets
+it exactly right, moving camera and all.
 
 ## Next steps
 
-1. **Finish probe arm C** (Grounding DINO, `"open car door."`). It was still
-   downloading weights; rerun
-   `.venv/bin/python tools/probe_gt1125.py --arms C --outdir experiments/2026-09-16_gt1125-probe-armC`.
-   **This decision matters more than the plan assumed**: R4's `door_delta` is
-   now dead on 3 clips, not 1, and one of them (`mKzCQKTHizw_1`) contains a door
-   event.
-2. **Run the VLM arm.** Qwen2.5-VL-7B was ~1 GB into a ~16 GB download.
+1. **Run the VLM arm.** Qwen2.5-VL-7B was ~1 GB into a ~16 GB download.
    `pvi/judge/vlm.py` is written and cache-backed but has never executed.
-3. **Run all 8 clips**, both judges, and compare. The geometric-vs-VLM delta is
+2. **Run all 8 clips**, both judges, and compare. The geometric-vs-VLM delta is
    the headline ablation.
-4. **LOCO threshold selection** over the agreed four knobs only: `det_conf`,
+3. **LOCO threshold selection** over the agreed four knobs only: `det_conf`,
    `tau_near`, `tau_far`, `vlm_conf_thresh` (design-plan §6a.2). Not written yet.
-5. **Track fragmentation needs a look.** 14 person tracks on a 102-frame clip
+4. **Track fragmentation needs a look.** 14 person tracks on a 102-frame clip
    with ~3 people. R2/R3 depend on true track birth/death, so fragmentation
    directly manufactures false enter/exit events.
-6. **Write-up** (≤2 pages) and push the public repo.
+5. **Write-up** (≤2 pages) and push the public repo.
 
 ## Open question for the user
 
@@ -157,7 +168,8 @@ currently **git-ignored pending that decision** — see `.gitignore`.
   (`f62f7dd5252b61097cbace33886045816dadbde9`, recorded automatically in output).
   `config/default.yaml` still has `revision: null` everywhere; pin them once each
   model has run.
-- **No accuracy number on 7 of 8 clips.** Only `NmlzoaDcOuI_6` has been run.
+- **No accuracy number on 6 of 8 clips.** Only `NmlzoaDcOuI_6` and
+  `mKzCQKTHizw_1` have been run.
 - **Tracking quality is unmeasured.** See fragmentation above.
 - **The VIRAT origin of the `NmlzoaDcOuI_*` clips** remains an unchecked
   hypothesis. Worth ~10 minutes; build nothing on it.

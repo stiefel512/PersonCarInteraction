@@ -21,7 +21,7 @@ from .detect.hf import HFDetector
 from .detect.sliced import SlicedDetector
 from .judge.base import Verdict
 from .judge.geometric import GeometricJudge
-from .propose.features import Track, door_delta_series, pair_features
+from .propose.features import Track, door_cue_series, pair_features
 from .propose.rules import RULE_TYPE, Candidate, primary_rule, propose
 from .schema import ClipMeta, Interaction, PersonRef, VehicleRef, write_output
 from .track.tracker import MultiClassTracker
@@ -67,13 +67,14 @@ def build_detector(cfg: C.Config, tiled: bool):
 
 
 # Stored grayscale frames are downscaled to this max width. 600 frames of 4K
-# grayscale is ~5 GB; the two things these frames feed -- the camera-motion
-# decision and the coarse door_delta statistic -- lose nothing at 960 px.
+# grayscale is ~5 GB, and the one thing these frames feed -- the camera-motion
+# decision -- loses nothing at 960 px.
 GRAY_MAX_WIDTH = 960
 
 
 def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
-             tiled: bool | None = None, batch: int = 8
+             tiled: bool | None = None, batch: int = 8,
+             skip_door_cue: bool = False
              ) -> tuple[ClipMeta, list[Interaction], dict]:
     meta = video.probe(clip_path)
     t = cfg.tunable
@@ -116,23 +117,36 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
     persons = [tr for tr in tracks if tr.is_person]
     vehicles = [tr for tr in tracks if not tr.is_person]
 
-    door = {v.id: door_delta_series(gray, v, meta.n_frames, static_camera,
-                                    scale=gray_scale)
-            for v in vehicles}
+    # --- propose, in two passes ---
+    #
+    # The door cue is an open-vocabulary detector pass, so it is far too
+    # expensive to run on every frame. It is only ever consumed by R4, which
+    # requires a person to already be near the vehicle -- so pass 1 computes the
+    # near-spans without it, and the cue runs only on frames inside those spans.
+    def build_pairs(door_by_vehicle):
+        pairs, feats = [], {}
+        for p in persons:
+            for v in vehicles:
+                pf = pair_features(p, v, meta, t.smooth_window_s,
+                                   door_by_vehicle.get(v.id))
+                if pf.n_visible == 0:
+                    continue
+                feats[(p.id, v.id)] = pf
+                pairs.append((pf, p))
+        return pairs, feats
 
-    # --- propose ---
-    pairs = []
-    feats = {}
-    for p in persons:
-        for v in vehicles:
-            pf = pair_features(p, v, meta, t.smooth_window_s, door.get(v.id))
-            if pf.n_visible == 0:
-                continue
-            feats[(p.id, v.id)] = pf
-            pairs.append((pf, p))
+    pairs, feats = build_pairs({})
+    door_frames = _near_frames(pairs, t.tau_near, t.tau_far, meta)
+
+    door_dets = {}
+    if door_frames and not skip_door_cue:
+        door_dets = _detect_doors(clip_path, meta, sorted(door_frames), cfg)
+        door = {v.id: door_cue_series(door_dets, v, meta.n_frames)
+                for v in vehicles}
+        pairs, feats = build_pairs(door)
 
     cands = propose(pairs, meta, t.tau_near, t.tau_far, t.min_dwell_s,
-                    t.door_delta_thresh)
+                    t.door_conf_thresh)
 
     # --- judge ---
     accepted, rejected = _judge_all(cands, meta, clip_path, cfg, judge_name,
@@ -156,13 +170,13 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
             note=verdict.note, confidence=round(verdict.confidence, 4),
             evidence={
                 "rule": primary_rule(cand), **cand.evidence,
-                # Normalized median boxes over the span. These are what lets the
-                # evaluator check that a prediction refers to the same actors as
-                # the GT event it overlaps -- temporal overlap alone is not a
-                # match in the multi-actor clips (evaluate/match.anchors_agree).
-                "person_box_norm": _median_box_norm(
+                # Normalized union boxes over the span. These let the evaluator
+                # check that a prediction refers to the same actors as the GT
+                # event it overlaps -- temporal overlap alone is not a match in
+                # the multi-actor clips (evaluate/match.anchors_agree).
+                "person_box_norm": _span_box_norm(
                     track_by_id.get(cand.person_id), cand.span, meta),
-                "vehicle_box_norm": _median_box_norm(
+                "vehicle_box_norm": _span_box_norm(
                     track_by_id.get(cand.vehicle_id), cand.span, meta),
             },
         ))
@@ -177,8 +191,26 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
         "n_detections": len(dets),
         "n_person_tracks": len(persons),
         "n_vehicle_tracks": len(vehicles),
+        "n_door_cue_frames": len(door_dets),
+        "n_door_detections": sum(len(v) for v in door_dets.values()),
         "n_candidates": len(cands),
         "n_accepted": len(accepted),
+        # Per-track summary. Detector failure and tracker fragmentation are both
+        # SILENT here -- they show up as missing or duplicated candidates, never
+        # as an error -- so the raw track inventory is a first-class diagnostic
+        # (design-plan s7), not debug noise. `gap_frames` is the giveaway for
+        # fragmentation: a track with many internal gaps is one identity the
+        # tracker kept losing.
+        "tracks": [
+            {"id": tr.id, "cls": _cls_name(tr.cls),
+             "birth": tr.birth_frame, "death": tr.death_frame,
+             "n_observed": len(tr.frames),
+             "span_frames": tr.death_frame - tr.birth_frame + 1,
+             "gap_frames": (tr.death_frame - tr.birth_frame + 1) - len(tr.frames),
+             "centroid_motion": round(tr.centroid_motion(), 4),
+             "is_static": tr.is_static()}
+            for tr in tracks
+        ],
         "rejected": [
             {"person_id": c.person_id, "vehicle_id": c.vehicle_id,
              "frame_start": c.frame_start, "frame_end": c.frame_end,
@@ -192,13 +224,64 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
     return meta, interactions, debug
 
 
-def _median_box_norm(track, span, meta: ClipMeta) -> list[float] | None:
-    """Median box of a track over a span, normalized to [0, 1].
+def _near_frames(pairs, tau_near: float, tau_far: float, meta: ClipMeta) -> set[int]:
+    """Frames inside some person-vehicle near-span, padded by one second.
 
-    Median rather than mean so one bad frame from the detector cannot drag the
-    box; normalized because the evaluator compares it against GT anchors, which
-    are normalized for the same reason everything else here is -- the set spans
-    352x288 to 3840x2160.
+    These are the only frames R4 can possibly care about, so they are the only
+    ones the open-vocabulary door detector is run on. Padding by a second
+    catches a door opened just before contact or closed just after.
+    """
+    from .propose.rules import near_spans
+
+    pad = max(1, meta.to_frames(1.0))
+    out: set[int] = set()
+    for pf, _person in pairs:
+        for lo, hi in near_spans(pf, tau_near, tau_far):
+            out.update(range(max(0, lo - pad), min(meta.n_frames, hi + pad + 1)))
+    return out
+
+
+def _detect_doors(clip_path: Path, meta: ClipMeta, frames: list[int],
+                  cfg: C.Config) -> dict[int, list]:
+    """Run the open-vocabulary detector for open doors on selected frames.
+
+    Returns {frame: [(box, conf), ...]}. See
+    experiments/2026-09-16_door-cue-ground-level/findings.md for why this
+    replaced the pixel-change heuristic, and for the one clip it does not work
+    on (gt1125_06, aerial).
+    """
+    from .detect.openvocab import OpenVocabDetector
+
+    ov = OpenVocabDetector(cfg.openvocab.model_id,
+                           revision=cfg.openvocab.revision, device=cfg.device)
+    decoded = video.read_frames(clip_path, frames, meta)
+    out: dict[int, list] = {}
+    for f in frames:
+        dets = ov.detect([decoded[f]], [f], ["open car door"],
+                         cfg.openvocab.box_threshold, cfg.openvocab.text_threshold)[0]
+        # Grounding DINO returns the matched token span, which for a weakly
+        # grounded phrase can be a fragment such as "open" -- accept those too,
+        # but they are a signal the grounding is poor (see the arm C findings).
+        hits = [(d.box, d.conf) for d in dets
+                if "door" in d.label or d.label.strip() == "open"]
+        if hits:
+            out[f] = hits
+    return out
+
+
+def _span_box_norm(track, span, meta: ClipMeta) -> list[float] | None:
+    """Union of a track's boxes over a span, normalized to [0, 1].
+
+    Union, not median. The evaluator compares this against a GT anchor placed on
+    one specific frame, and a median box is only where the actor was *typically*
+    -- on a panning camera that is nowhere in particular. Measured on
+    `mKzCQKTHizw_1`, whose camera pans: the median person box missed the frame-118
+    anchor by 0.004 in x and threw away a tIoU-0.81 match. The union covers
+    everywhere the actor was during the event, so an anchor on any frame inside
+    the span falls within it.
+
+    Normalized because the anchors are, for the same reason everything else here
+    is: the set spans 352x288 to 3840x2160.
     """
     if track is None:
         return None
@@ -206,9 +289,11 @@ def _median_box_norm(track, span, meta: ClipMeta) -> list[float] | None:
              if span[0] <= f <= span[1]]
     if not boxes:
         return None
-    med = np.median(np.array(boxes, dtype=float), axis=0)
-    return [round(float(med[0] / meta.width), 5), round(float(med[1] / meta.height), 5),
-            round(float(med[2] / meta.width), 5), round(float(med[3] / meta.height), 5)]
+    a = np.array(boxes, dtype=float)
+    return [round(float(a[:, 0].min() / meta.width), 5),
+            round(float(a[:, 1].min() / meta.height), 5),
+            round(float(a[:, 2].max() / meta.width), 5),
+            round(float(a[:, 3].max() / meta.height), 5)]
 
 
 def _cls_name(cls: int) -> str:
