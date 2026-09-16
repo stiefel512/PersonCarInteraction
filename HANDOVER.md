@@ -18,7 +18,7 @@ Task statement in `HomeTask.docx` (extract with `unzip` + strip XML).
 ## Where we are
 
 **The design plan is APPROVED (2026-09-16) and implementation is well underway.**
-The `pvi/` package is built, 190 tests pass, and the pipeline runs end to end on
+The `pvi/` package is built, 214 tests pass, and the pipeline runs end to end on
 a real clip with the geometric (ablation) judge. The VLM arm is not yet
 exercised — weights were still downloading.
 
@@ -39,7 +39,7 @@ pvi/track/    tracker.py gmc.py
 pvi/propose/  spans.py features.py rules.py
 pvi/judge/    base.py vlm.py geometric.py prompt.py
 pvi/evaluate/ match.py metrics.py run.py
-tests/        190 passing
+tests/        214 passing
 tools/        probe_gt1125.py probe_door_cue.py camera_motion_report.py
               (+ the pre-existing extract_frames / label_gt / validate_gt)
 ```
@@ -81,12 +81,17 @@ Each is written up where it belongs; this is the index.
    `exit_vehicle` positives** — all start at frame 0. A track born already in
    contact is what an exit looks like; the guard deleted the signal.
    `birth_at_clip_start` / `death_at_clip_end` are now recorded in the evidence.
-9. **Matching now checks actor identity** via the GT anchors. Temporal overlap
-   alone let a prediction about a *different vehicle* win a match on
-   `NmlzoaDcOuI_6`. `problem-definition.md` §3 always required this; it was
-   simply unimplemented. The prediction side must be a **union** box over the
-   span: on the panning `mKzCQKTHizw_1` a median box missed the anchor by 0.004
-   and threw away a tIoU-0.81 correct match.
+9. **Matching RANKS on actor identity; it must not gate.** Using the GT anchors
+   as a hard filter was measured to be net-harmful: it cost 5 of 17 true
+   positives and lowered *both* precision (0.327 -> 0.231) and recall (0.944 ->
+   0.667), since a rejected match becomes a false positive *and* a false
+   negative. It failed wherever the person track fragmented. Agreement now sorts
+   pairings ahead of non-agreement, with tIoU breaking ties.
+   Original problem it solves: temporal overlap alone let a prediction about a
+   *different vehicle* win a match on `NmlzoaDcOuI_6`. The prediction side must
+   be a **union** box over the span, not a median: on the panning
+   `mKzCQKTHizw_1` a median box missed the anchor by 0.004 and threw away a
+   tIoU-0.81 correct match.
 10. **R4 now uses the open-vocabulary door cue** (design-plan §6c.4). Grounding
    DINO grounds `"open car door"` on 24/28 ground-level frames with boxes on the
    actual door, and fails on the aerial clip. Adopted because the retired
@@ -106,27 +111,50 @@ Each is written up where it belongs; this is the index.
 **Arm C is decided too** — `experiments/2026-09-16_door-cue-ground-level/findings.md`.
 The open-vocab door cue is adopted; see finding 10 above.
 
-### End-to-end runs (geometric / ablation judge)
+### Full-set baseline — geometric (ablation) judge, untuned defaults
 
-| clip | P | R | tp/fp/fn | pass_by fired |
-|---|---|---|---|---|
-| `NmlzoaDcOuI_6` | 0.167 | 1.000 | 1/5/0 | 2/2 |
-| `mKzCQKTHizw_1` | **1.000** | **1.000** | 1/0/0 | 0/0 |
-| pooled | 0.286 | 1.000 | 2/5/0 | 2/2 |
+`experiments/2026-09-16_run-all/` (`comparison.csv`, `findings.md`).
 
-Recall 1.0 with precision 0.286 is the control arm behaving exactly as designed:
-it accepts every proposal, so the false-positive count is the number the VLM has
-to buy back. `mKzCQKTHizw_1` is a clean single-event clip and the pipeline gets
-it exactly right, moving camera and all.
+| clip | P | R | F1 | tp/fp/fn | pass_by fired |
+|---|---|---|---|---|---|
+| `1THkHYIQ_bY_0` | 0.000 | 0.000 | 0.000 | 0/5/1 | 0/1 |
+| `HIu4lM4B8hA_1` | 0.143 | 0.333 | 0.200 | 1/6/2 | 0/0 |
+| `NmlzoaDcOuI_1` | 0.286 | 0.667 | 0.400 | 2/5/1 | 2/2 |
+| `NmlzoaDcOuI_6` | 0.167 | 1.000 | 0.286 | 1/5/0 | 2/2 |
+| `gt1125_06` | 0.143 | 1.000 | 0.250 | 2/12/0 | 0/0 |
+| `iMGR_0AG3a8_2_3` | 0.375 | 0.500 | 0.429 | 3/5/3 | 0/1 |
+| `mKzCQKTHizw_0` | 0.250 | 1.000 | 0.400 | 1/3/0 | 1/1 |
+| `mKzCQKTHizw_1` | **1.000** | **1.000** | **1.000** | 1/0/0 | 0/0 |
+| **POOLED** | **0.327** | **0.944** | **0.486** | 17/35/1 | **6/7** |
+
+17 of 18 positives are proposed at default thresholds, so the recall half of the
+design works. Precision 0.327 and 6 of 7 `pass_by` fired is the control
+behaving as designed -- it accepts everything -- and is exactly what the VLM arm
+has to move. `gt1125_06` finds both positives, so tiling earned its place.
+
+**The single outright miss is a lead, not a mystery**: `1THkHYIQ_bY_0`'s 8.8 s
+`attend_vehicle`. Detection is fine there (2096 detections, 7 person tracks);
+the long event **fragments into four short candidates** overlapping 6-16% each,
+so none reaches tIoU 0.3. `HIu4lM4B8hA_1` shows the same pattern. This is a
+proposer problem -- the hysteresis span breaks when someone leaning into a car
+drifts past `tau_far`, or when their track breaks on hard imagery. `tau_far` is
+in the LOCO search, so tuning may absorb some of it.
 
 ## Next steps
 
-1. **Run the VLM arm.** Qwen2.5-VL-7B was ~1 GB into a ~16 GB download.
-   `pvi/judge/vlm.py` is written and cache-backed but has never executed.
-2. **Run all 8 clips**, both judges, and compare. The geometric-vs-VLM delta is
-   the headline ablation.
-3. **LOCO threshold selection** over the agreed four knobs only: `det_conf`,
-   `tau_near`, `tau_far`, `vlm_conf_thresh` (design-plan §6a.2). Not written yet.
+1. **Run the VLM arm** -- the only thing standing between here and the headline
+   ablation. Blocked on bandwidth, not code: Qwen2.5-VL-7B is a 16 GB download
+   and three of five shards were still missing at hand-off. Check with
+   `python -c "from pvi.judge.vlm import check_weights_available as c; c('Qwen/Qwen2.5-VL-7B-Instruct','cc594898137f460bfe9f0759e9844b3ce807cfb5')"`,
+   resume with `snapshot_download(..., revision=...)`, then
+   `tools/run_all.py --judges geometric,vlm`.
+   Note each interrupted attempt starts a NEW `.incomplete` blob rather than
+   resuming the old one, so avoid killing it.
+2. **Chase span fragmentation** (see the baseline table above). It is the single
+   remaining recall miss and the likely cause of several false positives, since
+   one long event becomes four short wrong ones.
+3. **LOCO threshold selection.** The harness exists (`pvi/evaluate/loco.py`,
+   `python -m pvi.evaluate.loco`) and is tested; it has not been run.
 4. ~~Track fragmentation~~ — **checked, and it is not a problem.** The raw count
    (14 person tracks on a 102-frame clip) looked alarming but the inference was
    wrong. Fragmentation means one identity split into temporally *sequential*
@@ -170,14 +198,17 @@ currently **git-ignored pending that decision** — see `.gitignore`.
 
 ## Still unverified
 
-- **The VLM path has never run.** `judge/vlm.py`, `judge/prompt.py` and the cache
-  are written and unit-tested, but no Qwen forward pass has happened.
-- **Model revisions are pinned for RF-DETR only**
-  (`f62f7dd5252b61097cbace33886045816dadbde9`, recorded automatically in output).
-  `config/default.yaml` still has `revision: null` everywhere; pin them once each
-  model has run.
-- **No accuracy number on 6 of 8 clips.** Only `NmlzoaDcOuI_6` and
-  `mKzCQKTHizw_1` have been run.
+- **`generate()` has never run.** Everything around it is verified: the prompt
+  builder, the response parser and the cache are unit-tested, and the multi-image
+  message plumbing is checked against the real Qwen processor
+  (`tests/test_vlm_plumbing.py`) -- one image placeholder per image, correct
+  `pixel_values`/`image_grid_thw`. But no forward pass has happened, so treat the
+  VLM arm as unproven.
+- ~~Model revisions~~ **all three are now pinned** in `config/default.yaml`.
+  A null revision resolves "latest" against the Hub: unreproducible, and it hung
+  this session for half an hour on a slow connection.
+- **All 8 clips have a geometric number; none has a VLM number.** The
+  comparison the ablation exists for is half-done.
 - **Tracking quality is only spot-checked**, on `NmlzoaDcOuI_6` and
   `mKzCQKTHizw_1`. Both look sound (see next-steps item 4), but there is no
   quantitative MOT metric and the GT carries no per-frame boxes to compute one
