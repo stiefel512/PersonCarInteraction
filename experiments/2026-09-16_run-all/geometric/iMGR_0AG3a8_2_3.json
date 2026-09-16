@@ -1,0 +1,356 @@
+{
+  "clip_id": "iMGR_0AG3a8_2_3",
+  "clip_meta": {
+    "fps": 6.667,
+    "n_frames": 182,
+    "width": 960,
+    "height": 720
+  },
+  "config_hash": "sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b",
+  "interactions": [
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i001",
+      "event_group_id": "iMGR_0AG3a8_2_3__g001",
+      "type": "enter_vehicle",
+      "frame_start": 0,
+      "frame_end": 60,
+      "time_start_s": 0.0,
+      "time_end_s": 9.0,
+      "person": {
+        "track_id": 0,
+        "description": "person track 0"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, parked",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 9.15,
+        "vehicle_is_static": true,
+        "person_birth": 0,
+        "person_death": 59,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "max_iou": 0.2108,
+        "person_box_norm": [
+          0.08656,
+          0.22725,
+          0.30703,
+          0.46563
+        ],
+        "vehicle_box_norm": [
+          -0.00038,
+          0.22957,
+          0.25668,
+          0.46731
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i002",
+      "event_group_id": "iMGR_0AG3a8_2_3__g002",
+      "type": "enter_vehicle",
+      "frame_start": 64,
+      "frame_end": 76,
+      "time_start_s": 9.6,
+      "time_end_s": 11.399,
+      "person": {
+        "track_id": 1,
+        "description": "person track 1"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, parked",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0661,
+        "dwell_s": 1.95,
+        "vehicle_is_static": true,
+        "person_birth": 65,
+        "person_death": 75,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0,
+        "person_box_norm": [
+          0.27016,
+          0.22689,
+          0.3164,
+          0.37672
+        ],
+        "vehicle_box_norm": [
+          0.00013,
+          0.23158,
+          0.25009,
+          0.46708
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i003",
+      "event_group_id": "iMGR_0AG3a8_2_3__g003",
+      "type": "enter_vehicle",
+      "frame_start": 84,
+      "frame_end": 105,
+      "time_start_s": 12.599,
+      "time_end_s": 15.749,
+      "person": {
+        "track_id": 2,
+        "description": "person track 2"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, parked",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0887,
+        "dwell_s": 3.3,
+        "vehicle_is_static": true,
+        "person_birth": 85,
+        "person_death": 104,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0,
+        "person_box_norm": [
+          0.27068,
+          0.2182,
+          0.32585,
+          0.39042
+        ],
+        "vehicle_box_norm": [
+          0.00019,
+          0.22934,
+          0.24902,
+          0.47711
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i004",
+      "event_group_id": "iMGR_0AG3a8_2_3__g004",
+      "type": "enter_vehicle",
+      "frame_start": 85,
+      "frame_end": 105,
+      "time_start_s": 12.749,
+      "time_end_s": 15.749,
+      "person": {
+        "track_id": 2,
+        "description": "person track 2"
+      },
+      "vehicle": {
+        "track_id": 10005,
+        "description": "car track 10005, moving",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0057,
+        "dwell_s": 3.15,
+        "vehicle_is_static": false,
+        "person_birth": 85,
+        "person_death": 104,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0012,
+        "person_box_norm": [
+          0.27068,
+          0.2182,
+          0.32585,
+          0.39042
+        ],
+        "vehicle_box_norm": [
+          0.31434,
+          0.08815,
+          0.65062,
+          0.55446
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i005",
+      "event_group_id": "iMGR_0AG3a8_2_3__g005",
+      "type": "enter_vehicle",
+      "frame_start": 106,
+      "frame_end": 121,
+      "time_start_s": 15.899,
+      "time_end_s": 18.149,
+      "person": {
+        "track_id": 3,
+        "description": "person track 3"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, parked",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 2.4,
+        "vehicle_is_static": true,
+        "person_birth": 107,
+        "person_death": 120,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.2115,
+        "person_box_norm": [
+          0.11611,
+          0.28559,
+          0.20009,
+          0.48819
+        ],
+        "vehicle_box_norm": [
+          2e-05,
+          0.23147,
+          0.24988,
+          0.47604
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i006",
+      "event_group_id": "iMGR_0AG3a8_2_3__g006",
+      "type": "enter_vehicle",
+      "frame_start": 109,
+      "frame_end": 121,
+      "time_start_s": 16.349,
+      "time_end_s": 18.149,
+      "person": {
+        "track_id": 3,
+        "description": "person track 3"
+      },
+      "vehicle": {
+        "track_id": 10006,
+        "description": "truck track 10006, parked",
+        "class": "truck"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 1.95,
+        "vehicle_is_static": true,
+        "person_birth": 107,
+        "person_death": 120,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0139,
+        "person_box_norm": [
+          0.11611,
+          0.28559,
+          0.19136,
+          0.48819
+        ],
+        "vehicle_box_norm": [
+          -0.00016,
+          0.43946,
+          0.43628,
+          0.99427
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i007",
+      "event_group_id": "iMGR_0AG3a8_2_3__g007",
+      "type": "enter_vehicle",
+      "frame_start": 140,
+      "frame_end": 155,
+      "time_start_s": 20.999,
+      "time_end_s": 23.249,
+      "person": {
+        "track_id": 4,
+        "description": "person track 4"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, parked",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 2.4,
+        "vehicle_is_static": true,
+        "person_birth": 141,
+        "person_death": 154,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.1027,
+        "person_box_norm": [
+          0.00886,
+          0.35615,
+          0.30173,
+          0.63467
+        ],
+        "vehicle_box_norm": [
+          9e-05,
+          0.23173,
+          0.251,
+          0.46635
+        ]
+      }
+    },
+    {
+      "interaction_id": "iMGR_0AG3a8_2_3__i008",
+      "event_group_id": "iMGR_0AG3a8_2_3__g008",
+      "type": "enter_vehicle",
+      "frame_start": 167,
+      "frame_end": 181,
+      "time_start_s": 25.049,
+      "time_end_s": 27.149,
+      "person": {
+        "track_id": 5,
+        "description": "person track 5"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, parked",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 2.25,
+        "vehicle_is_static": true,
+        "person_birth": 168,
+        "person_death": 181,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": true,
+        "max_iou": 0.1572,
+        "person_box_norm": [
+          0.13116,
+          0.30328,
+          0.20252,
+          0.49655
+        ],
+        "vehicle_box_norm": [
+          -0.00031,
+          0.23063,
+          0.24971,
+          0.47828
+        ]
+      }
+    }
+  ]
+}

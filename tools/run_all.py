@@ -30,6 +30,7 @@ from pvi import config as C
 from pvi.cli import run_clip, seed_everything
 from pvi.evaluate.metrics import full_report
 from pvi.schema import GTEvent, load_ground_truth, write_output
+from pvi.video import probe
 
 STRESS = {"mKzCQKTHizw_0": "precision stress (runners near parked cars)",
           "gt1125_06": "recall stress (moving camera, oblique overhead)"}
@@ -41,6 +42,10 @@ def main() -> None:
     ap.add_argument("--judges", default="geometric,vlm")
     ap.add_argument("--videos", type=Path, default=Path("Videos"))
     ap.add_argument("--outdir", type=Path, default=None)
+    ap.add_argument("--rescore", action="store_true",
+                    help="re-score existing outputs in --outdir without "
+                         "re-running inference; use after a change to matching "
+                         "or metrics, which must not cost GPU time to evaluate")
     args = ap.parse_args()
 
     judges = [j.strip() for j in args.judges.split(",") if j.strip()]
@@ -62,16 +67,25 @@ def main() -> None:
     for judge in judges:
         pooled_preds = []
         for clip in clips:
-            t0 = time.perf_counter()
-            meta, interactions, debug = run_clip(clip, cfg, judge)
-            elapsed = time.perf_counter() - t0
-            pooled_preds.extend(interactions)
-
             jd = outdir / judge
-            write_output(jd / f"{meta.clip_id}.json", meta, interactions,
-                         C.config_hash(cfg))
-            (jd / f"{meta.clip_id}.debug.json").write_text(
-                json.dumps(debug, indent=2) + "\n")
+            if args.rescore:
+                from pvi.evaluate.run import load_predictions
+                out_json = jd / f"{clip.stem}.json"
+                if not out_json.exists():
+                    continue
+                _, interactions = load_predictions(out_json)
+                debug = json.loads((jd / f"{clip.stem}.debug.json").read_text())
+                meta = probe(clip)
+                elapsed = float("nan")
+            else:
+                t0 = time.perf_counter()
+                meta, interactions, debug = run_clip(clip, cfg, judge)
+                elapsed = time.perf_counter() - t0
+                write_output(jd / f"{meta.clip_id}.json", meta, interactions,
+                             C.config_hash(cfg))
+                (jd / f"{meta.clip_id}.debug.json").write_text(
+                    json.dumps(debug, indent=2) + "\n")
+            pooled_preds.extend(interactions)
 
             rep = full_report(interactions, gt_by_clip.get(meta.clip_id, []))
             reports[f"{judge}/{meta.clip_id}"] = rep
@@ -87,12 +101,13 @@ def main() -> None:
                 "n_candidates": debug["n_candidates"],
                 "static_camera": debug["static_camera"],
                 "tiled": debug["tiled"],
-                "seconds": round(elapsed, 1),
+                "seconds": ("" if elapsed != elapsed else round(elapsed, 1)),
                 "note": STRESS.get(meta.clip_id, ""),
             })
             print(f"  {judge:10s} {meta.clip_id:20s} "
                   f"P={d['precision']:.3f} R={d['recall']:.3f} F1={d['f1']:.3f} "
-                  f"({d['tp']}/{d['fp']}/{d['fn']})  {elapsed:.0f}s")
+                  f"({d['tp']}/{d['fp']}/{d['fn']})"
+                  + ("" if elapsed != elapsed else f"  {elapsed:.0f}s"))
 
         rep = full_report(pooled_preds, gts)
         reports[f"{judge}/POOLED"] = rep

@@ -219,8 +219,31 @@ def test_matching_prefers_the_right_vehicle_over_a_tighter_span():
     assert r.matches[0].type_correct is True
 
 
-def test_actor_check_can_be_disabled():
+def test_actor_mismatch_ranks_last_but_is_not_discarded():
+    """Actor agreement RANKS, it does not gate. Gating was measured to be
+    net-harmful: as a hard filter it cost 5 of 17 true positives across the 8
+    clips and lowered BOTH precision (0.327 -> 0.231) and recall (0.944 ->
+    0.667), because a rejected match becomes a false positive AND a false
+    negative. It failed on correct detections wherever the person track
+    fragmented -- i.e. on the night and CIF-grayscale clips."""
     gt = gt_with_anchors(0.15, 0.25, 0.7, 0.5)
     wrong = pred_with_boxes([0.9, 0.9, 0.95, 0.99], [0.0, 0.0, 0.05, 0.05])
-    assert match_events([wrong], [gt]).n_tp == 0
+    assert match_events([wrong], [gt]).n_tp == 1
+
+
+def test_agreeing_actors_win_even_against_a_better_tiou():
+    """The ranking is actors first, then tIoU -- a pairing about the right car
+    beats a marginally tighter span about the wrong one."""
+    gt = gt_with_anchors(0.15, 0.25, 0.7, 0.5, start=0, end=42)
+    right = pred_with_boxes([0.1, 0.1, 0.2, 0.4], [0.5, 0.3, 0.9, 0.7],
+                            start=0, end=48, idx=1)
+    wrong = pred_with_boxes([0.1, 0.1, 0.2, 0.4], [0.0, 0.8, 0.1, 0.95],
+                            start=0, end=42, type_="attend_vehicle", idx=2)
+    r = match_events([right, wrong], [gt])
+    assert r.matches[0].pred_idx == 0, "the exact-span wrong-vehicle pred won"
+
+
+def test_disabling_the_actor_check_changes_only_the_ranking():
+    gt = gt_with_anchors(0.15, 0.25, 0.7, 0.5)
+    wrong = pred_with_boxes([0.9, 0.9, 0.95, 0.99], [0.0, 0.0, 0.05, 0.05])
     assert match_events([wrong], [gt], require_same_actors=False).n_tp == 1

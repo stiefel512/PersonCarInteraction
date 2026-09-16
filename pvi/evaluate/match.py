@@ -116,9 +116,22 @@ def match_events(preds: Sequence[Interaction], gts: Sequence[GTEvent],
     hit and shows up in the type confusion matrix. Conflating them would hide
     whether a miss was a localization failure or a naming one.
 
-    `require_same_actors=True` by default: a prediction must also refer to the
-    same person and vehicle, tested against the GT anchors. Temporal overlap
-    alone is not a match in the multi-actor clips.
+    `require_same_actors=True` by default. Actor agreement, tested against the
+    GT anchors, **ranks** candidate pairings rather than gating them: a pairing
+    whose actors agree beats one whose actors do not, and tIoU breaks the tie
+    within each group.
+
+    Ranking rather than gating, because gating was measured to be net-harmful.
+    As a hard filter it cost 5 of 17 true positives across the 8 clips and
+    lowered *both* precision (0.327 -> 0.231) and recall (0.944 -> 0.667) --
+    a rejected match becomes a false positive *and* a false negative, so a
+    strict actor test is not the conservative choice it looks like. It failed
+    on correct detections whenever the person track fragmented, which is exactly
+    what happens on the night and CIF-grayscale clips.
+
+    Ranking keeps what the check was introduced for: on `NmlzoaDcOuI_6` a
+    prediction about a *different vehicle* no longer wins over the correct one,
+    because the correct pairing sorts first.
 
     Positives and `pass_by` negatives are matched in separate passes, positives
     first, so a prediction that overlaps both is credited to the positive.
@@ -145,7 +158,7 @@ def _greedy(preds: Sequence[Interaction], gts: Sequence[GTEvent],
             gt_pool: list[int], taken_pred: set[int],
             tiou_thresh: float, require_same_type: bool,
             require_same_actors: bool = True) -> list[Match]:
-    cands: list[tuple[float, int, int]] = []
+    cands: list[tuple[int, float, int, int]] = []
     for pi, p in enumerate(preds):
         if pi in taken_pred:
             continue
@@ -153,19 +166,19 @@ def _greedy(preds: Sequence[Interaction], gts: Sequence[GTEvent],
             g = gts[gi]
             if require_same_type and p.type != g.type:
                 continue
-            if require_same_actors and not anchors_agree(p, g):
-                continue
             t = temporal_iou(p.frame_start, p.frame_end, g.frame_start, g.frame_end)
             if t >= tiou_thresh:
-                cands.append((t, pi, gi))
+                agree = 1 if (not require_same_actors or anchors_agree(p, g)) else 0
+                cands.append((agree, t, pi, gi))
 
-    # Sort by descending tIoU; ties broken by index so the result is
-    # deterministic regardless of input ordering.
-    cands.sort(key=lambda c: (-c[0], c[1], c[2]))
+    # Actor agreement RANKS pairings; it does not gate them. Prefer a pairing
+    # whose actors match, then the higher tIoU, then index order for
+    # determinism.
+    cands.sort(key=lambda c: (-c[0], -c[1], c[2], c[3]))
 
     used_gt: set[int] = set()
     out: list[Match] = []
-    for t, pi, gi in cands:
+    for _agree, t, pi, gi in cands:
         if pi in taken_pred or gi in used_gt:
             continue
         taken_pred.add(pi)
