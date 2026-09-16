@@ -1,0 +1,29 @@
+# NOTE: git does not strip trailing comments from pattern lines -- every comment
+# here is on its own line deliberately.
+
+# Environment
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Large regenerable data. data/frames/ is 231 MB and is rebuilt by
+# tools/extract_frames.py; it is labeling-only and the pipeline never reads it.
+data/frames/
+Videos-*.zip
+
+# Superseded GT backup (pre id-fix). The audit log in docs/labeling-protocol.md
+# records what changed, so the file itself need not ship.
+data/ground_truth.pre-idfix.json
+
+# Deliberately NOT ignored, and worth stating because each is easy to ignore
+# by reflex:
+#   outputs/          -- the required output artifact
+#   experiments/      -- the run log (config.yaml + results.json per run)
+#   data/vlm_cache/   -- committed so results reproduce without a GPU
+
+# Source clips, 89 MB of the employer's take-home data. Ignored PENDING A
+# DECISION on whether to redistribute them in a public repo -- see the open
+# question in HANDOVER.md. Reproduction needs them; publishing them is the
+# user's call.
+Videos/

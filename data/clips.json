@@ -1,0 +1,66 @@
+{
+  "1THkHYIQ_bY_0": {
+    "clip_id": "1THkHYIQ_bY_0",
+    "width": 1280,
+    "height": 720,
+    "fps": 30.0,
+    "n_frames": 495,
+    "duration_s": 16.5
+  },
+  "HIu4lM4B8hA_1": {
+    "clip_id": "HIu4lM4B8hA_1",
+    "width": 352,
+    "height": 288,
+    "fps": 25.0,
+    "n_frames": 250,
+    "duration_s": 10.0
+  },
+  "NmlzoaDcOuI_1": {
+    "clip_id": "NmlzoaDcOuI_1",
+    "width": 1280,
+    "height": 720,
+    "fps": 6.0,
+    "n_frames": 108,
+    "duration_s": 18.0
+  },
+  "NmlzoaDcOuI_6": {
+    "clip_id": "NmlzoaDcOuI_6",
+    "width": 1280,
+    "height": 720,
+    "fps": 6.0,
+    "n_frames": 102,
+    "duration_s": 17.0
+  },
+  "gt1125_06": {
+    "clip_id": "gt1125_06",
+    "width": 3840,
+    "height": 2160,
+    "fps": 29.97002997002997,
+    "n_frames": 600,
+    "duration_s": 20.02
+  },
+  "iMGR_0AG3a8_2_3": {
+    "clip_id": "iMGR_0AG3a8_2_3",
+    "width": 960,
+    "height": 720,
+    "fps": 6.667,
+    "n_frames": 182,
+    "duration_s": 27.298635
+  },
+  "mKzCQKTHizw_0": {
+    "clip_id": "mKzCQKTHizw_0",
+    "width": 640,
+    "height": 360,
+    "fps": 29.97002997002997,
+    "n_frames": 300,
+    "duration_s": 10.01
+  },
+  "mKzCQKTHizw_1": {
+    "clip_id": "mKzCQKTHizw_1",
+    "width": 640,
+    "height": 360,
+    "fps": 29.97002997002997,
+    "n_frames": 276,
+    "duration_s": 9.2092
+  }
+}

@@ -1,0 +1,36 @@
+# Python 3.12. System Python is 3.14, which has no torch wheels.
+#
+#   uv venv --python /usr/bin/python3.12 .venv
+#   VIRTUAL_ENV=.venv uv pip install -r requirements.txt
+#
+# torch/torchvision carry a +cu132 local version tag from the CUDA-matched
+# index. On a different CUDA setup, install those two first with
+# `uv pip install torch torchvision --torch-backend=auto` and then this file.
+#
+# Also required, outside pip: ffmpeg and ffprobe (>= 9; the code uses
+# `-fps_mode passthrough`, as `-vsync` was removed in ffmpeg 9).
+
+torch==2.14.0
+torchvision==0.29.0
+
+# Detection (RF-DETR-L) and the VLM judge (Qwen2.5-VL).
+transformers==5.17.0
+accelerate==1.15.0
+safetensors==0.8.0
+tokenizers==0.23.2
+qwen-vl-utils==0.0.14
+
+# Tracking. Apache-2.0 -- Ultralytics, BoxMOT and motcpp are all AGPL-3.0,
+# which is disqualifying for a public repo. Ships BoTSORTTracker with a
+# pure-Python CMC, which is why no GMC is hand-rolled on the tracking path.
+trackers==2.6.0
+supervision==0.30.3
+
+# ORB/RANSAC for the camera-motion diagnostic, and image ops.
+opencv-python-headless==5.0.0.93
+pillow==12.3.0
+numpy==2.5.3
+scipy==1.18.1
+
+pyyaml==6.0.3
+pytest==9.1.1

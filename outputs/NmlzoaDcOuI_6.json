@@ -1,0 +1,270 @@
+{
+  "clip_id": "NmlzoaDcOuI_6",
+  "clip_meta": {
+    "fps": 6.0,
+    "n_frames": 102,
+    "width": 1280,
+    "height": 720
+  },
+  "config_hash": "sha256:b2ad72e0a6f0c6df3ce50883fec14b6c5e39ed49442a8241a4a2ef56c3595dbc",
+  "interactions": [
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i001",
+      "event_group_id": "NmlzoaDcOuI_6__g001",
+      "type": "exit_vehicle",
+      "frame_start": 0,
+      "frame_end": 48,
+      "time_start_s": 0.0,
+      "time_end_s": 8.0,
+      "person": {
+        "track_id": 1,
+        "description": "person track 1"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R3_birth_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R3_birth_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 8.167,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 55,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "max_iou": 0.3239,
+        "person_box_norm": [
+          0.27669,
+          0.16229,
+          0.40248,
+          0.67321
+        ],
+        "vehicle_box_norm": [
+          0.0013,
+          0.20485,
+          0.4497,
+          0.69628
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i002",
+      "event_group_id": "NmlzoaDcOuI_6__g002",
+      "type": "attend_vehicle",
+      "frame_start": 4,
+      "frame_end": 42,
+      "time_start_s": 0.667,
+      "time_end_s": 7.0,
+      "person": {
+        "track_id": 1,
+        "description": "person track 1"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "car track 10001, moving",
+        "class": "car"
+      },
+      "note": "accepted by R1_dwell (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R1_dwell",
+        "min_d_norm": 0.0,
+        "dwell_s": 6.5,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 55,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "max_iou": 0.0039,
+        "person_box_norm": [
+          0.26089,
+          0.16236,
+          0.38827,
+          0.67318
+        ],
+        "vehicle_box_norm": [
+          0.15856,
+          0.001,
+          0.43791,
+          0.12563
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i003",
+      "event_group_id": "NmlzoaDcOuI_6__g003",
+      "type": "attend_vehicle",
+      "frame_start": 71,
+      "frame_end": 91,
+      "time_start_s": 11.833,
+      "time_end_s": 15.167,
+      "person": {
+        "track_id": 2,
+        "description": "person track 2"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R1_dwell (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R1_dwell",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.5,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 99,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": true,
+        "max_iou": 0.1199,
+        "person_box_norm": [
+          0.88047,
+          0.03229,
+          0.95518,
+          0.37014
+        ],
+        "vehicle_box_norm": [
+          0.70519,
+          0.0006,
+          0.90914,
+          0.1547
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i004",
+      "event_group_id": "NmlzoaDcOuI_6__g004",
+      "type": "exit_vehicle",
+      "frame_start": 80,
+      "frame_end": 91,
+      "time_start_s": 13.333,
+      "time_end_s": 15.167,
+      "person": {
+        "track_id": 12,
+        "description": "person track 12"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R3_birth_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R3_birth_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 2.0,
+        "vehicle_is_static": false,
+        "person_birth": 81,
+        "person_death": 101,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": true,
+        "max_iou": 0.2326,
+        "person_box_norm": [
+          0.81506,
+          0.00734,
+          0.88372,
+          0.33168
+        ],
+        "vehicle_box_norm": [
+          0.77177,
+          0.00044,
+          0.96822,
+          0.11823
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i005",
+      "event_group_id": "NmlzoaDcOuI_6__g005",
+      "type": "enter_vehicle",
+      "frame_start": 82,
+      "frame_end": 88,
+      "time_start_s": 13.667,
+      "time_end_s": 14.667,
+      "person": {
+        "track_id": 10,
+        "description": "person track 10"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 1.167,
+        "vehicle_is_static": false,
+        "person_birth": 72,
+        "person_death": 88,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0288,
+        "person_box_norm": [
+          0.95703,
+          0.08666,
+          0.99988,
+          0.37666
+        ],
+        "vehicle_box_norm": [
+          0.77177,
+          0.00043,
+          0.96822,
+          0.11823
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i006",
+      "event_group_id": "NmlzoaDcOuI_6__g006",
+      "type": "enter_vehicle",
+      "frame_start": 87,
+      "frame_end": 91,
+      "time_start_s": 14.5,
+      "time_end_s": 15.167,
+      "person": {
+        "track_id": 13,
+        "description": "person track 13"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 0.833,
+        "vehicle_is_static": false,
+        "person_birth": 88,
+        "person_death": 90,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0927,
+        "person_box_norm": [
+          0.85027,
+          0.04796,
+          0.88343,
+          0.2053
+        ],
+        "vehicle_box_norm": [
+          0.81907,
+          0.00048,
+          0.99561,
+          0.08854
+        ]
+      }
+    }
+  ]
+}

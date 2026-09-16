@@ -1,0 +1,171 @@
+{
+  "1THkHYIQ_bY_0": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 8e-06,
+      "max_translation_frac_width": 3.9e-05,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 30,
+      "n_pairs": 15,
+      "n_estimates_ok": 15,
+      "median_translation_frac_width": 8.8e-05,
+      "max_translation_frac_width": 0.000272,
+      "rejected_reasons": []
+    },
+    "resolution": "1280x720",
+    "verdict": "static"
+  },
+  "HIu4lM4B8hA_1": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 0.001103,
+      "max_translation_frac_width": 0.002587,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 25,
+      "n_pairs": 15,
+      "n_estimates_ok": 15,
+      "median_translation_frac_width": 0.001306,
+      "max_translation_frac_width": 0.060988,
+      "rejected_reasons": []
+    },
+    "resolution": "352x288",
+    "verdict": "static"
+  },
+  "NmlzoaDcOuI_1": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 0.000137,
+      "max_translation_frac_width": 0.001447,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 6,
+      "n_pairs": 17,
+      "n_estimates_ok": 17,
+      "median_translation_frac_width": 0.000382,
+      "max_translation_frac_width": 0.00431,
+      "rejected_reasons": []
+    },
+    "resolution": "1280x720",
+    "verdict": "static"
+  },
+  "NmlzoaDcOuI_6": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 17,
+      "n_estimates_ok": 17,
+      "median_translation_frac_width": 0.000298,
+      "max_translation_frac_width": 0.08165,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 6,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 0.00024,
+      "max_translation_frac_width": 0.176967,
+      "rejected_reasons": []
+    },
+    "resolution": "1280x720",
+    "verdict": "static"
+  },
+  "gt1125_06": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 0.000281,
+      "max_translation_frac_width": 0.000583,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 30,
+      "n_pairs": 15,
+      "n_estimates_ok": 15,
+      "median_translation_frac_width": 0.004284,
+      "max_translation_frac_width": 0.007621,
+      "rejected_reasons": []
+    },
+    "resolution": "3840x2160",
+    "verdict": "moving"
+  },
+  "iMGR_0AG3a8_2_3": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 3.8e-05,
+      "max_translation_frac_width": 0.000327,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 7,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 5.6e-05,
+      "max_translation_frac_width": 0.000203,
+      "rejected_reasons": []
+    },
+    "resolution": "960x720",
+    "verdict": "static"
+  },
+  "mKzCQKTHizw_0": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 15,
+      "median_translation_frac_width": 0.00131,
+      "max_translation_frac_width": 0.028999,
+      "rejected_reasons": [
+        "implausible scale 1.575"
+      ]
+    },
+    "one_second": {
+      "gap_frames": 30,
+      "n_pairs": 15,
+      "n_estimates_ok": 12,
+      "median_translation_frac_width": 0.122417,
+      "max_translation_frac_width": 0.448979,
+      "rejected_reasons": [
+        "implausible scale 1.740",
+        "only 10 inliers"
+      ]
+    },
+    "resolution": "640x360",
+    "verdict": "moving"
+  },
+  "mKzCQKTHizw_1": {
+    "one_frame": {
+      "gap_frames": 1,
+      "n_pairs": 16,
+      "n_estimates_ok": 16,
+      "median_translation_frac_width": 0.001268,
+      "max_translation_frac_width": 0.006936,
+      "rejected_reasons": []
+    },
+    "one_second": {
+      "gap_frames": 30,
+      "n_pairs": 16,
+      "n_estimates_ok": 13,
+      "median_translation_frac_width": 0.00883,
+      "max_translation_frac_width": 0.085175,
+      "rejected_reasons": [
+        "implausible scale 0.553",
+        "implausible scale 0.576",
+        "implausible scale 1.563"
+      ]
+    },
+    "resolution": "640x360",
+    "verdict": "moving"
+  }
+}

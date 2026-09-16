@@ -1,0 +1,205 @@
+{
+  "A_plain": {
+    "per_frame": {
+      "0": {
+        "n_person": 8,
+        "n_vehicle": 22,
+        "max_person_conf": 0.8617,
+        "median_person_height_px": 93.1,
+        "vehicle_classes": [
+          "car",
+          "truck"
+        ]
+      },
+      "120": {
+        "n_person": 7,
+        "n_vehicle": 19,
+        "max_person_conf": 0.8578,
+        "median_person_height_px": 85.5,
+        "vehicle_classes": [
+          "car",
+          "truck"
+        ]
+      },
+      "222": {
+        "n_person": 6,
+        "n_vehicle": 21,
+        "max_person_conf": 0.8423,
+        "median_person_height_px": 96.4,
+        "vehicle_classes": [
+          "car",
+          "truck"
+        ],
+        "anchor": {
+          "anchor_px": [
+            1909.6,
+            1213.7
+          ],
+          "covered_by_person_box": true,
+          "best_conf": 0.6622
+        }
+      },
+      "239": {
+        "n_person": 5,
+        "n_vehicle": 24,
+        "max_person_conf": 0.836,
+        "median_person_height_px": 109.6,
+        "vehicle_classes": [
+          "car",
+          "truck"
+        ],
+        "anchor": {
+          "anchor_px": [
+            2214.9,
+            1220.6
+          ],
+          "covered_by_person_box": true,
+          "best_conf": 0.836
+        }
+      },
+      "360": {
+        "n_person": 5,
+        "n_vehicle": 24,
+        "max_person_conf": 0.8524,
+        "median_person_height_px": 97.9,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      },
+      "480": {
+        "n_person": 2,
+        "n_vehicle": 24,
+        "max_person_conf": 0.4435,
+        "median_person_height_px": 69.3,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      },
+      "599": {
+        "n_person": 4,
+        "n_vehicle": 21,
+        "max_person_conf": 0.7583,
+        "median_person_height_px": 78.0,
+        "vehicle_classes": [
+          "car",
+          "truck"
+        ]
+      }
+    },
+    "total_person_detections": 37,
+    "total_vehicle_detections": 155,
+    "anchors_covered": 2,
+    "anchors_total": 2,
+    "seconds_total": 3.68,
+    "seconds_per_frame": 0.53,
+    "revision": "f62f7dd5252b61097cbace33886045816dadbde9"
+  },
+  "B_tiled": {
+    "per_frame": {
+      "0": {
+        "n_person": 7,
+        "n_vehicle": 28,
+        "max_person_conf": 0.9341,
+        "median_person_height_px": 96.3,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      },
+      "120": {
+        "n_person": 7,
+        "n_vehicle": 29,
+        "max_person_conf": 0.9353,
+        "median_person_height_px": 85.5,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      },
+      "222": {
+        "n_person": 6,
+        "n_vehicle": 30,
+        "max_person_conf": 0.9288,
+        "median_person_height_px": 89.3,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ],
+        "anchor": {
+          "anchor_px": [
+            1909.6,
+            1213.7
+          ],
+          "covered_by_person_box": true,
+          "best_conf": 0.9221
+        }
+      },
+      "239": {
+        "n_person": 7,
+        "n_vehicle": 30,
+        "max_person_conf": 0.9288,
+        "median_person_height_px": 83.7,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ],
+        "anchor": {
+          "anchor_px": [
+            2214.9,
+            1220.6
+          ],
+          "covered_by_person_box": true,
+          "best_conf": 0.9288
+        }
+      },
+      "360": {
+        "n_person": 5,
+        "n_vehicle": 28,
+        "max_person_conf": 0.9033,
+        "median_person_height_px": 92.0,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      },
+      "480": {
+        "n_person": 4,
+        "n_vehicle": 33,
+        "max_person_conf": 0.9061,
+        "median_person_height_px": 68.5,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      },
+      "599": {
+        "n_person": 6,
+        "n_vehicle": 29,
+        "max_person_conf": 0.8854,
+        "median_person_height_px": 73.6,
+        "vehicle_classes": [
+          "car",
+          "motorcycle",
+          "truck"
+        ]
+      }
+    },
+    "total_person_detections": 42,
+    "total_vehicle_detections": 207,
+    "anchors_covered": 2,
+    "anchors_total": 2,
+    "seconds_total": 8.46,
+    "seconds_per_frame": 1.21,
+    "revision": "f62f7dd5252b61097cbace33886045816dadbde9"
+  }
+}

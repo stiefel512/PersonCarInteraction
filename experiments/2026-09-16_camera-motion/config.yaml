@@ -1,0 +1,10 @@
+experiment: per-clip camera motion
+date: '2026-09-16'
+n_pairs_per_clip: 15
+gray_max_width: 960
+static_threshold_frac_width: 0.004
+seed: 0
+method: ORB + RANSAC homography; median translation as a fraction of frame width,
+  at a 1-frame and a 1-second baseline
+note: 'the 1-second baseline is the decisive one: drift accumulates, zero-mean estimation
+  jitter does not'

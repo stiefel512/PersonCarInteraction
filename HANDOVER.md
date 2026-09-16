@@ -1,0 +1,169 @@
+# Handover — BlackRover person-vehicle interaction detection
+
+`CLAUDE.md` loads automatically. Read these before doing anything else:
+
+1. `docs/problem-definition.md` — scope, data inventory, metrics, Track A decision.
+   **Two corrections were made 2026-09-16** (person scale; camera motion) — read them.
+2. `docs/design-plan.md` — architecture, contracts, resolved decisions (§6),
+   amendments at approval (§6a), **implementation findings that supersede parts
+   of §5/§6 (§6c)**, config schema (§6b)
+3. `config/schema.md` — fixed vs tunable config split
+4. `docs/labeling-protocol.md` — GT conventions + audit log
+5. `~/research/literature/object-detection-heterogeneous-surveillance/summary.md`
+   — detector/tracker selection, plus a post-hoc note on what the scale
+   correction changed
+
+Task statement in `HomeTask.docx` (extract with `unzip` + strip XML).
+
+## Where we are
+
+**The design plan is APPROVED (2026-09-16) and implementation is well underway.**
+The `pvi/` package is built, 181 tests pass, and the pipeline runs end to end on
+a real clip with the geometric (ablation) judge. The VLM arm is not yet
+exercised — weights were still downloading.
+
+### Environment
+
+- `.venv/` — Python 3.12.14, created with `uv`. `requirements.txt` is pinned.
+- torch 2.14.0+cu132, transformers 5.17.0, trackers 2.6.0, CUDA works on the A6000.
+- **ffmpeg 9 removed `-vsync`.** Both `pvi/video.py` and `tools/extract_frames.py`
+  now use `-fps_mode passthrough`. The old spelling yielded *zero frames* rather
+  than an error.
+
+### Built and tested
+
+```
+pvi/config.py schema.py video.py geometry.py viz.py cli.py
+pvi/detect/   base.py hf.py sliced.py openvocab.py
+pvi/track/    tracker.py gmc.py
+pvi/propose/  spans.py features.py rules.py
+pvi/judge/    base.py vlm.py geometric.py prompt.py
+pvi/evaluate/ match.py metrics.py run.py
+tests/        181 passing
+tools/        probe_gt1125.py camera_motion_report.py (+ the pre-existing three)
+```
+
+Run: `.venv/bin/python -m pvi.cli --clip Videos/<clip>.mp4 [--judge geometric|vlm]`
+Evaluate: `.venv/bin/python -m pvi.evaluate.run`
+Test: `.venv/bin/python -m pytest tests -q`
+
+### Findings that changed the design
+
+Each is written up where it belongs; this is the index.
+
+1. **`gt1125_06` persons are ~110 px at native 4K, not ~10 px.** The old figure
+   was eyeballed from a downscaled contact sheet. The clip is a moving-camera
+   problem, not a small-object one. (problem-definition.md, correction note.)
+2. **`data/frames/` is downscaled to max width 1600** and is labeling-only.
+   `gt1125_06` is 1600×900 there. The pipeline decodes from `Videos/*.mp4` at
+   native resolution and never reads it. (design-plan §6a.3.)
+3. **3 of 8 clips have a moving camera, not 1.** Both `mKzCQKTHizw_*` clips pan —
+   `_0`'s camera follows the runner. Measuring this needed a **one-second**
+   baseline; at one frame the drone reads as *more* static than a tripod because
+   its drift is below ORB jitter. (problem-definition.md, camera-motion
+   correction; `experiments/2026-09-16_camera-motion/`.)
+4. **`trackers` 2.6.0 ships a Python CMC**, so §6.6's "GMC must be hand-rolled"
+   is obsolete. Tracking uses `BoTSORTTracker(enable_cmc=...)`. `track/gmc.py`
+   survives only as the camera-motion diagnostic. (design-plan §6c.1.)
+5. **Unconditional CMC is not free** — on degenerate features it corrupts
+   association rather than falling back to identity. Enabled per clip.
+   (design-plan §6c.3.)
+6. **RF-DETR uses COCO's 91-class indexing (`person=1`)**, D-FINE uses 80
+   contiguous with Pascal names. The config's hard-coded `[0,1,2,3,5,7]` would
+   have selected N/A, airplane and train. Classes are resolved **by name** to a
+   canonical vocabulary. (design-plan §6c.2.)
+7. **Tile-boundary duplicates**: IoU-only NMS roughly doubled the vehicle count.
+   Fixed with intersection-over-smaller suppression, plus an ordering fix so the
+   whole box beats the fragment on tied confidence.
+   (`experiments/2026-09-16_gt1125-probe/findings.md`.)
+8. **The clip-edge guard on R2/R3 was removed.** It suppressed **3 of the 7
+   `exit_vehicle` positives** — all start at frame 0. A track born already in
+   contact is what an exit looks like; the guard deleted the signal.
+   `birth_at_clip_start` / `death_at_clip_end` are now recorded in the evidence.
+9. **Matching now checks actor identity** via the GT anchors. Temporal overlap
+   alone let a prediction about a *different vehicle* win a match on
+   `NmlzoaDcOuI_6`. `problem-definition.md` §3 always required this; it was
+   simply unimplemented.
+
+### Probe results (design-plan §6.2)
+
+`experiments/2026-09-16_gt1125-probe/findings.md`. Arms A and B are decided:
+
+- **The clip is not dropped.** Plain detection covers both GT anchors, finds
+  ~5 persons and ~22 vehicles per frame, and detects the box truck.
+- **Tiling is kept for `gt1125_06` only**, auto-enabled by resolution
+  (`pvi.cli.TILE_MIN_WIDTH = 1920`). It raises anchor confidence 0.66/0.84 →
+  0.92/0.93 and finds persons the plain pass misses, at 2.3× runtime.
+
+### First end-to-end run
+
+`NmlzoaDcOuI_6`, geometric judge: 6 candidates → 6 interactions, P=0.167,
+R=1.000, and it fired on **both** labeled `pass_by` events. That is the control
+arm behaving exactly as designed — it accepts everything, so the false-positive
+count is the number the VLM has to buy back.
+
+## Next steps
+
+1. **Finish probe arm C** (Grounding DINO, `"open car door."`). It was still
+   downloading weights; rerun
+   `.venv/bin/python tools/probe_gt1125.py --arms C --outdir experiments/2026-09-16_gt1125-probe-armC`.
+   **This decision matters more than the plan assumed**: R4's `door_delta` is
+   now dead on 3 clips, not 1, and one of them (`mKzCQKTHizw_1`) contains a door
+   event.
+2. **Run the VLM arm.** Qwen2.5-VL-7B was ~1 GB into a ~16 GB download.
+   `pvi/judge/vlm.py` is written and cache-backed but has never executed.
+3. **Run all 8 clips**, both judges, and compare. The geometric-vs-VLM delta is
+   the headline ablation.
+4. **LOCO threshold selection** over the agreed four knobs only: `det_conf`,
+   `tau_near`, `tau_far`, `vlm_conf_thresh` (design-plan §6a.2). Not written yet.
+5. **Track fragmentation needs a look.** 14 person tracks on a 102-frame clip
+   with ~3 people. R2/R3 depend on true track birth/death, so fragmentation
+   directly manufactures false enter/exit events.
+6. **Write-up** (≤2 pages) and push the public repo.
+
+## Open question for the user
+
+**Should `Videos/` be committed to the public GitHub repo?** It is 89 MB of the
+employer's take-home data (`gt1125_06.mp4` alone is 40 MB, over GitHub's 50 MB
+warning threshold though under the 100 MB hard limit). Reproduction needs the
+clips, but redistributing their data publicly is their call, not ours. It is
+currently **git-ignored pending that decision** — see `.gitignore`.
+
+## Gotchas
+
+- **Frame indexing.** `data/frames/<clip>/` JPEGs are numbered from `000001.jpg`,
+  but frame index 0 is `000001.jpg`. GT and all code use 0-based indices.
+- **Spans are INCLUSIVE.** `frame_end` is the last frame of contact, so a span
+  `[10, 10]` is one frame long. Getting this wrong makes a single-frame event
+  score tIoU 0.0 against itself.
+- **Config constraints**, validated at load: `tau_far > tau_near`;
+  `min_dwell_s < 0.75`; smoothing floored at 3 frames per clip.
+- **Normalisation.** All spatial thresholds are normalised by the vehicle-box
+  diagonal; all temporal thresholds are in seconds. Never raw pixels or frame
+  counts in rule logic.
+- **Determinism is graded.** Greedy decoding, VLM batch size 1, float32
+  detection, response cache keyed on image bytes + prompt, resolved config
+  written next to every output.
+- **`attend_vehicle` vs `pass_by`** is the expected precision failure. At n=2 it
+  cannot be tuned and has to come from the prompt's type definitions.
+- **`data/ground_truth.json` is FROZEN.** If a label must change, log what and
+  why in the labeling-protocol audit log.
+
+## Still unverified
+
+- **The VLM path has never run.** `judge/vlm.py`, `judge/prompt.py` and the cache
+  are written and unit-tested, but no Qwen forward pass has happened.
+- **Model revisions are pinned for RF-DETR only**
+  (`f62f7dd5252b61097cbace33886045816dadbde9`, recorded automatically in output).
+  `config/default.yaml` still has `revision: null` everywhere; pin them once each
+  model has run.
+- **No accuracy number on 7 of 8 clips.** Only `NmlzoaDcOuI_6` has been run.
+- **Tracking quality is unmeasured.** See fragmentation above.
+- **The VIRAT origin of the `NmlzoaDcOuI_*` clips** remains an unchecked
+  hypothesis. Worth ~10 minutes; build nothing on it.
+
+## User preferences (also in global CLAUDE.md)
+
+Keep explanations brief. Be explicit about the assumptions a method relies on.
+No W&B/MLflow — plain `experiments/<date>_<name>/` dirs with config.yaml and
+results.json. Write tests for math, not full coverage. Python only.

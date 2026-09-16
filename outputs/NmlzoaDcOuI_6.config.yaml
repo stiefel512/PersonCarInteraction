@@ -1,0 +1,45 @@
+_config_hash: sha256:b2ad72e0a6f0c6df3ce50883fec14b6c5e39ed49442a8241a4a2ef56c3595dbc
+detector:
+  classes:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 5
+  - 7
+  model_id: Roboflow/rf-detr-large
+  revision: null
+device: cuda:0
+openvocab:
+  box_threshold: 0.27
+  model_id: IDEA-Research/grounding-dino-base
+  revision: null
+  text_threshold: 0.25
+paths:
+  frames: data/frames
+  ground_truth: data/ground_truth.json
+  outputs: outputs
+  videos: Videos
+  vlm_cache: data/vlm_cache
+seed: 0
+tracker:
+  gmc: orb
+  impl: roboflow-trackers
+  name: bytetrack
+tunable:
+  context_pad_s: 1.0
+  crop_margin: 0.25
+  det_conf: 0.35
+  door_delta_thresh: 0.12
+  min_dwell_s: 0.5
+  n_vlm_frames: 12
+  smooth_window_s: 0.4
+  tau_far: 0.3
+  tau_near: 0.15
+  vlm_conf_thresh: 0.5
+vlm:
+  batch_size: 1
+  max_new_tokens: 512
+  model_id: Qwen/Qwen2.5-VL-7B-Instruct
+  revision: null
+  temperature: 0.0

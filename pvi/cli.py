@@ -1,0 +1,351 @@
+"""Entry point: one clip in, one JSON out.
+
+Deliberately has no ground-truth dependency. Evaluation is a separate entry
+point (`pvi.evaluate.run`), so the thing that produces the deliverable cannot
+see the labels it will be scored against.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import random
+from pathlib import Path
+
+import numpy as np
+import torch
+
+from . import config as C
+from . import video
+from .detect.base import COCO_PERSON, Detection
+from .detect.hf import HFDetector
+from .detect.sliced import SlicedDetector
+from .judge.base import Verdict
+from .judge.geometric import GeometricJudge
+from .propose.features import Track, door_delta_series, pair_features
+from .propose.rules import RULE_TYPE, Candidate, primary_rule, propose
+from .schema import ClipMeta, Interaction, PersonRef, VehicleRef, write_output
+from .track.tracker import MultiClassTracker
+
+
+def seed_everything(seed: int) -> None:
+    """Seed every RNG and ask torch for deterministic kernels.
+
+    `warn_only=True` rather than hard-failing: a few ops have no deterministic
+    implementation, and aborting the run would be worse than a warning that says
+    exactly which one. The VLM response cache is the real reproducibility lever
+    (design-plan s7); this is defence in depth.
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.use_deterministic_algorithms(True, warn_only=True)
+    torch.backends.cudnn.benchmark = False
+
+
+# Tiling is pointless below this width: at 704 px tiles a 1280-wide frame is
+# already close to native scale through the detector's own resize, and for
+# anything at or under the tile size `tile_origins` returns a single tile, so
+# the tiled path becomes the plain path run twice. Only `gt1125_06` (3840) is
+# above this in the current set.
+TILE_MIN_WIDTH = 1920
+
+
+def should_tile(meta: ClipMeta, requested: bool | None) -> bool:
+    """Whether to tile this clip. `requested` overrides the resolution rule."""
+    if requested is not None:
+        return requested
+    return meta.width >= TILE_MIN_WIDTH
+
+
+def build_detector(cfg: C.Config, tiled: bool):
+    det = HFDetector(cfg.detector.model_id, revision=cfg.detector.revision,
+                     device=cfg.device, classes=cfg.detector.classes)
+    if tiled:
+        return SlicedDetector(inner=det)
+    return det
+
+
+# Stored grayscale frames are downscaled to this max width. 600 frames of 4K
+# grayscale is ~5 GB; the two things these frames feed -- the camera-motion
+# decision and the coarse door_delta statistic -- lose nothing at 960 px.
+GRAY_MAX_WIDTH = 960
+
+
+def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
+             tiled: bool | None = None, batch: int = 8
+             ) -> tuple[ClipMeta, list[Interaction], dict]:
+    meta = video.probe(clip_path)
+    t = cfg.tunable
+    tiled = should_tile(meta, tiled)
+
+    # Pass 1: decide whether the camera moves, before tracking, because the
+    # answer decides whether the tracker runs CMC at all. Unconditional CMC is
+    # NOT free -- when feature matching degenerates it corrupts association
+    # rather than falling back to identity.
+    gray, gray_scale = _decode_gray(clip_path, meta)
+    static_camera = _camera_is_static(gray, meta)
+
+    detector = build_detector(cfg, tiled)
+
+    # Pass 2: detect and track in one streaming pass. Streaming because the 4K
+    # clip cannot be held in memory and the tracker's CMC needs the real frame.
+    tracker = MultiClassTracker(meta, enable_cmc=not static_camera,
+                                cmc_method=cfg.tracker.gmc)
+    dets: list[Detection] = []
+    buf, idxs = [], []
+
+    def flush():
+        if not buf:
+            return
+        for per_frame, fi, fr in zip(detector.detect(buf, meta, idxs, t.det_conf),
+                                     idxs, buf):
+            dets.extend(per_frame)
+            tracker.update(fi, fr, per_frame)
+        buf.clear()
+        idxs.clear()
+
+    for i, frame in video.iter_frames(clip_path, meta):
+        buf.append(frame.copy())
+        idxs.append(i)
+        if len(buf) == batch:
+            flush()
+    flush()
+
+    tracks = tracker.finish()
+    persons = [tr for tr in tracks if tr.is_person]
+    vehicles = [tr for tr in tracks if not tr.is_person]
+
+    door = {v.id: door_delta_series(gray, v, meta.n_frames, static_camera,
+                                    scale=gray_scale)
+            for v in vehicles}
+
+    # --- propose ---
+    pairs = []
+    feats = {}
+    for p in persons:
+        for v in vehicles:
+            pf = pair_features(p, v, meta, t.smooth_window_s, door.get(v.id))
+            if pf.n_visible == 0:
+                continue
+            feats[(p.id, v.id)] = pf
+            pairs.append((pf, p))
+
+    cands = propose(pairs, meta, t.tau_near, t.tau_far, t.min_dwell_s,
+                    t.door_delta_thresh)
+
+    # --- judge ---
+    accepted, rejected = _judge_all(cands, meta, clip_path, cfg, judge_name,
+                                    feats, persons, vehicles)
+
+    track_by_id = {tr.id: tr for tr in tracks}
+
+    interactions = []
+    for n, (cand, verdict) in enumerate(accepted, start=1):
+        interactions.append(Interaction(
+            interaction_id=f"{meta.clip_id}__i{n:03d}",
+            event_group_id=f"{meta.clip_id}__g{n:03d}",
+            type=verdict.type,
+            frame_start=cand.frame_start, frame_end=cand.frame_end,
+            time_start_s=round(meta.to_s(cand.frame_start), 3),
+            time_end_s=round(meta.to_s(cand.frame_end), 3),
+            person=PersonRef(track_id=cand.person_id, description=verdict.person_desc),
+            vehicle=VehicleRef(track_id=cand.vehicle_id,
+                               cls=_cls_name(cand.vehicle_cls),
+                               description=verdict.vehicle_desc),
+            note=verdict.note, confidence=round(verdict.confidence, 4),
+            evidence={
+                "rule": primary_rule(cand), **cand.evidence,
+                # Normalized median boxes over the span. These are what lets the
+                # evaluator check that a prediction refers to the same actors as
+                # the GT event it overlaps -- temporal overlap alone is not a
+                # match in the multi-actor clips (evaluate/match.anchors_agree).
+                "person_box_norm": _median_box_norm(
+                    track_by_id.get(cand.person_id), cand.span, meta),
+                "vehicle_box_norm": _median_box_norm(
+                    track_by_id.get(cand.vehicle_id), cand.span, meta),
+            },
+        ))
+
+    debug = {
+        "clip_id": meta.clip_id,
+        "judge": judge_name,
+        "detector_revision": detector.revision,
+        "static_camera": static_camera,
+        "tiled": tiled,
+        "cmc_enabled": not static_camera,
+        "n_detections": len(dets),
+        "n_person_tracks": len(persons),
+        "n_vehicle_tracks": len(vehicles),
+        "n_candidates": len(cands),
+        "n_accepted": len(accepted),
+        "rejected": [
+            {"person_id": c.person_id, "vehicle_id": c.vehicle_id,
+             "frame_start": c.frame_start, "frame_end": c.frame_end,
+             "rules": c.rules, "evidence": c.evidence,
+             "verdict_type": (v.type if v else None),
+             "verdict_confidence": (round(v.confidence, 4) if v else None),
+             "reason": ("could not judge" if v is None else "rejected")}
+            for c, v in rejected
+        ],
+    }
+    return meta, interactions, debug
+
+
+def _median_box_norm(track, span, meta: ClipMeta) -> list[float] | None:
+    """Median box of a track over a span, normalized to [0, 1].
+
+    Median rather than mean so one bad frame from the detector cannot drag the
+    box; normalized because the evaluator compares it against GT anchors, which
+    are normalized for the same reason everything else here is -- the set spans
+    352x288 to 3840x2160.
+    """
+    if track is None:
+        return None
+    boxes = [b for f, b in zip(track.frames, track.boxes)
+             if span[0] <= f <= span[1]]
+    if not boxes:
+        return None
+    med = np.median(np.array(boxes, dtype=float), axis=0)
+    return [round(float(med[0] / meta.width), 5), round(float(med[1] / meta.height), 5),
+            round(float(med[2] / meta.width), 5), round(float(med[3] / meta.height), 5)]
+
+
+def _cls_name(cls: int) -> str:
+    from .detect.base import COCO_NAMES
+    return COCO_NAMES.get(cls, str(cls))
+
+
+def _decode_gray(clip_path: Path, meta: ClipMeta) -> tuple[dict[int, np.ndarray], float]:
+    """Decode the clip once into downscaled grayscale frames.
+
+    Returns the frames and the scale factor mapping native pixel coordinates
+    into them, so callers holding native-resolution boxes can convert.
+    """
+    import cv2
+
+    from .track.gmc import to_gray
+
+    scale = min(1.0, GRAY_MAX_WIDTH / meta.width)
+    out: dict[int, np.ndarray] = {}
+    for i, frame in video.iter_frames(clip_path, meta):
+        g = to_gray(frame)
+        if scale < 1.0:
+            g = cv2.resize(g, (int(meta.width * scale), int(meta.height * scale)),
+                           interpolation=cv2.INTER_AREA)
+        out[i] = g
+    return out, scale
+
+
+def _camera_is_static(gray: dict[int, np.ndarray], meta: ClipMeta,
+                      sample: int = 12, thresh_frac: float = 0.004) -> bool:
+    """Decide static vs moving camera from translation over a ONE-SECOND baseline.
+
+    Measured rather than configured: a hard-coded clip id would silently be
+    wrong on a ninth clip, and this is cheap on a handful of frame pairs.
+
+    **The baseline is the crux.** A consecutive-frame baseline cannot separate
+    these clips: measured on this set, `gt1125_06`'s drone drift is ~0.24
+    px/frame while the static `mKzCQKTHizw_*` clips show ~0.83 px/frame of ORB
+    estimation jitter -- so the drone reads as *less* mobile than a tripod. Over
+    a second the two separate cleanly, because drift accumulates and zero-mean
+    jitter does not. Evidence: `experiments/2026-09-16_camera-motion/`.
+
+    The threshold is a FRACTION of frame width, not pixels: the set spans 352 px
+    to 3840 px wide, and a fixed pixel threshold would call the same physical
+    drift static on one clip and moving on another.
+    """
+    from .track.gmc import estimate
+
+    keys = sorted(gray)
+    gap = max(1, int(round(meta.fps)))
+    if len(keys) < gap + 2:
+        return True
+    width = gray[keys[0]].shape[1]
+    step = max(1, (len(keys) - gap) // sample)
+    mags = []
+    for a in keys[:-gap:step]:
+        b = a + gap
+        if b not in gray:
+            continue
+        r = estimate(gray[a], gray[b])
+        if r.ok:
+            mags.append(float(np.hypot(r.H[0, 2], r.H[1, 2])) / width)
+    if not mags:
+        return True
+    return float(np.median(mags)) < thresh_frac
+
+
+def _judge_all(cands, meta, clip_path, cfg, judge_name, feats, persons, vehicles):
+    accepted: list[tuple[Candidate, Verdict]] = []
+    rejected: list[tuple[Candidate, Verdict | None]] = []
+
+    if judge_name == "geometric":
+        judge = GeometricJudge(feats)
+        for c in cands:
+            v = judge.judge(c, meta)
+            (accepted if v and v.is_interaction else rejected).append((c, v))
+        return accepted, rejected
+
+    from .judge.vlm import VLMJudge
+    t = cfg.tunable
+    judge = VLMJudge(cfg.vlm.model_id, revision=cfg.vlm.revision, device=cfg.device,
+                     cache_dir=cfg.paths.vlm_cache,
+                     max_new_tokens=cfg.vlm.max_new_tokens,
+                     n_frames=t.n_vlm_frames, context_pad_s=t.context_pad_s,
+                     crop_margin=t.crop_margin, conf_thresh=t.vlm_conf_thresh)
+
+    pbox = {p.id: dict(zip(p.frames, p.boxes)) for p in persons}
+    vbox = {v.id: dict(zip(v.frames, v.boxes)) for v in vehicles}
+
+    # Decode only the frames the judge will actually look at.
+    from .propose.spans import dilate_span, sample_frames
+    wanted: set[int] = set()
+    for c in cands:
+        span = dilate_span(c.span, meta.to_frames(t.context_pad_s), meta.n_frames)
+        wanted.update(sample_frames(span, t.n_vlm_frames))
+    frames = video.read_frames(clip_path, sorted(wanted), meta) if wanted else {}
+
+    for c in cands:
+        v = judge.judge(c, meta, frames=frames,
+                        person_boxes=pbox.get(c.person_id, {}),
+                        vehicle_boxes=vbox.get(c.vehicle_id, {}))
+        (accepted if v and v.is_interaction else rejected).append((c, v))
+    return accepted, rejected
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--clip", type=Path, required=True)
+    ap.add_argument("--config", type=Path, default=Path("config/default.yaml"))
+    ap.add_argument("--judge", choices=("vlm", "geometric"), default="vlm")
+    tile_grp = ap.add_mutually_exclusive_group()
+    tile_grp.add_argument("--tiled", dest="tiled", action="store_true",
+                          default=None,
+                          help="force tiled inference (default: by resolution)")
+    tile_grp.add_argument("--no-tiled", dest="tiled", action="store_false",
+                          help="force plain inference")
+    ap.add_argument("--outdir", type=Path, default=None)
+    args = ap.parse_args()
+
+    cfg = C.load(args.config)
+    seed_everything(cfg.seed)
+
+    outdir = args.outdir or cfg.paths.outputs
+    meta, interactions, debug = run_clip(args.clip, cfg, args.judge, args.tiled)
+
+    chash = C.config_hash(cfg)
+    write_output(Path(outdir) / f"{meta.clip_id}.json", meta, interactions, chash)
+    Path(outdir, f"{meta.clip_id}.debug.json").write_text(
+        json.dumps(debug, indent=2) + "\n")
+    C.dump_resolved(cfg, Path(outdir) / f"{meta.clip_id}.config.yaml")
+
+    print(f"{meta.clip_id}: {debug['n_candidates']} candidates -> "
+          f"{len(interactions)} interactions ({args.judge} judge)")
+    for i in interactions:
+        print(f"  {i.type:16s} [{i.frame_start:4d}-{i.frame_end:4d}] "
+              f"p{i.person.track_id} v{i.vehicle.track_id} conf={i.confidence:.2f}")
+
+
+if __name__ == "__main__":
+    main()

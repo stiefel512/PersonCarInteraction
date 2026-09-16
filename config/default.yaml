@@ -1,0 +1,55 @@
+# Default configuration. Schema and rationale: config/schema.md
+#
+# The `tunable` values below are FIRST GUESSES derived from the ground truth's
+# geometry -- they are not tuned results. Reported numbers come from the
+# leave-one-clip-out selection described in docs/design-plan.md s6.3, which
+# varies only det_conf, tau_near, tau_far and vlm_conf_thresh (s6a.2).
+# Do not read this file as a result.
+
+seed: 0
+device: cuda:0
+
+paths:
+  videos: Videos
+  # Labeling/contact-sheet use ONLY. Downscaled to max width 1600, so
+  # data/frames/gt1125_06/ is 1600x900, not 3840x2160. The pipeline decodes
+  # from `videos` at native resolution and never reads this.
+  frames: data/frames
+  ground_truth: data/ground_truth.json
+  outputs: outputs
+  vlm_cache: data/vlm_cache
+
+detector:
+  model_id: Roboflow/rf-detr-large
+  revision: null          # resolved to a commit hash on first run, then frozen
+  classes: [0, 1, 2, 3, 5, 7]   # COCO: person, bicycle, car, motorcycle, bus, truck
+
+vlm:
+  model_id: Qwen/Qwen2.5-VL-7B-Instruct
+  revision: null
+  max_new_tokens: 512
+  temperature: 0.0        # greedy; required for determinism
+  batch_size: 1           # batching perturbs outputs even at t=0
+
+tracker:
+  impl: roboflow-trackers
+  name: bytetrack
+  gmc: orb
+
+openvocab:
+  model_id: IDEA-Research/grounding-dino-base
+  revision: null
+  box_threshold: 0.27
+  text_threshold: 0.25
+
+tunable:
+  det_conf: 0.35
+  tau_near: 0.15
+  tau_far: 0.30          # constraint: must exceed tau_near
+  min_dwell_s: 0.5       # constraint: must be < 0.75 (shortest GT positive)
+  smooth_window_s: 0.4   # floored at 3 frames per clip at runtime
+  door_delta_thresh: 0.12
+  context_pad_s: 1.0
+  n_vlm_frames: 12
+  crop_margin: 0.25
+  vlm_conf_thresh: 0.5

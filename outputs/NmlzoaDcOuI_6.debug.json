@@ -1,0 +1,14 @@
+{
+  "clip_id": "NmlzoaDcOuI_6",
+  "judge": "geometric",
+  "detector_revision": "f62f7dd5252b61097cbace33886045816dadbde9",
+  "static_camera": true,
+  "tiled": false,
+  "cmc_enabled": false,
+  "n_detections": 638,
+  "n_person_tracks": 14,
+  "n_vehicle_tracks": 4,
+  "n_candidates": 6,
+  "n_accepted": 6,
+  "rejected": []
+}
