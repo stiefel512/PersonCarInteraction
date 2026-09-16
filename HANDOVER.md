@@ -127,9 +127,17 @@ it exactly right, moving camera and all.
    the headline ablation.
 3. **LOCO threshold selection** over the agreed four knobs only: `det_conf`,
    `tau_near`, `tau_far`, `vlm_conf_thresh` (design-plan §6a.2). Not written yet.
-4. **Track fragmentation needs a look.** 14 person tracks on a 102-frame clip
-   with ~3 people. R2/R3 depend on true track birth/death, so fragmentation
-   directly manufactures false enter/exit events.
+4. ~~Track fragmentation~~ — **checked, and it is not a problem.** The raw count
+   (14 person tracks on a 102-frame clip) looked alarming but the inference was
+   wrong. Fragmentation means one identity split into temporally *sequential*
+   tracks; these tracks are almost all *concurrent*, which rules that out by
+   construction. Verified further: no concurrent pair exceeds mean IoU 0.3, so
+   there are no duplicate tracks on one person either, and only 2 of 14 tracks
+   have any internal gap. `NmlzoaDcOuI_6` is a busy kerbside — 14 distinct
+   people over 17 s is plausible, and the render in the tracking check shows
+   several background pedestrians at once. Vehicle `centroid_motion` of 0.2-0.6
+   is likewise legitimate: the red sedan drives off, as the clip inventory says.
+   No action needed; recorded so the next session does not re-raise it.
 5. **Write-up** (≤2 pages) and push the public repo.
 
 ## Open question for the user
@@ -170,7 +178,10 @@ currently **git-ignored pending that decision** — see `.gitignore`.
   model has run.
 - **No accuracy number on 6 of 8 clips.** Only `NmlzoaDcOuI_6` and
   `mKzCQKTHizw_1` have been run.
-- **Tracking quality is unmeasured.** See fragmentation above.
+- **Tracking quality is only spot-checked**, on `NmlzoaDcOuI_6` and
+  `mKzCQKTHizw_1`. Both look sound (see next-steps item 4), but there is no
+  quantitative MOT metric and the GT carries no per-frame boxes to compute one
+  against.
 - **The VIRAT origin of the `NmlzoaDcOuI_*` clips** remains an unchecked
   hypothesis. Worth ~10 minutes; build nothing on it.
 
