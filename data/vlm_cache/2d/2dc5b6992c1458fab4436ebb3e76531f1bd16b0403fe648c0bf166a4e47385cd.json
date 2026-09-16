@@ -1,0 +1,26 @@
+{
+  "frame_indices": [
+    57,
+    59,
+    62,
+    64,
+    66,
+    69,
+    71,
+    74,
+    76,
+    78,
+    81,
+    83
+  ],
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The woman walks past the white car without interacting with it.",
+    "person": "woman, black top + shorts, none",
+    "type": "pass_by",
+    "vehicle": "white car, parked, right side"
+  },
+  "raw": "```json\n{\n  \"type\": \"pass_by\",\n  \"confidence\": 0.9,\n  \"person\": \"woman, black top + shorts, none\",\n  \"vehicle\": \"white car, parked, right side\",\n  \"note\": \"The woman walks past the white car without interacting with it.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

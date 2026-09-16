@@ -1,0 +1,26 @@
+{
+  "frame_indices": [
+    81,
+    88,
+    95,
+    102,
+    109,
+    116,
+    124,
+    131,
+    138,
+    145,
+    152,
+    159
+  ],
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "man leans over front of white car, inspecting it",
+    "person": "man, brown shirt + jeans, none",
+    "type": "attend_vehicle",
+    "vehicle": "white car, parked, central"
+  },
+  "raw": "```json\n{\n  \"type\": \"attend_vehicle\",\n  \"confidence\": 0.9,\n  \"person\": \"man, brown shirt + jeans, none\",\n  \"vehicle\": \"white car, parked, central\",\n  \"note\": \"man leans over front of white car, inspecting it\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

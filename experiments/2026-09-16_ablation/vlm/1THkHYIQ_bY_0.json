@@ -1,0 +1,55 @@
+{
+  "clip_id": "1THkHYIQ_bY_0",
+  "clip_meta": {
+    "fps": 30.0,
+    "n_frames": 495,
+    "width": 1280,
+    "height": 720
+  },
+  "config_hash": "sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b",
+  "interactions": [
+    {
+      "interaction_id": "1THkHYIQ_bY_0__i001",
+      "event_group_id": "1THkHYIQ_bY_0__g001",
+      "type": "load_unload",
+      "frame_start": 53,
+      "frame_end": 69,
+      "time_start_s": 1.767,
+      "time_end_s": 2.3,
+      "person": {
+        "track_id": 0,
+        "description": "man wearing dark jacket + pants, carrying large white object"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver car parked, covered with white tarp, partially visible",
+        "class": "car"
+      },
+      "note": "man removes tarp from car, revealing part of the vehicle",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 0.567,
+        "vehicle_is_static": true,
+        "person_birth": 59,
+        "person_death": 63,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.2096,
+        "person_box_norm": [
+          0.40896,
+          0.34573,
+          0.55544,
+          0.84047
+        ],
+        "vehicle_box_norm": [
+          0.12244,
+          0.33327,
+          0.66045,
+          0.72007
+        ]
+      }
+    }
+  ]
+}

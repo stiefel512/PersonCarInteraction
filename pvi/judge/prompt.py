@@ -31,19 +31,23 @@ PERSON_COLOUR = (255, 40, 40)      # red
 VEHICLE_COLOUR = (40, 120, 255)    # blue
 
 TYPE_DEFINITIONS = """\
-- enter_vehicle: the person moves from outside the vehicle to inside it. They \
-stop being visible because they are now in the vehicle.
-- exit_vehicle: the person moves from inside the vehicle to outside it. They \
-first become visible at the vehicle.
+- enter_vehicle: the person ends up inside the vehicle. They may be seen \
+getting in, or they may simply stop being visible AT the vehicle because they \
+are now inside it. Walking away afterwards does not happen - they do not \
+reappear.
+- exit_vehicle: the person starts out inside the vehicle. They may be seen \
+getting out, or their FIRST appearance may already be at the vehicle, after \
+which they move away. Somebody whose first appearance is at the vehicle - never \
+seen approaching it from elsewhere - came out of it.
 - open_close_door: the person opens and/or closes a door, boot or tailgate \
 without a full entry or exit.
 - load_unload: the person moves an object into or out of the vehicle.
 - attend_vehicle: sustained deliberate physical engagement that is none of the \
 above - leaning on it, inspecting it, cleaning it, reaching through a window.
-- pass_by: NOT an interaction. The person merely walks or runs near the \
-vehicle, or stands near it, without deliberately engaging with it. Proximity \
-alone is never an interaction. Choose this whenever the person does not touch \
-the vehicle or act on it."""
+- pass_by: NOT an interaction. The person walks or runs past the vehicle, or \
+stands near it, without engaging with it - they were already walking before \
+they reached it and they keep going afterwards. Proximity alone is never an \
+interaction."""
 
 SYSTEM_PROMPT = """\
 You analyse short surveillance clips and decide whether a specific person is \
@@ -55,15 +59,17 @@ seconds.
 
 The person in question is outlined in RED. The vehicle in question is outlined \
 in BLUE. Ignore every other person and vehicle.
-
+{tracking_evidence}
 Decide which one of these best describes what the RED person does with the BLUE \
 vehicle across these frames:
 
 {types}
 
 Two rules that override everything else:
-1. If the person only passes by, walks near, runs near or stands near the \
-vehicle without deliberately engaging with it, the answer is pass_by.
+1. If the person walks past the vehicle and carries on - already moving before \
+they reached it, still moving after - the answer is pass_by. This does NOT \
+apply when they first appear at the vehicle or stop being visible at it; that \
+is an exit or an entry.
 2. Judge only what is visible. Do not infer intent, ownership, or whether the \
 action is authorised.
 
@@ -135,6 +141,46 @@ def draw_boxes(frame: np.ndarray, person: Box | None, vehicle: Box | None,
     return img.crop(tuple(int(round(v)) for v in crop))
 
 
+def tracking_evidence(cand: Candidate, meta: ClipMeta) -> str:
+    """State what the tracker observed that the sampled frames cannot show.
+
+    This is the hybrid design doing its job. Whether a person was *first seen*
+    at the vehicle, or *last seen* at it, is a fact about the whole clip; a
+    handful of crops cannot convey it, and it is precisely what separates an
+    exit or an entry from someone walking past.
+
+    Without it the VLM rejected `exit_vehicle` events as `pass_by` at 0.9
+    confidence -- including one at tIoU 0.97 where all four proposal rules
+    fired -- because a person already beside a car who then walks away looks
+    exactly like a pass-by in isolation.
+
+    Only structural observations are passed. No ground truth, and no hint about
+    what the answer should be: the model is told what was seen, not what to
+    conclude.
+    """
+    from ..propose.rules import R2_DEATH_NEAR, R3_BIRTH_NEAR, R4_DOOR_CHANGE
+
+    lines = []
+    if R3_BIRTH_NEAR in cand.rules:
+        lines.append("- The RED person's FIRST appearance anywhere in the clip "
+                     "is here, at the BLUE vehicle. They were never seen "
+                     "approaching it from elsewhere.")
+    if R2_DEATH_NEAR in cand.rules:
+        lines.append("- The RED person's LAST appearance anywhere in the clip "
+                     "is here, at the BLUE vehicle. They are never seen again "
+                     "afterwards.")
+    if R4_DOOR_CHANGE in cand.rules:
+        lines.append("- A door of the BLUE vehicle was detected open during "
+                     "this span.")
+    if cand.evidence.get("birth_at_clip_start"):
+        lines.append("- The clip itself begins at this moment, so anything "
+                     "before it is simply not recorded.")
+    if not lines:
+        return ""
+    return ("\nWhat the tracker observed across the WHOLE clip, which these "
+            "frames alone cannot show:\n" + "\n".join(lines) + "\n")
+
+
 def build(cand: Candidate, meta: ClipMeta, frames: dict[int, np.ndarray],
           person_boxes: dict[int, Box], vehicle_boxes: dict[int, Box],
           n_frames: int, context_pad_s: float, crop_margin: float) -> PromptBundle:
@@ -152,6 +198,7 @@ def build(cand: Candidate, meta: ClipMeta, frames: dict[int, np.ndarray],
     user = USER_TEMPLATE.format(
         n=len(images),
         dur=(span[1] - span[0] + 1) / meta.fps,
+        tracking_evidence=tracking_evidence(cand, meta),
         types=TYPE_DEFINITIONS,
         type_list=", ".join(ALLOWED_TYPES),
     )

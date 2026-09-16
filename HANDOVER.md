@@ -168,13 +168,16 @@ in the LOCO search, so tuning may absorb some of it.
    No action needed; recorded so the next session does not re-raise it.
 5. **Write-up** (≤2 pages) and push the public repo.
 
-## Open question for the user
+## Settled: `Videos/` is not shipped
 
-**Should `Videos/` be committed to the public GitHub repo?** It is 89 MB of the
-employer's take-home data (`gt1125_06.mp4` alone is 40 MB, over GitHub's 50 MB
-warning threshold though under the 100 MB hard limit). Reproduction needs the
-clips, but redistributing their data publicly is their call, not ours. It is
-currently **git-ignored pending that decision** — see `.gitignore`.
+**Decided by the user 2026-09-16: keep the clips git-ignored.** They are the
+task-setter's footage and the repo is public. Do not add them, and do not
+"helpfully" un-ignore them when reproduction fails — a reviewer places the 8
+`.mp4` files in `Videos/` themselves (README, "Getting the data").
+
+What ships instead, so the results stay inspectable without the clips:
+`outputs/`, `experiments/*/` (including annotated probe frames),
+`data/ground_truth.json`, and `data/vlm_cache/`.
 
 ## Gotchas
 

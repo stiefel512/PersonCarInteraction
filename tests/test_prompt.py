@@ -158,3 +158,83 @@ def test_cache_key_changes_when_the_boxes_move():
     b = P.build(cand(), META, f, {i: (110, 100, 150, 200) for i in range(15, 46)},
                 {i: (200, 150, 400, 300) for i in range(15, 46)}, 6, 1.0, 0.25)
     assert a.cache_key() != b.cache_key()
+
+
+# --- tracking evidence ---
+#
+# Measured failure this addresses: without it the VLM rejected exit_vehicle
+# events as pass_by at 0.9 confidence, including one at tIoU 0.97 where all four
+# proposal rules fired. A person already beside a car who then walks away looks
+# exactly like a pass-by in isolation; that they were NEVER SEEN approaching is
+# a whole-clip fact the crops cannot carry.
+
+from pvi.judge.prompt import tracking_evidence
+from pvi.propose.rules import (R1_DWELL, R2_DEATH_NEAR, R3_BIRTH_NEAR,
+                               R4_DOOR_CHANGE)
+
+
+def cand_with(rules, evidence=None):
+    return Candidate(person_id=1, vehicle_id=2, vehicle_cls=2,
+                     frame_start=20, frame_end=40, rules=rules,
+                     evidence=evidence or {})
+
+
+def test_birth_near_states_the_person_was_never_seen_approaching():
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR]), META)
+    assert "FIRST appearance" in t and "never seen" in t.lower()
+
+
+def test_death_near_states_the_person_is_never_seen_again():
+    t = tracking_evidence(cand_with([R2_DEATH_NEAR]), META)
+    assert "LAST appearance" in t
+
+
+def test_door_rule_reports_the_open_door():
+    assert "door" in tracking_evidence(cand_with([R4_DOOR_CHANGE]), META).lower()
+
+
+def test_dwell_alone_adds_no_evidence():
+    """R1 fires on nearly every candidate, so it carries no information the
+    frames do not already show. Saying something for every candidate would
+    dilute the lines that matter."""
+    assert tracking_evidence(cand_with([R1_DWELL]), META) == ""
+
+
+def test_several_rules_are_all_reported():
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR, R2_DEATH_NEAR, R4_DOOR_CHANGE]),
+                          META)
+    assert t.count("\n- ") == 3
+
+
+def test_evidence_never_names_a_type_or_an_answer():
+    """It reports what the tracker saw, not what to conclude. Naming the type
+    would make the VLM a rubber stamp for the geometric arm and destroy the
+    ablation's meaning."""
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR, R2_DEATH_NEAR, R4_DOOR_CHANGE]),
+                          META)
+    for name in ("exit_vehicle", "enter_vehicle", "pass_by", "open_close_door"):
+        assert name not in t
+
+
+def test_clip_start_is_disclosed_so_absence_is_not_read_as_evidence():
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR],
+                                    {"birth_at_clip_start": True}), META)
+    assert "clip itself begins" in t
+
+
+def test_evidence_appears_in_the_built_prompt():
+    c = cand_with([R3_BIRTH_NEAR])
+    b = P.build(c, META, frames(range(0, 100)),
+                {i: (100, 100, 140, 200) for i in range(100)},
+                {i: (200, 150, 400, 300) for i in range(100)}, 6, 1.0, 0.25)
+    assert "FIRST appearance" in b.user
+
+
+def test_pass_by_rule_no_longer_swallows_appearances_at_the_vehicle():
+    """The old rule said 'stands near it -> pass_by' with no exception, which is
+    what made an exit look like a pass-by."""
+    c = cand_with([R1_DWELL])
+    b = P.build(c, META, frames(range(0, 100)),
+                {i: (100, 100, 140, 200) for i in range(100)},
+                {i: (200, 150, 400, 300) for i in range(100)}, 6, 1.0, 0.25)
+    assert "does NOT apply" in b.user

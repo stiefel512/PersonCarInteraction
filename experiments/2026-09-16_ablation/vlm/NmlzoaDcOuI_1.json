@@ -1,0 +1,98 @@
+{
+  "clip_id": "NmlzoaDcOuI_1",
+  "clip_meta": {
+    "fps": 6.0,
+    "n_frames": 108,
+    "width": 1280,
+    "height": 720
+  },
+  "config_hash": "sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b",
+  "interactions": [
+    {
+      "interaction_id": "NmlzoaDcOuI_1__i001",
+      "event_group_id": "NmlzoaDcOuI_1__g001",
+      "type": "open_close_door",
+      "frame_start": 14,
+      "frame_end": 16,
+      "time_start_s": 2.333,
+      "time_end_s": 2.667,
+      "person": {
+        "track_id": 8,
+        "description": "woman white shirt black pants sunglasses"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan parked",
+        "class": "car"
+      },
+      "note": "woman closes car door",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.1443,
+        "dwell_s": 0.5,
+        "vehicle_is_static": true,
+        "person_birth": 15,
+        "person_death": 15,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0,
+        "person_box_norm": [
+          0.26184,
+          0.78305,
+          0.34972,
+          0.99798
+        ],
+        "vehicle_box_norm": [
+          0.00098,
+          0.20682,
+          0.47734,
+          0.64579
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_1__i002",
+      "event_group_id": "NmlzoaDcOuI_1__g002",
+      "type": "exit_vehicle",
+      "frame_start": 53,
+      "frame_end": 84,
+      "time_start_s": 8.833,
+      "time_end_s": 14.0,
+      "person": {
+        "track_id": 9,
+        "description": "woman, blonde hair, white top, black pants"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "The woman exits the driver's side of the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 5.333,
+        "vehicle_is_static": true,
+        "person_birth": 54,
+        "person_death": 83,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "max_iou": 0.0521,
+        "person_box_norm": [
+          -4e-05,
+          0.10742,
+          0.11638,
+          0.33337
+        ],
+        "vehicle_box_norm": [
+          9e-05,
+          0.17668,
+          0.47864,
+          0.64786
+        ]
+      }
+    }
+  ]
+}

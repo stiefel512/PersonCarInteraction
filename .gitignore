@@ -22,8 +22,9 @@ data/ground_truth.pre-idfix.json
 #   experiments/      -- the run log (config.yaml + results.json per run)
 #   data/vlm_cache/   -- committed so results reproduce without a GPU
 
-# Source clips, 89 MB of the employer's take-home data. Ignored PENDING A
-# DECISION on whether to redistribute them in a public repo -- see the open
-# question in HANDOVER.md. Reproduction needs them; publishing them is the
-# user's call.
+# Source clips -- DELIBERATELY NOT SHIPPED (decided 2026-09-16).
+# 89 MB of the task-setter's footage. The repo is public, and redistributing
+# someone else's data is not ours to do. See README "Getting the data" for what
+# a reviewer needs; the committed outputs, metrics and VLM cache make the
+# results inspectable without the clips.
 Videos/

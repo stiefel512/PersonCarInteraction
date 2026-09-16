@@ -47,6 +47,24 @@ The clip set spans **352×288 to 3840×2160** and **6 to 30 fps**. So:
 A threshold tuned on one clip would otherwise mean something different on the
 next one.
 
+## Getting the data
+
+**The source clips are not in this repository, deliberately.** They are the
+task-setter's footage; publishing someone else's data is not ours to do. Place
+the 8 `.mp4` files in `Videos/` and everything below works unchanged — nothing
+is hard-coded to a clip beyond the ground-truth ids.
+
+What *is* committed, so the results stay inspectable without the clips:
+
+| | |
+|---|---|
+| `outputs/` and `experiments/*/` | every reported number, plus per-clip debug artifacts |
+| `data/ground_truth.json` | the 25 hand-labeled events |
+| `data/vlm_cache/` | every VLM response, keyed by image+prompt hash |
+| `experiments/*/frames/` | annotated frames from the probes |
+
+Re-running the pipeline needs the clips. Re-reading what it concluded does not.
+
 ## Setup
 
 System Python is 3.14, which has no torch wheels. The project needs its own
