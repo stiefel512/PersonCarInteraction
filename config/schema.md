@@ -23,10 +23,10 @@ comparability between runs.
 | `paths.vlm_cache` | `data/vlm_cache/` | committed; enables GPU-free reproduction |
 | `device` | `cuda:0` | |
 | `detector.model_id` | `Roboflow/rf-detr-large` | Apache-2.0; RF-DETR-L. Fallback `ustc-community/dfine-xlarge-coco` |
-| `detector.revision` | *(pinned hash)* | resolved at first run, then frozen |
+| `detector.revision` | `f62f7dd5252b61097cbace33886045816dadbde9` | **pinned.** A null revision resolves "latest" against the Hub: not reproducible, and it hangs on a slow connection. |
 | `detector.classes` | `[person, bicycle, car, motorcycle, bus, truck]` | COCO ids |
 | `vlm.model_id` | `Qwen/Qwen2.5-VL-7B-Instruct` | Apache-2.0 |
-| `vlm.revision` | *(pinned hash)* | |
+| `vlm.revision` | `cc594898137f460bfe9f0759e9844b3ce807cfb5` | pinned |
 | `vlm.max_new_tokens` | 512 | |
 | `vlm.temperature` | 0.0 | greedy; non-negotiable for determinism |
 | `vlm.batch_size` | 1 | batching perturbs outputs even at t=0 |
@@ -34,6 +34,7 @@ comparability between runs.
 | `tracker.name` | `bytetrack` | |
 | `tracker.gmc` | `orb` | hand-rolled ORB+RANSAC; no upstream Python GMC exists |
 | `openvocab.model_id` | `IDEA-Research/grounding-dino-base` | Apache-2.0; probe-only until design-plan §6.7 resolves |
+| `openvocab.revision` | `12bdfa3120f3e7ec7b434d90674b3396eccf88eb` | pinned |
 | `openvocab.box_threshold` | 0.27 | literature-suggested starting point |
 | `openvocab.text_threshold` | 0.25 | prompts must be lowercase, dot-terminated |
 
