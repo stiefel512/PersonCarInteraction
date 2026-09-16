@@ -80,6 +80,13 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
     t = cfg.tunable
     tiled = should_tile(meta, tiled)
 
+    # Fail fast on a missing or truncated VLM checkpoint. The judge is built
+    # only after detection, tracking and the door cue, so without this an
+    # incomplete download surfaces ten minutes into the clip.
+    if judge_name == "vlm":
+        from .judge.vlm import check_weights_available
+        check_weights_available(cfg.vlm.model_id, cfg.vlm.revision)
+
     # Pass 1: decide whether the camera moves, before tracking, because the
     # answer decides whether the tracker runs CMC at all. Unconditional CMC is
     # NOT free -- when feature matching degenerates it corrupts association

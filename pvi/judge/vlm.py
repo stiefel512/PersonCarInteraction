@@ -27,6 +27,50 @@ from . import prompt as P
 from .base import Judge, Verdict
 
 
+def check_weights_available(model_id: str, revision: str | None) -> None:
+    """Fail fast if the checkpoint is not fully present locally.
+
+    The VLM is constructed only after detection, tracking and the door cue have
+    run, so a missing shard otherwise surfaces ten minutes into a clip. Worse,
+    an *incomplete* snapshot is not obviously broken: `snapshot_download` can
+    exit 0 having fetched only some shards, and the directory looks populated.
+    Observed here -- 2 of 5 Qwen shards present, and the run died after a full
+    detect-and-track pass.
+
+    Checks the index's shard list against what is on disk. Raises with the
+    missing filenames rather than the library's generic "couldn't connect to
+    huggingface.co", which points at the network when the real problem is a
+    truncated cache.
+    """
+    import json
+
+    try:
+        from huggingface_hub import snapshot_download
+    except ImportError:          # pragma: no cover - hub is a hard dependency
+        return
+
+    try:
+        snap = Path(snapshot_download(model_id, revision=revision,
+                                      local_files_only=True))
+    except Exception as exc:
+        raise RuntimeError(
+            f"{model_id} (revision {revision}) is not in the local cache: {exc}"
+        ) from exc
+
+    index = snap / "model.safetensors.index.json"
+    if not index.exists():
+        return                   # single-file checkpoint; nothing to verify
+
+    want = sorted(set(json.loads(index.read_text())["weight_map"].values()))
+    missing = [w for w in want if not (snap / w).exists()]
+    if missing:
+        raise RuntimeError(
+            f"{model_id} is incomplete in the local cache: {len(missing)} of "
+            f"{len(want)} shards missing ({', '.join(missing)}). "
+            f"Re-run snapshot_download for this revision; it resumes."
+        )
+
+
 class VLMJudge(Judge):
     def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-7B-Instruct",
                  revision: str | None = None, device: str = "cuda:0",
