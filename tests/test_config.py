@@ -115,3 +115,40 @@ def test_dump_resolved_roundtrips(tmp_path):
     loaded = yaml.safe_load(out.read_text())
     assert loaded["_config_hash"] == config_hash(cfg)
     assert loaded["tunable"]["tau_near"] == cfg.tunable.tau_near
+
+
+# --- det_floor / det_conf split ---
+#
+# Pre-filtering detections at det_conf before the tracker disables ByteTrack's
+# second association pass, which is the mechanism that carries a track through
+# detector flicker. Measured on the night and CIF clips: the subject's
+# confidence oscillates between ~0.6 and ~0.1 frame to frame, and filtering at
+# 0.35 split one person into 5-7 sequential tracks.
+
+def test_det_conf_must_exceed_the_tracker_floor():
+    from pvi.config import TrackerCfg
+    with pytest.raises(ConfigError, match="det_floor"):
+        validate(Config(tracker=TrackerCfg(det_floor=0.6),
+                        tunable=Tunables(det_conf=0.5)))
+
+
+def test_equal_floor_and_conf_are_rejected():
+    from pvi.config import TrackerCfg
+    with pytest.raises(ConfigError, match="det_floor"):
+        validate(Config(tracker=TrackerCfg(det_floor=0.5),
+                        tunable=Tunables(det_conf=0.5)))
+
+
+def test_shipped_default_leaves_a_real_second_association_band():
+    """The gap between floor and det_conf IS the second-association pool. If it
+    collapses the fix is undone, silently."""
+    cfg = load("config/default.yaml")
+    assert cfg.tunable.det_conf - cfg.tracker.det_floor >= 0.2
+
+
+def test_det_conf_range_stays_above_the_floor():
+    """Every point the LOCO search can reach must satisfy the constraint, or the
+    sweep will raise partway through."""
+    from pvi.config import TUNABLE_RANGES
+    lo, _ = TUNABLE_RANGES["det_conf"]
+    assert lo > load("config/default.yaml").tracker.det_floor

@@ -1,0 +1,102 @@
+{
+  "clip_id": "mKzCQKTHizw_1",
+  "clip_meta": {
+    "fps": 29.97002997002997,
+    "n_frames": 276,
+    "width": 640,
+    "height": 360
+  },
+  "config_hash": "sha256:3bd05983186c6d95f43c429584b45f19b1074ee303712b6acb5ecb07a665bc0b",
+  "interactions": [
+    {
+      "interaction_id": "mKzCQKTHizw_1__i001",
+      "event_group_id": "mKzCQKTHizw_1__g001",
+      "type": "enter_vehicle",
+      "frame_start": 59,
+      "frame_end": 157,
+      "time_start_s": 1.969,
+      "time_end_s": 5.239,
+      "person": {
+        "track_id": 0,
+        "description": "person track 0"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.303,
+        "vehicle_is_static": false,
+        "person_birth": 65,
+        "person_death": 151,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.162,
+        "person_box_norm": [
+          0.21288,
+          -6e-05,
+          0.49131,
+          0.29358
+        ],
+        "vehicle_box_norm": [
+          0.02022,
+          0.0003,
+          0.60408,
+          0.41626
+        ]
+      }
+    },
+    {
+      "interaction_id": "mKzCQKTHizw_1__i002",
+      "event_group_id": "mKzCQKTHizw_1__g002",
+      "type": "enter_vehicle",
+      "frame_start": 108,
+      "frame_end": 199,
+      "time_start_s": 3.604,
+      "time_end_s": 6.64,
+      "person": {
+        "track_id": 1,
+        "description": "person track 1"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "car track 10000, moving",
+        "class": "car"
+      },
+      "note": "accepted by R2_death_near (geometric ablation arm; no semantic check)",
+      "confidence": 0.5,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.07,
+        "vehicle_is_static": false,
+        "person_birth": 104,
+        "person_death": 193,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.202,
+        "person_box_norm": [
+          0.00022,
+          0.0003,
+          0.44233,
+          0.99756
+        ],
+        "vehicle_box_norm": [
+          0.00032,
+          0.00052,
+          0.60408,
+          0.47779
+        ]
+      }
+    }
+  ]
+}

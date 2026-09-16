@@ -265,3 +265,47 @@ def test_two_genuinely_adjacent_cars_are_both_kept():
     a = d(0, 0, 100, 60, conf=0.9, cls=2)
     b = d(105, 0, 205, 60, conf=0.9, cls=2)
     assert len(nms([a, b], iou_thresh=0.55)) == 2
+
+
+# --- per-frame detection cap ---
+#
+# Lowering the tracker's detection floor to 0.10 multiplied per-frame counts,
+# and on the 4K clip that runs 28 tiles per frame the accumulated detections
+# exhausted system RAM.
+
+from pvi.detect.base import cap_per_frame
+
+
+def test_cap_keeps_the_highest_confidence_detections():
+    dets = [d(0, 0, 10, 10, conf=c / 100, cls=0) for c in range(1, 21)]
+    out = cap_per_frame(dets, limit=5)
+    assert len(out) == 5
+    assert min(x.conf for x in out) == pytest.approx(0.16)
+
+
+def test_cap_is_per_class_so_cars_cannot_crowd_out_people():
+    """On the aerial clip vehicles outnumber persons about five to one. An
+    overall cap would delete the people, which are the whole point."""
+    cars = [d(i, 0, i + 5, 10, conf=0.9, cls=2) for i in range(0, 300, 6)]
+    people = [d(i, 50, i + 4, 70, conf=0.2, cls=0) for i in range(0, 30, 6)]
+    out = cap_per_frame(cars + people, limit=10)
+    assert sum(1 for x in out if x.cls == 0) == 5
+    assert sum(1 for x in out if x.cls == 2) == 10
+
+
+def test_cap_is_a_no_op_below_the_limit():
+    dets = [d(0, 0, 10, 10, conf=0.5, cls=0), d(50, 50, 60, 60, conf=0.4, cls=0)]
+    assert len(cap_per_frame(dets, limit=100)) == 2
+
+
+def test_cap_is_deterministic_under_input_reordering():
+    dets = [d(i, 0, i + 5, 10, conf=0.5, cls=0) for i in range(0, 100, 5)]
+    assert [x.box for x in cap_per_frame(dets, limit=7)] == \
+           [x.box for x in cap_per_frame(list(reversed(dets)), limit=7)]
+
+
+def test_default_limit_is_well_above_a_realistic_scene():
+    """gt1125_06 peaks around 25 vehicles and 8 people per frame; the cap must
+    not bite on real content, only on the noise tail."""
+    from pvi.detect.base import MAX_DETS_PER_FRAME_PER_CLASS
+    assert MAX_DETS_PER_FRAME_PER_CLASS >= 50

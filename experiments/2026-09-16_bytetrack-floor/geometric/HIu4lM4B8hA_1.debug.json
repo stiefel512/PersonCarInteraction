@@ -1,0 +1,109 @@
+{
+  "clip_id": "HIu4lM4B8hA_1",
+  "judge": "geometric",
+  "detector_revision": "f62f7dd5252b61097cbace33886045816dadbde9",
+  "static_camera": true,
+  "tiled": false,
+  "cmc_enabled": false,
+  "n_detections": 5720,
+  "n_detections_above_det_conf": 581,
+  "det_floor": 0.1,
+  "det_conf": 0.5,
+  "n_person_tracks": 4,
+  "n_vehicle_tracks": 4,
+  "n_door_cue_frames": 183,
+  "n_door_detections": 297,
+  "n_candidates": 6,
+  "n_accepted": 6,
+  "tracks": [
+    {
+      "id": 0,
+      "cls": "person",
+      "birth": 59,
+      "death": 153,
+      "n_observed": 88,
+      "span_frames": 95,
+      "gap_frames": 7,
+      "centroid_motion": 0.5638,
+      "is_static": false
+    },
+    {
+      "id": 1,
+      "cls": "person",
+      "birth": 84,
+      "death": 164,
+      "n_observed": 81,
+      "span_frames": 81,
+      "gap_frames": 0,
+      "centroid_motion": 0.4257,
+      "is_static": false
+    },
+    {
+      "id": 2,
+      "cls": "person",
+      "birth": 150,
+      "death": 171,
+      "n_observed": 10,
+      "span_frames": 22,
+      "gap_frames": 12,
+      "centroid_motion": 0.102,
+      "is_static": false
+    },
+    {
+      "id": 3,
+      "cls": "person",
+      "birth": 184,
+      "death": 249,
+      "n_observed": 66,
+      "span_frames": 66,
+      "gap_frames": 0,
+      "centroid_motion": 0.3552,
+      "is_static": false
+    },
+    {
+      "id": 10000,
+      "cls": "car",
+      "birth": 0,
+      "death": 249,
+      "n_observed": 250,
+      "span_frames": 250,
+      "gap_frames": 0,
+      "centroid_motion": 0.0438,
+      "is_static": true
+    },
+    {
+      "id": 10001,
+      "cls": "car",
+      "birth": 0,
+      "death": 185,
+      "n_observed": 186,
+      "span_frames": 186,
+      "gap_frames": 0,
+      "centroid_motion": 0.0919,
+      "is_static": false
+    },
+    {
+      "id": 10002,
+      "cls": "car",
+      "birth": 0,
+      "death": 82,
+      "n_observed": 83,
+      "span_frames": 83,
+      "gap_frames": 0,
+      "centroid_motion": 0.0089,
+      "is_static": true
+    },
+    {
+      "id": 10003,
+      "cls": "car",
+      "birth": 177,
+      "death": 185,
+      "n_observed": 9,
+      "span_frames": 9,
+      "gap_frames": 0,
+      "centroid_motion": 0.0096,
+      "is_static": true
+    }
+  ],
+  "rejected": []
+}

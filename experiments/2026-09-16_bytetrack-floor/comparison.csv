@@ -1,0 +1,2 @@
+judge,clip,n_gt_positives,n_pred,tp,fp,fn,precision,recall,f1,pass_by_labeled,pass_by_fired,n_candidates,static_camera,tiled,seconds,note
+geometric,mKzCQKTHizw_1,1,2,1,1,0,0.5,1.0,0.6667,0,0,2,False,False,49.5,

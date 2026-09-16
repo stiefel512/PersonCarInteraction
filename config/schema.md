@@ -28,11 +28,13 @@ comparability between runs.
 | `vlm.model_id` | `Qwen/Qwen2.5-VL-7B-Instruct` | Apache-2.0 |
 | `vlm.revision` | `cc594898137f460bfe9f0759e9844b3ce807cfb5` | pinned |
 | `vlm.max_new_tokens` | 512 | |
+| `vlm.max_pixels_per_frame` | 401408 | `512*28*28`. Caps visual tokens per frame. Qwen's default (~12.8M) leaves them unbounded, since a crop is the union of person and vehicle boxes — a spurious distant track OOM'd a 48 GB card. |
 | `vlm.temperature` | 0.0 | greedy; non-negotiable for determinism |
 | `vlm.batch_size` | 1 | batching perturbs outputs even at t=0 |
 | `tracker.impl` | `roboflow-trackers` | Apache-2.0; Ultralytics/BoxMOT are AGPL |
 | `tracker.name` | `bytetrack` | |
-| `tracker.gmc` | `orb` | hand-rolled ORB+RANSAC; no upstream Python GMC exists |
+| `tracker.gmc` | `orb` | library CMC (`roboflow/trackers` 2.6.0 ships one; design-plan §6c.1) |
+| `tracker.det_floor` | 0.10 | confidence floor for detections given to the tracker. Far below `det_conf` deliberately: ByteTrack's second association pass needs low-confidence detections to bridge detector flicker. |
 | `openvocab.model_id` | `IDEA-Research/grounding-dino-base` | Apache-2.0; probe-only until design-plan §6.7 resolves |
 | `openvocab.revision` | `12bdfa3120f3e7ec7b434d90674b3396eccf88eb` | pinned |
 | `openvocab.box_threshold` | 0.27 | literature-suggested starting point |
@@ -44,7 +46,7 @@ Searched by LOCO threshold selection and any later sweep.
 
 | name | type | default | range | meaning |
 |---|---|---|---|---|
-| `det_conf` | float | 0.35 | [0.10, 0.70] | detection confidence floor |
+| `det_conf` | float | 0.50 | [0.15, 0.80] | **tracker high-confidence threshold, not a pre-filter.** At or above it a detection can start a track and joins the first association pass; between `tracker.det_floor` and here it feeds the second pass. Constraint: `det_conf > tracker.det_floor`. |
 | `tau_near` | float | 0.15 | [0.05, 0.40] | contact-enter, in vehicle-diagonal units |
 | `tau_far` | float | 0.30 | [0.10, 0.80] | contact-leave (hysteresis) |
 | `min_dwell_s` | float | 0.5 | [0.3, 0.7] | R1 dwell trigger, seconds |
@@ -62,6 +64,9 @@ meaningless configurations, so they are validated at config load:
 
 - **`tau_far > tau_near`** — otherwise the hysteresis degenerates and a person
   hovering near the threshold yields fragmented spans instead of one.
+- **`det_conf > tracker.det_floor`** — the floor feeds ByteTrack's second
+  association pass and `det_conf` is the high-confidence cut; inverting them
+  would leave the second pass empty, which is the bug this split exists to fix.
 - **`min_dwell_s < 0.75`** — the shortest positive event in the GT is 0.75 s, so
   a larger value makes R1 structurally unable to fire on it.
 

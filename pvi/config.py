@@ -61,6 +61,11 @@ class VLMCfg:
     max_new_tokens: int = 512
     temperature: float = 0.0
     batch_size: int = 1
+    # Pixel cap per image handed to the VLM. Qwen's own default (~12.8M) leaves
+    # the token count unbounded, because a crop is the union of the person and
+    # vehicle boxes and a spurious distant track makes that enormous.
+    # 401408 = 512 * 28 * 28, so ~512 visual tokens per frame.
+    max_pixels_per_frame: int = 401_408
 
 
 @dataclass(frozen=True)
@@ -68,6 +73,15 @@ class TrackerCfg:
     impl: str = "roboflow-trackers"
     name: str = "bytetrack"
     gmc: str = "orb"
+    # Confidence floor for detections HANDED TO THE TRACKER. Deliberately far
+    # below `det_conf`, because ByteTrack's whole contribution is a second
+    # association pass over LOW-confidence detections, which is what carries a
+    # track through a few frames of detector flicker. Pre-filtering at
+    # `det_conf` deletes exactly that pool and disables the mechanism.
+    # Measured: on the night and CIF clips the subject's confidence oscillates
+    # between ~0.6 and ~0.1 frame to frame, and filtering at 0.35 split one
+    # person into 5-7 sequential tracks.
+    det_floor: float = 0.10
 
 
 @dataclass(frozen=True)
@@ -80,7 +94,11 @@ class OpenVocabCfg:
 
 @dataclass(frozen=True)
 class Tunables:
-    det_conf: float = 0.35
+    # Not a pre-filter. This is the tracker's high-confidence threshold: at or
+    # above it a detection can start a track and joins the first association
+    # pass; between `tracker.det_floor` and here it still feeds the second
+    # association pass. See TrackerCfg.det_floor.
+    det_conf: float = 0.50
     tau_near: float = 0.15
     tau_far: float = 0.30
     min_dwell_s: float = 0.5
@@ -95,7 +113,7 @@ class Tunables:
 # Declared ranges, kept next to the defaults so a sweep cannot drift from the
 # documented schema. Inclusive on both ends.
 TUNABLE_RANGES: dict[str, tuple[float, float]] = {
-    "det_conf": (0.10, 0.70),
+    "det_conf": (0.15, 0.80),
     "tau_near": (0.05, 0.40),
     "tau_far": (0.10, 0.80),
     "min_dwell_s": (0.3, 0.7),
@@ -146,6 +164,13 @@ def validate(cfg: Config) -> None:
         raise ConfigError(
             f"tau_far ({t.tau_far}) must exceed tau_near ({t.tau_near}); "
             "otherwise the near/far hysteresis degenerates into a single threshold"
+        )
+    if t.det_conf <= cfg.tracker.det_floor:
+        raise ConfigError(
+            f"det_conf ({t.det_conf}) must exceed tracker.det_floor "
+            f"({cfg.tracker.det_floor}); det_conf is the confidence at which a "
+            "detection is trusted enough to start a track and to enter the "
+            "first association pass, and the floor is what feeds the second pass"
         )
     if t.min_dwell_s >= SHORTEST_POSITIVE_S:
         raise ConfigError(

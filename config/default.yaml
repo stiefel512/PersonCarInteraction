@@ -32,12 +32,19 @@ vlm:
   revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
   max_new_tokens: 512
   temperature: 0.0        # greedy; required for determinism
+  max_pixels_per_frame: 401408   # 512*28*28; bounds VLM tokens per frame
   batch_size: 1           # batching perturbs outputs even at t=0
 
 tracker:
   impl: roboflow-trackers
   name: bytetrack
   gmc: orb
+  # Confidence floor for detections handed to the TRACKER -- far below
+  # det_conf on purpose. ByteTrack's second association pass uses
+  # low-confidence detections to carry a track through detector flicker;
+  # pre-filtering at det_conf deletes that pool and splits one person into
+  # several sequential tracks on the night and CIF clips.
+  det_floor: 0.10
 
 openvocab:
   model_id: IDEA-Research/grounding-dino-base
@@ -46,7 +53,7 @@ openvocab:
   text_threshold: 0.25
 
 tunable:
-  det_conf: 0.35
+  det_conf: 0.50         # tracker high-confidence threshold, NOT a pre-filter
   tau_near: 0.15
   tau_far: 0.30          # constraint: must exceed tau_near
   min_dwell_s: 0.5       # constraint: must be < 0.75 (shortest GT positive)

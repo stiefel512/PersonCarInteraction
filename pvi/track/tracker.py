@@ -51,7 +51,17 @@ class MultiClassTracker:
     """
 
     def __init__(self, meta: ClipMeta, enable_cmc: bool = True,
-                 cmc_method: str = "orb", min_consecutive: int = 2):
+                 cmc_method: str = "orb", min_consecutive: int = 2,
+                 det_conf: float = 0.50):
+        """`det_conf` is the tracker's HIGH-confidence threshold, not a filter.
+
+        At or above it a detection may start a track and joins the first
+        association pass; anything below (down to whatever floor the caller
+        used when detecting) feeds ByteTrack's second association pass, which
+        is what carries a track through detector flicker. Both library
+        thresholds are set from it so there is one number to reason about
+        rather than two that can silently disagree.
+        """
         from trackers import BoTSORTTracker
 
         def make():
@@ -60,6 +70,8 @@ class MultiClassTracker:
                 enable_cmc=enable_cmc,
                 cmc_method=cmc_method,
                 minimum_consecutive_frames=min_consecutive,
+                track_activation_threshold=det_conf,
+                high_conf_det_threshold=det_conf,
                 # lost_track_buffer in frames; 1 s of tolerance for an occlusion
                 # behind a vehicle, expressed in seconds because the set spans
                 # 6-30 fps and a fixed frame count would mean 5x different
@@ -136,13 +148,14 @@ class MultiClassTracker:
 
 def track_objects(detections: list[Detection], meta: ClipMeta,
                   frames: dict[int, np.ndarray], enable_cmc: bool = True,
-                  cmc_method: str = "orb") -> list[Track]:
+                  cmc_method: str = "orb", det_conf: float = 0.50) -> list[Track]:
     """Batch convenience wrapper, for callers that already hold every frame.
 
     The streaming `MultiClassTracker` is what the CLI uses; this exists for
     tests and small clips.
     """
-    tr = MultiClassTracker(meta, enable_cmc=enable_cmc, cmc_method=cmc_method)
+    tr = MultiClassTracker(meta, enable_cmc=enable_cmc, cmc_method=cmc_method,
+                           det_conf=det_conf)
     by_frame: dict[int, list[Detection]] = {}
     for d in detections:
         by_frame.setdefault(d.frame, []).append(d)

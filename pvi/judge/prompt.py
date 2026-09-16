@@ -94,14 +94,22 @@ class PromptBundle:
     system: str
     user: str
 
-    def cache_key(self) -> str:
-        """Hash of the exact image bytes plus the prompt text.
+    def cache_key(self, salt: str = "") -> str:
+        """Hash of the exact image bytes, the prompt text, and `salt`.
 
         Keyed on the rendered images rather than on frame indices and box
         coordinates, because a change in cropping or box drawing must invalidate
         the entry -- otherwise a cached verdict would be replayed against
         different pixels. This is what lets the committed cache reproduce
         results without a GPU (design-plan s7).
+
+        `salt` carries everything OUTSIDE the images and prompt that changes the
+        answer: the model id, its revision, and the decode and pixel budgets.
+        Without it the cache is silently wrong across exactly the comparisons
+        this project intends to make -- design-plan s6.4 calls for reporting
+        both Qwen2.5-VL-7B and 32B, and with an unsalted key the 32B run would
+        replay the 7B verdicts. The per-frame pixel cap belongs here too: it
+        changes what the model is shown without changing the PIL image we hash.
         """
         h = hashlib.sha256()
         for im in self.images:
@@ -109,6 +117,7 @@ class PromptBundle:
             h.update(f"{im.size}".encode())
         h.update(self.system.encode())
         h.update(self.user.encode())
+        h.update(salt.encode())
         return h.hexdigest()
 
 

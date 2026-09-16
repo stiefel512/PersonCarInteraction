@@ -120,6 +120,32 @@ class Detector(abc.ABC):
         """Resolved model revision hash, recorded in the output for determinism."""
 
 
+# Cap on detections kept per frame per class, after sorting by confidence.
+# A surveillance frame holds tens of relevant objects, not hundreds; the tail
+# below this is noise. The cap exists because lowering the tracker's detection
+# floor to 0.10 multiplied per-frame counts, and on the 4K clip that runs 28
+# tiles per frame, which exhausted system RAM.
+MAX_DETS_PER_FRAME_PER_CLASS = 100
+
+
+def cap_per_frame(dets: Sequence[Detection],
+                  limit: int = MAX_DETS_PER_FRAME_PER_CLASS) -> list[Detection]:
+    """Keep the `limit` highest-confidence detections of each class.
+
+    Per class, not overall, so a frame full of parked cars cannot crowd out the
+    people -- which is exactly the situation on the aerial clip, where vehicles
+    outnumber persons five to one.
+    """
+    by_cls: dict[int, list[Detection]] = {}
+    for d in dets:
+        by_cls.setdefault(d.cls, []).append(d)
+    out: list[Detection] = []
+    for cls in sorted(by_cls):
+        pool = sorted(by_cls[cls], key=lambda d: (-d.conf, d.box))
+        out.extend(pool[:limit])
+    return sorted(out, key=lambda d: (d.frame, d.cls, -d.conf, d.box))
+
+
 def ios(a: Box, b: Box) -> float:
     """Intersection over the SMALLER box's area.
 

@@ -16,7 +16,7 @@ import torch
 
 from . import config as C
 from . import video
-from .detect.base import COCO_PERSON, Detection
+from .detect.base import COCO_PERSON, Detection, cap_per_frame
 from .detect.hf import HFDetector
 from .detect.sliced import SlicedDetector
 from .judge.base import Verdict
@@ -58,18 +58,41 @@ def should_tile(meta: ClipMeta, requested: bool | None) -> bool:
     return meta.width >= TILE_MIN_WIDTH
 
 
+# Loaded models, keyed by what distinguishes them. Process-lifetime, because
+# `tools/run_all.py` runs 8 clips x 2 judges in ONE process and `run_clip` used
+# to construct every model afresh each call -- 16 loads of a 16 GB VLM among
+# them, which exhausted system RAM partway through the set. Caching also removes
+# most of the wall-clock: loading Qwen costs far more than judging a clip.
+_MODELS: dict[tuple, object] = {}
+
+
+def clear_model_cache() -> None:
+    """Drop cached models. For tests and for callers switching checkpoints."""
+    _MODELS.clear()
+    _free_gpu()
+
+
 def build_detector(cfg: C.Config, tiled: bool):
-    det = HFDetector(cfg.detector.model_id, revision=cfg.detector.revision,
-                     device=cfg.device, classes=cfg.detector.classes)
-    if tiled:
-        return SlicedDetector(inner=det)
-    return det
+    key = ("detector", cfg.detector.model_id, cfg.detector.revision, cfg.device)
+    if key not in _MODELS:
+        _MODELS[key] = HFDetector(
+            cfg.detector.model_id, revision=cfg.detector.revision,
+            device=cfg.device, classes=cfg.detector.classes)
+    det = _MODELS[key]
+    # The sliced wrapper is a thin decorator over the shared detector, so it is
+    # rebuilt per clip while the weights are loaded once.
+    return SlicedDetector(inner=det) if tiled else det
 
 
 # Stored grayscale frames are downscaled to this max width. 600 frames of 4K
 # grayscale is ~5 GB, and the one thing these frames feed -- the camera-motion
 # decision -- loses nothing at 960 px.
 GRAY_MAX_WIDTH = 960
+
+# Memory budget for frames held while judging. `read_frames` materialises every
+# frame it is given, and a 4K frame is 25 MB, so an unbounded request is a
+# multi-gigabyte allocation. Candidates are judged in chunks that fit this.
+MAX_JUDGE_FRAME_BYTES = 1_500_000_000
 
 
 def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
@@ -98,17 +121,31 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
 
     # Pass 2: detect and track in one streaming pass. Streaming because the 4K
     # clip cannot be held in memory and the tracker's CMC needs the real frame.
+    # Detect down to the FLOOR, not to det_conf. ByteTrack's second association
+    # pass needs the low-confidence detections; pre-filtering at det_conf
+    # deletes them and splits one person into several sequential tracks on any
+    # clip where the detector flickers. det_conf is passed to the tracker as its
+    # high-confidence threshold instead.
     tracker = MultiClassTracker(meta, enable_cmc=not static_camera,
-                                cmc_method=cfg.tracker.gmc)
-    dets: list[Detection] = []
+                                cmc_method=cfg.tracker.gmc,
+                                det_conf=t.det_conf)
+    # Counted, not accumulated. Holding every detection for the whole clip is
+    # pure memory cost for a debug statistic, and at the 0.10 floor on the 4K
+    # tiled clip that list is enormous.
+    n_dets = 0
+    n_dets_above_conf = 0
     buf, idxs = [], []
 
     def flush():
+        nonlocal n_dets, n_dets_above_conf
         if not buf:
             return
-        for per_frame, fi, fr in zip(detector.detect(buf, meta, idxs, t.det_conf),
-                                     idxs, buf):
-            dets.extend(per_frame)
+        for per_frame, fi, fr in zip(
+                detector.detect(buf, meta, idxs, cfg.tracker.det_floor),
+                idxs, buf):
+            per_frame = cap_per_frame(per_frame)
+            n_dets += len(per_frame)
+            n_dets_above_conf += sum(1 for d in per_frame if d.conf >= t.det_conf)
             tracker.update(fi, fr, per_frame)
         buf.clear()
         idxs.clear()
@@ -156,6 +193,9 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
                     t.door_conf_thresh)
 
     # --- judge ---
+    detector_revision = detector.revision
+    _free_gpu()
+
     accepted, rejected = _judge_all(cands, meta, clip_path, cfg, judge_name,
                                     feats, persons, vehicles)
 
@@ -191,11 +231,14 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
     debug = {
         "clip_id": meta.clip_id,
         "judge": judge_name,
-        "detector_revision": detector.revision,
+        "detector_revision": detector_revision,
         "static_camera": static_camera,
         "tiled": tiled,
         "cmc_enabled": not static_camera,
-        "n_detections": len(dets),
+        "n_detections": n_dets,
+        "n_detections_above_det_conf": n_dets_above_conf,
+        "det_floor": cfg.tracker.det_floor,
+        "det_conf": t.det_conf,
         "n_person_tracks": len(persons),
         "n_vehicle_tracks": len(vehicles),
         "n_door_cue_frames": len(door_dets),
@@ -259,20 +302,33 @@ def _detect_doors(clip_path: Path, meta: ClipMeta, frames: list[int],
     """
     from .detect.openvocab import OpenVocabDetector
 
-    ov = OpenVocabDetector(cfg.openvocab.model_id,
-                           revision=cfg.openvocab.revision, device=cfg.device)
-    decoded = video.read_frames(clip_path, frames, meta)
+    key = ("openvocab", cfg.openvocab.model_id, cfg.openvocab.revision, cfg.device)
+    if key not in _MODELS:
+        _MODELS[key] = OpenVocabDetector(
+            cfg.openvocab.model_id, revision=cfg.openvocab.revision,
+            device=cfg.device)
+    ov = _MODELS[key]
+    # Streamed one frame at a time rather than materialised. `read_frames`
+    # holds every requested frame, and at 25 MB per 4K frame a few hundred of
+    # them exhausts system RAM -- which is what happened once the lowered
+    # detection floor multiplied the number of near-spans.
+    wanted = set(frames)
+    last = max(wanted)
     out: dict[int, list] = {}
-    for f in frames:
-        dets = ov.detect([decoded[f]], [f], ["open car door"],
-                         cfg.openvocab.box_threshold, cfg.openvocab.text_threshold)[0]
+    for f, frame in video.iter_frames(clip_path, meta):
+        if f in wanted:
+            dets = ov.detect([frame], [f], ["open car door"],
+                             cfg.openvocab.box_threshold,
+                             cfg.openvocab.text_threshold)[0]
         # Grounding DINO returns the matched token span, which for a weakly
         # grounded phrase can be a fragment such as "open" -- accept those too,
         # but they are a signal the grounding is poor (see the arm C findings).
-        hits = [(d.box, d.conf) for d in dets
-                if "door" in d.label or d.label.strip() == "open"]
-        if hits:
-            out[f] = hits
+            hits = [(d.box, d.conf) for d in dets
+                    if "door" in d.label or d.label.strip() == "open"]
+            if hits:
+                out[f] = hits
+        if f >= last:
+            break
     return out
 
 
@@ -301,6 +357,14 @@ def _span_box_norm(track, span, meta: ClipMeta) -> list[float] | None:
             round(float(a[:, 1].min() / meta.height), 5),
             round(float(a[:, 2].max() / meta.width), 5),
             round(float(a[:, 3].max() / meta.height), 5)]
+
+
+def _free_gpu() -> None:
+    import gc
+
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 def _cls_name(cls: int) -> str:
@@ -381,28 +445,62 @@ def _judge_all(cands, meta, clip_path, cfg, judge_name, feats, persons, vehicles
 
     from .judge.vlm import VLMJudge
     t = cfg.tunable
-    judge = VLMJudge(cfg.vlm.model_id, revision=cfg.vlm.revision, device=cfg.device,
-                     cache_dir=cfg.paths.vlm_cache,
-                     max_new_tokens=cfg.vlm.max_new_tokens,
-                     n_frames=t.n_vlm_frames, context_pad_s=t.context_pad_s,
-                     crop_margin=t.crop_margin, conf_thresh=t.vlm_conf_thresh)
+    key = ("vlm", cfg.vlm.model_id, cfg.vlm.revision, cfg.device,
+           cfg.vlm.max_pixels_per_frame)
+    if key not in _MODELS:
+        _MODELS[key] = VLMJudge(
+            cfg.vlm.model_id, revision=cfg.vlm.revision, device=cfg.device,
+            cache_dir=cfg.paths.vlm_cache,
+            max_new_tokens=cfg.vlm.max_new_tokens,
+            max_pixels_per_frame=cfg.vlm.max_pixels_per_frame)
+    judge = _MODELS[key]
+    # Tunables can change between clips and between LOCO settings while the
+    # weights stay put, so they are applied to the cached instance. Anything in
+    # the cache KEY changes what the model is; these only change how it is used.
+    judge.n_frames = t.n_vlm_frames
+    judge.context_pad_s = t.context_pad_s
+    judge.crop_margin = t.crop_margin
+    judge.conf_thresh = t.vlm_conf_thresh
 
     pbox = {p.id: dict(zip(p.frames, p.boxes)) for p in persons}
     vbox = {v.id: dict(zip(v.frames, v.boxes)) for v in vehicles}
 
-    # Decode only the frames the judge will actually look at.
+    # Decode only the frames the judge will look at, and only for a few
+    # candidates at a time. Holding every candidate's frames at once is what
+    # exhausted RAM on the 4K clip: 25 MB per frame, and the lowered detection
+    # floor raised the candidate count.
     from .propose.spans import dilate_span, sample_frames
-    wanted: set[int] = set()
-    for c in cands:
+
+    def frames_for(c):
         span = dilate_span(c.span, meta.to_frames(t.context_pad_s), meta.n_frames)
-        wanted.update(sample_frames(span, t.n_vlm_frames))
-    frames = video.read_frames(clip_path, sorted(wanted), meta) if wanted else {}
+        return sample_frames(span, t.n_vlm_frames)
+
+    frame_bytes = meta.width * meta.height * 3
+    per_chunk = max(1, int(MAX_JUDGE_FRAME_BYTES // max(1, frame_bytes)))
+
+    pending: list[Candidate] = []
+    pending_frames: set[int] = set()
+
+    def run_chunk():
+        if not pending:
+            return
+        frames = video.read_frames(clip_path, sorted(pending_frames), meta)
+        for c in pending:
+            v = judge.judge(c, meta, frames=frames,
+                            person_boxes=pbox.get(c.person_id, {}),
+                            vehicle_boxes=vbox.get(c.vehicle_id, {}))
+            (accepted if v and v.is_interaction else rejected).append((c, v))
+        pending.clear()
+        pending_frames.clear()
+        _free_gpu()
 
     for c in cands:
-        v = judge.judge(c, meta, frames=frames,
-                        person_boxes=pbox.get(c.person_id, {}),
-                        vehicle_boxes=vbox.get(c.vehicle_id, {}))
-        (accepted if v and v.is_interaction else rejected).append((c, v))
+        need = set(frames_for(c))
+        if pending and len(pending_frames | need) > per_chunk:
+            run_chunk()
+        pending.append(c)
+        pending_frames.update(need)
+    run_chunk()
     return accepted, rejected
 
 

@@ -1,0 +1,102 @@
+{
+  "clip_id": "NmlzoaDcOuI_6",
+  "clip_meta": {
+    "fps": 6.0,
+    "n_frames": 102,
+    "width": 1280,
+    "height": 720
+  },
+  "config_hash": "sha256:4be4c76ae1032160d23f1ef5e4d1c5eca9e16be55712eacb000ebfafb70ca596",
+  "interactions": [
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i001",
+      "event_group_id": "NmlzoaDcOuI_6__g001",
+      "type": "exit_vehicle",
+      "frame_start": 0,
+      "frame_end": 48,
+      "time_start_s": 0.0,
+      "time_end_s": 8.0,
+      "person": {
+        "track_id": 1,
+        "description": "man, green shirt + black shorts, black shoes, folder"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "red sedan, parked, right side of frame",
+        "class": "car"
+      },
+      "note": "The man exits the red sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R3_birth_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 8.167,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 55,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": true,
+        "max_iou": 0.3239,
+        "person_box_norm": [
+          0.20317,
+          0.13653,
+          0.76623,
+          0.73692
+        ],
+        "vehicle_box_norm": [
+          0.00079,
+          0.18244,
+          0.47932,
+          0.6992
+        ]
+      }
+    },
+    {
+      "interaction_id": "NmlzoaDcOuI_6__i002",
+      "event_group_id": "NmlzoaDcOuI_6__g002",
+      "type": "open_close_door",
+      "frame_start": 76,
+      "frame_end": 79,
+      "time_start_s": 12.667,
+      "time_end_s": 13.167,
+      "person": {
+        "track_id": 13,
+        "description": "child, purple top + black pants, baby in arms"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "red, sedan, moving, right side of frame",
+        "class": "car"
+      },
+      "note": "The child is seen opening the rear passenger door of the red sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.1196,
+        "dwell_s": 0.667,
+        "vehicle_is_static": false,
+        "person_birth": 76,
+        "person_death": 78,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0,
+        "person_box_norm": [
+          0.90966,
+          0.01463,
+          0.93221,
+          0.08354
+        ],
+        "vehicle_box_norm": [
+          0.62549,
+          0.00051,
+          0.88036,
+          0.2014
+        ]
+      }
+    }
+  ]
+}

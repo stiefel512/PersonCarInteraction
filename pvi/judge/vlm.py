@@ -78,6 +78,7 @@ class VLMJudge(Judge):
                  max_new_tokens: int = 512,
                  n_frames: int = 12, context_pad_s: float = 1.0,
                  crop_margin: float = 0.25, conf_thresh: float = 0.5,
+                 max_pixels_per_frame: int = 401_408,
                  load_model: bool = True):
         self.model_id = model_id
         self.device = device
@@ -88,6 +89,15 @@ class VLMJudge(Judge):
         self.context_pad_s = context_pad_s
         self.crop_margin = crop_margin
         self.conf_thresh = conf_thresh
+        # Cap on pixels per image handed to the VLM. Qwen2.5-VL's own default is
+        # ~12.8M, which with n_vlm_frames images per candidate is unbounded in
+        # practice: the crop is the union of the person and vehicle boxes, so a
+        # spurious track far from the vehicle produces an enormous crop and an
+        # enormous token count. Observed as a 4.5 GiB allocation failure on a
+        # 48 GB card once low-confidence detections started reaching the tracker.
+        # 401408 = 512 * 28 * 28, i.e. ~512 visual tokens per frame, so 12
+        # frames cost ~6k tokens regardless of how bad a crop gets.
+        self.max_pixels_per_frame = max_pixels_per_frame
 
         self.n_cache_hits = 0
         self.n_cache_misses = 0
@@ -101,7 +111,9 @@ class VLMJudge(Judge):
     def _load(self, revision: str | None) -> None:
         from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
 
-        self.processor = AutoProcessor.from_pretrained(self.model_id, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(
+            self.model_id, revision=revision,
+            max_pixels=self.max_pixels_per_frame)
         self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             self.model_id, revision=revision, dtype=torch.bfloat16,
         ).to(self.device).eval()
@@ -166,8 +178,16 @@ class VLMJudge(Judge):
         trimmed = out[0][inputs["input_ids"].shape[1]:]
         return self.processor.decode(trimmed, skip_special_tokens=True)
 
+    @property
+    def cache_salt(self) -> str:
+        """Everything outside the images and prompt that changes the verdict."""
+        return "|".join(str(x) for x in (
+            self.model_id, self._revision, self.max_new_tokens,
+            self.max_pixels_per_frame,
+        ))
+
     def judge_bundle(self, bundle: P.PromptBundle) -> dict | None:
-        key = bundle.cache_key()
+        key = bundle.cache_key(self.cache_salt)
         hit = self._cached(key)
         if hit is not None:
             self.n_cache_hits += 1
@@ -179,6 +199,7 @@ class VLMJudge(Judge):
         self._store(key, {
             "model_id": self.model_id,
             "revision": self._revision,
+            "max_pixels_per_frame": self.max_pixels_per_frame,
             "frame_indices": bundle.frame_indices,
             "raw": raw,
             "parsed": parsed,

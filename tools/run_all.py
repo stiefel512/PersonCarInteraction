@@ -42,6 +42,11 @@ def main() -> None:
     ap.add_argument("--judges", default="geometric,vlm")
     ap.add_argument("--videos", type=Path, default=Path("Videos"))
     ap.add_argument("--outdir", type=Path, default=None)
+    ap.add_argument("--clips", default=None,
+                    help="comma-separated clip ids; default all. Running one "
+                         "clip per process bounds page-cache growth, which on "
+                         "this machine tripped the OOM watchdog partway through "
+                         "the set even with ~50 GB genuinely available.")
     ap.add_argument("--rescore", action="store_true",
                     help="re-score existing outputs in --outdir without "
                          "re-running inference; use after a change to matching "
@@ -61,6 +66,9 @@ def main() -> None:
         gt_by_clip.setdefault(g.clip_id, []).append(g)
 
     clips = sorted(args.videos.glob("*.mp4"))
+    if args.clips:
+        want = {c.strip() for c in args.clips.split(",") if c.strip()}
+        clips = [c for c in clips if c.stem in want]
     rows: list[dict] = []
     reports: dict = {}
 
@@ -109,6 +117,8 @@ def main() -> None:
                   f"({d['tp']}/{d['fp']}/{d['fn']})"
                   + ("" if elapsed != elapsed else f"  {elapsed:.0f}s"))
 
+        if args.clips:
+            continue          # partial run: a pooled row here would be a lie
         rep = full_report(pooled_preds, gts)
         reports[f"{judge}/POOLED"] = rep
         d = rep["primary"]["tier1_detection"]

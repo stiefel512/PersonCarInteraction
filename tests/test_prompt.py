@@ -262,3 +262,52 @@ def test_prompt_keeps_a_strong_pass_by_default_and_a_narrow_exception():
                 {i: (200, 150, 400, 300) for i in range(100)}, 6, 1.0, 0.25)
     assert "When in doubt, answer pass_by" in b.user
     assert "does NOT apply" in b.user
+
+
+# --- cache key salt ---
+#
+# The key hashes the rendered images and prompt. Anything else that changes the
+# answer must be salted in, or the cache is silently wrong across exactly the
+# comparisons this project intends to make.
+
+def _bundle():
+    return P.build(cand(), META, frames(range(15, 46)),
+                   {i: (100, 100, 140, 200) for i in range(15, 46)},
+                   {i: (200, 150, 400, 300) for i in range(15, 46)}, 6, 1.0, 0.25)
+
+
+def test_salt_changes_the_key():
+    b = _bundle()
+    assert b.cache_key("model-a") != b.cache_key("model-b")
+
+
+def test_same_salt_is_stable():
+    b = _bundle()
+    assert b.cache_key("x") == b.cache_key("x")
+
+
+def test_switching_model_would_not_replay_the_other_models_verdicts():
+    """design-plan §6.4 calls for reporting both Qwen2.5-VL-7B and 32B. With an
+    unsalted key the 32B run would serve the 7B answers."""
+    from pvi.judge.vlm import VLMJudge
+    a = VLMJudge(model_id="Qwen/Qwen2.5-VL-7B-Instruct", load_model=False)
+    b = VLMJudge(model_id="Qwen/Qwen2.5-VL-32B-Instruct", load_model=False)
+    bundle = _bundle()
+    assert bundle.cache_key(a.cache_salt) != bundle.cache_key(b.cache_salt)
+
+
+def test_changing_the_pixel_budget_invalidates_the_entry():
+    """The cap changes what the model is shown without changing the PIL image
+    we hash, so it has to be in the salt."""
+    from pvi.judge.vlm import VLMJudge
+    a = VLMJudge(max_pixels_per_frame=401_408, load_model=False)
+    b = VLMJudge(max_pixels_per_frame=200_704, load_model=False)
+    bundle = _bundle()
+    assert bundle.cache_key(a.cache_salt) != bundle.cache_key(b.cache_salt)
+
+
+def test_revision_is_in_the_salt():
+    from pvi.judge.vlm import VLMJudge
+    a = VLMJudge(revision="aaa", load_model=False)
+    b = VLMJudge(revision="bbb", load_model=False)
+    assert _bundle().cache_key(a.cache_salt) != _bundle().cache_key(b.cache_salt)

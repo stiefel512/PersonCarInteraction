@@ -54,7 +54,9 @@ from .metrics import detection_prf
 # Grid over the four searched knobs. Deliberately coarse: with ~2.25 positives
 # per held-out fold, a finer grid resolves noise, not signal.
 GRID: dict[str, tuple[float, ...]] = {
-    "det_conf": (0.25, 0.35, 0.50),
+    # det_conf is the tracker's high-confidence threshold, not a
+    # pre-filter, so the useful band sits well above tracker.det_floor.
+    "det_conf": (0.35, 0.50, 0.65),
     "tau_near": (0.08, 0.15, 0.25),
     "tau_far": (0.20, 0.30, 0.45),
     "vlm_conf_thresh": (0.3, 0.5, 0.7),

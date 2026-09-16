@@ -1,0 +1,26 @@
+{
+  "frame_indices": [
+    70,
+    71,
+    73,
+    74,
+    75,
+    77,
+    78,
+    80,
+    81,
+    82,
+    84,
+    85
+  ],
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The child is seen opening the rear passenger door of the red sedan.",
+    "person": "child, purple top + black pants, baby in arms",
+    "type": "open_close_door",
+    "vehicle": "red, sedan, moving, right side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"open_close_door\",\n    \"confidence\": 0.9,\n    \"person\": \"child, purple top + black pants, baby in arms\",\n    \"vehicle\": \"red, sedan, moving, right side of frame\",\n    \"note\": \"The child is seen opening the rear passenger door of the red sedan.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}
