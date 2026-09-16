@@ -199,3 +199,59 @@ def test_evidence_records_min_d_norm_and_dwell():
 def test_no_contact_yields_no_candidates():
     assert propose_pair(pf(far_series()), track(0, N - 1), META,
                         0.15, 0.30, 0.5, 0.30) == []
+
+
+# --- frame-edge birth/death ---
+#
+# Track birth means the tracker first saw the person, NOT that they emerged from
+# a vehicle. A pedestrian walking into shot beside a parked car looks identical
+# to an exit unless you check whether their first box was against the border.
+
+from pvi.propose.rules import at_frame_edge
+
+FRAME = ClipMeta(clip_id="t", width=640, height=480, fps=10.0, n_frames=N)
+
+
+def test_box_against_the_left_border_is_at_the_edge():
+    assert at_frame_edge((0.0, 200.0, 40.0, 300.0), FRAME)
+
+
+def test_box_against_the_right_border_is_at_the_edge():
+    assert at_frame_edge((600.0, 200.0, 640.0, 300.0), FRAME)
+
+
+def test_box_against_the_bottom_border_is_at_the_edge():
+    assert at_frame_edge((300.0, 440.0, 340.0, 480.0), FRAME)
+
+
+def test_box_in_open_view_is_not_at_the_edge():
+    assert not at_frame_edge((300.0, 200.0, 340.0, 300.0), FRAME)
+
+
+def test_edge_tolerance_is_a_fraction_so_it_scales():
+    """A fixed pixel margin would mean very different things at 352x288 and 4K."""
+    small = ClipMeta("s", 352, 288, 25.0, 10)
+    big = ClipMeta("b", 3840, 2160, 30.0, 10)
+    # 1% in from the left edge of each: inside the default 2% margin for both.
+    assert at_frame_edge((small.width * 0.01, 100, small.width * 0.05, 200), small)
+    assert at_frame_edge((big.width * 0.01, 100, big.width * 0.05, 200), big)
+
+
+def test_evidence_records_birth_and_death_edges():
+    d = far_series()
+    d[40:61] = [0.05] * 21
+    # Track whose boxes sit in open view.
+    tr = Track(id=1, cls=0, frames=list(range(35, 61)),
+               boxes=[(300.0, 200.0, 340.0, 300.0)] * 26)
+    out = propose_pair(pf(d), tr, FRAME, 0.15, 0.30, 0.5, 0.30)
+    assert out[0].evidence["born_at_frame_edge"] is False
+    assert out[0].evidence["died_at_frame_edge"] is False
+
+
+def test_evidence_flags_a_track_that_walked_in_from_off_camera():
+    d = far_series()
+    d[40:61] = [0.05] * 21
+    boxes = [(0.0, 200.0, 40.0, 300.0)] + [(300.0, 200.0, 340.0, 300.0)] * 25
+    tr = Track(id=1, cls=0, frames=list(range(35, 61)), boxes=boxes)
+    out = propose_pair(pf(d), tr, FRAME, 0.15, 0.30, 0.5, 0.30)
+    assert out[0].evidence["born_at_frame_edge"] is True

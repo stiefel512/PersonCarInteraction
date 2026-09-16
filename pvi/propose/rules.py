@@ -24,6 +24,7 @@ from typing import Any, Sequence
 import math
 import numpy as np
 
+from ..geometry import Box
 from ..schema import ClipMeta
 from .features import PairFeatures, Track
 from .spans import Span, hysteresis_spans, merge_spans, span_length_s
@@ -90,6 +91,31 @@ def near_spans(pf: PairFeatures, tau_near: float, tau_far: float) -> list[Span]:
     return hysteresis_spans(list(pf.d_norm), enter=tau_near, leave=tau_far)
 
 
+# A box within this fraction of the frame's smaller dimension of any border is
+# treated as touching the edge.
+EDGE_FRAC = 0.02
+
+
+def at_frame_edge(box: Box, meta: ClipMeta, frac: float = EDGE_FRAC) -> bool:
+    """Whether a box touches the frame border.
+
+    This is what separates "emerged from the vehicle" from "walked into shot".
+    A track's birth means only that the tracker first saw the person then; it
+    does **not** mean they materialised there. If their first box is against a
+    frame edge they walked in from off-camera, which is the overwhelmingly
+    common case for a pass-by.
+
+    Measured consequence of conflating the two: telling the VLM "their first
+    appearance is at the vehicle, never seen approaching" for *every*
+    birth-near candidate recovered 4 true positives but also made it accept 4
+    of 7 labeled `pass_by` events, because the sentence is equally true of
+    someone who simply walked into frame beside a parked car.
+    """
+    m = min(meta.width, meta.height) * frac
+    return (box[0] <= m or box[1] <= m
+            or box[2] >= meta.width - m or box[3] >= meta.height - m)
+
+
 def propose_pair(pf: PairFeatures, person: Track, meta: ClipMeta,
                  tau_near: float, tau_far: float, min_dwell_s: float,
                  door_conf_thresh: float) -> list[Candidate]:
@@ -154,6 +180,12 @@ def propose_pair(pf: PairFeatures, person: Track, meta: ClipMeta,
                 # starting, and that call belongs to the judge.
                 "birth_at_clip_start": person.birth_frame <= tol,
                 "death_at_clip_end": person.death_frame >= meta.n_frames - 1 - tol,
+                # Whether the track began/ended against a frame border, i.e.
+                # the person walked into or out of shot rather than emerging
+                # from or disappearing into the vehicle. Without this, track
+                # birth alone cannot tell the two apart.
+                "born_at_frame_edge": at_frame_edge(person.boxes[0], meta),
+                "died_at_frame_edge": at_frame_edge(person.boxes[-1], meta),
                 "max_iou": round(float(np.nanmax(pf.iou[m[0]:m[1] + 1])), 4)
                 if not np.all(np.isnan(pf.iou[m[0]:m[1] + 1])) else None,
             },

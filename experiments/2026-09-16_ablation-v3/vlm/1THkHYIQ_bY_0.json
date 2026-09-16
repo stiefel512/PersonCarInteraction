@@ -1,0 +1,192 @@
+{
+  "clip_id": "1THkHYIQ_bY_0",
+  "clip_meta": {
+    "fps": 30.0,
+    "n_frames": 495,
+    "width": 1280,
+    "height": 720
+  },
+  "config_hash": "sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b",
+  "interactions": [
+    {
+      "interaction_id": "1THkHYIQ_bY_0__i001",
+      "event_group_id": "1THkHYIQ_bY_0__g001",
+      "type": "load_unload",
+      "frame_start": 53,
+      "frame_end": 69,
+      "time_start_s": 1.767,
+      "time_end_s": 2.3,
+      "person": {
+        "track_id": 0,
+        "description": "man wearing dark jacket and pants, carrying large white object"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver car, parked, partially covered by tarp, in foreground",
+        "class": "car"
+      },
+      "note": "The man is seen removing a large white object from the back of the silver car.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 0.567,
+        "vehicle_is_static": true,
+        "person_birth": 59,
+        "person_death": 63,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.2096,
+        "person_box_norm": [
+          0.40896,
+          0.34573,
+          0.55544,
+          0.84047
+        ],
+        "vehicle_box_norm": [
+          0.12244,
+          0.33327,
+          0.66045,
+          0.72007
+        ]
+      }
+    },
+    {
+      "interaction_id": "1THkHYIQ_bY_0__i002",
+      "event_group_id": "1THkHYIQ_bY_0__g002",
+      "type": "open_close_door",
+      "frame_start": 69,
+      "frame_end": 93,
+      "time_start_s": 2.3,
+      "time_end_s": 3.1,
+      "person": {
+        "track_id": 1,
+        "description": "man wearing dark jacket + jeans, none"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "black car, parked, in open view",
+        "class": "car"
+      },
+      "note": "man opens driver's side door",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R3_birth_near",
+        "min_d_norm": 0.0831,
+        "dwell_s": 0.833,
+        "vehicle_is_static": true,
+        "person_birth": 75,
+        "person_death": 197,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0473,
+        "person_box_norm": [
+          0.5228,
+          0.39105,
+          0.74845,
+          0.825
+        ],
+        "vehicle_box_norm": [
+          0.12171,
+          0.34091,
+          0.67446,
+          0.72273
+        ]
+      }
+    },
+    {
+      "interaction_id": "1THkHYIQ_bY_0__i003",
+      "event_group_id": "1THkHYIQ_bY_0__g003",
+      "type": "open_close_door",
+      "frame_start": 125,
+      "frame_end": 166,
+      "time_start_s": 4.167,
+      "time_end_s": 5.533,
+      "person": {
+        "track_id": 1,
+        "description": "man wearing dark jacket and jeans, carrying bag"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver car, parked, partially covered by tarp",
+        "class": "car"
+      },
+      "note": "man interacts with car door, possibly opening and closing it.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R4_door_change",
+        "min_d_norm": 0.1243,
+        "dwell_s": 1.4,
+        "vehicle_is_static": true,
+        "person_birth": 75,
+        "person_death": 197,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0,
+        "person_box_norm": [
+          0.72159,
+          0.35209,
+          0.90008,
+          0.72553
+        ],
+        "vehicle_box_norm": [
+          0.12316,
+          0.3412,
+          0.66334,
+          0.71424
+        ]
+      }
+    },
+    {
+      "interaction_id": "1THkHYIQ_bY_0__i004",
+      "event_group_id": "1THkHYIQ_bY_0__g004",
+      "type": "open_close_door",
+      "frame_start": 225,
+      "frame_end": 247,
+      "time_start_s": 7.5,
+      "time_end_s": 8.233,
+      "person": {
+        "track_id": 2,
+        "description": "man wearing dark clothing, none, none, none"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver sedan, parked, in the middle of the frame",
+        "class": "car"
+      },
+      "note": "The man opens the door of the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 0.767,
+        "vehicle_is_static": true,
+        "person_birth": 231,
+        "person_death": 241,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0045,
+        "person_box_norm": [
+          0.6543,
+          0.3798,
+          0.82699,
+          0.68611
+        ],
+        "vehicle_box_norm": [
+          0.12338,
+          0.34067,
+          0.65903,
+          0.71323
+        ]
+      }
+    }
+  ]
+}

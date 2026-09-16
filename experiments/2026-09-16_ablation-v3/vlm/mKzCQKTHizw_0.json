@@ -1,0 +1,102 @@
+{
+  "clip_id": "mKzCQKTHizw_0",
+  "clip_meta": {
+    "fps": 29.97002997002997,
+    "n_frames": 300,
+    "width": 640,
+    "height": 360
+  },
+  "config_hash": "sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b",
+  "interactions": [
+    {
+      "interaction_id": "mKzCQKTHizw_0__i001",
+      "event_group_id": "mKzCQKTHizw_0__g001",
+      "type": "enter_vehicle",
+      "frame_start": 37,
+      "frame_end": 108,
+      "time_start_s": 1.235,
+      "time_end_s": 3.604,
+      "person": {
+        "track_id": 0,
+        "description": "man, black jacket + pants, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver car, parked, right side of frame",
+        "class": "car"
+      },
+      "note": "The man enters the silver car.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0022,
+        "dwell_s": 2.402,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 102,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0074,
+        "person_box_norm": [
+          0.25457,
+          0.05992,
+          0.47851,
+          0.70359
+        ],
+        "vehicle_box_norm": [
+          0.37253,
+          6e-05,
+          0.71632,
+          0.11213
+        ]
+      }
+    },
+    {
+      "interaction_id": "mKzCQKTHizw_0__i002",
+      "event_group_id": "mKzCQKTHizw_0__g002",
+      "type": "enter_vehicle",
+      "frame_start": 267,
+      "frame_end": 296,
+      "time_start_s": 8.909,
+      "time_end_s": 9.877,
+      "person": {
+        "track_id": 1,
+        "description": "woman, light blue top, beige pants, black bag"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "The woman enters the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 1.001,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 290,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": true,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.4583,
+        "person_box_norm": [
+          0.32394,
+          0.13798,
+          0.92783,
+          0.93156
+        ],
+        "vehicle_box_norm": [
+          0.54964,
+          0.21674,
+          0.99992,
+          0.88002
+        ]
+      }
+    }
+  ]
+}

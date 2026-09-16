@@ -1,0 +1,26 @@
+{
+  "frame_indices": [
+    65,
+    68,
+    71,
+    74,
+    77,
+    80,
+    82,
+    85,
+    88,
+    91,
+    94,
+    97
+  ],
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The woman walks past the parked red sedan.",
+    "person": "woman, white shirt + black pants, none",
+    "type": "pass_by",
+    "vehicle": "red, sedan, parked, right side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"pass_by\",\n    \"confidence\": 0.9,\n    \"person\": \"woman, white shirt + black pants, none\",\n    \"vehicle\": \"red, sedan, parked, right side of frame\",\n    \"note\": \"The woman walks past the parked red sedan.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

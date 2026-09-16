@@ -179,14 +179,33 @@ def cand_with(rules, evidence=None):
                      evidence=evidence or {})
 
 
-def test_birth_near_states_the_person_was_never_seen_approaching():
-    t = tracking_evidence(cand_with([R3_BIRTH_NEAR]), META)
-    assert "FIRST appearance" in t and "never seen" in t.lower()
+def test_birth_in_open_view_states_they_did_not_walk_in():
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR],
+                                    {"born_at_frame_edge": False}), META)
+    assert "FIRST appearance" in t and "not walk in from off-camera" in t
 
 
-def test_death_near_states_the_person_is_never_seen_again():
-    t = tracking_evidence(cand_with([R2_DEATH_NEAR]), META)
-    assert "LAST appearance" in t
+def test_birth_at_the_frame_edge_says_the_OPPOSITE():
+    """Track birth alone does not mean 'emerged from the vehicle' -- a
+    pedestrian walking into shot beside a parked car satisfies it too.
+    Asserting the emergence claim unconditionally recovered 4 true positives
+    but made the VLM accept 4 of 7 labeled pass_by events."""
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR],
+                                    {"born_at_frame_edge": True}), META)
+    assert "walked in from off-camera" in t
+    assert "did not come out" in t
+
+
+def test_death_in_open_view_states_they_did_not_walk_off():
+    t = tracking_evidence(cand_with([R2_DEATH_NEAR],
+                                    {"died_at_frame_edge": False}), META)
+    assert "LAST appearance" in t and "not walk off-camera" in t
+
+
+def test_death_at_the_frame_edge_says_the_OPPOSITE():
+    t = tracking_evidence(cand_with([R2_DEATH_NEAR],
+                                    {"died_at_frame_edge": True}), META)
+    assert "walked off-camera" in t and "did not get into" in t
 
 
 def test_door_rule_reports_the_open_door():
@@ -201,8 +220,9 @@ def test_dwell_alone_adds_no_evidence():
 
 
 def test_several_rules_are_all_reported():
-    t = tracking_evidence(cand_with([R3_BIRTH_NEAR, R2_DEATH_NEAR, R4_DOOR_CHANGE]),
-                          META)
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR, R2_DEATH_NEAR, R4_DOOR_CHANGE],
+                                    {"born_at_frame_edge": False,
+                                     "died_at_frame_edge": False}), META)
     assert t.count("\n- ") == 3
 
 
@@ -210,8 +230,9 @@ def test_evidence_never_names_a_type_or_an_answer():
     """It reports what the tracker saw, not what to conclude. Naming the type
     would make the VLM a rubber stamp for the geometric arm and destroy the
     ablation's meaning."""
-    t = tracking_evidence(cand_with([R3_BIRTH_NEAR, R2_DEATH_NEAR, R4_DOOR_CHANGE]),
-                          META)
+    t = tracking_evidence(cand_with([R3_BIRTH_NEAR, R2_DEATH_NEAR, R4_DOOR_CHANGE],
+                                    {"born_at_frame_edge": False,
+                                     "died_at_frame_edge": False}), META)
     for name in ("exit_vehicle", "enter_vehicle", "pass_by", "open_close_door"):
         assert name not in t
 
@@ -223,18 +244,21 @@ def test_clip_start_is_disclosed_so_absence_is_not_read_as_evidence():
 
 
 def test_evidence_appears_in_the_built_prompt():
-    c = cand_with([R3_BIRTH_NEAR])
+    c = cand_with([R3_BIRTH_NEAR], {"born_at_frame_edge": False})
     b = P.build(c, META, frames(range(0, 100)),
                 {i: (100, 100, 140, 200) for i in range(100)},
                 {i: (200, 150, 400, 300) for i in range(100)}, 6, 1.0, 0.25)
     assert "FIRST appearance" in b.user
 
 
-def test_pass_by_rule_no_longer_swallows_appearances_at_the_vehicle():
-    """The old rule said 'stands near it -> pass_by' with no exception, which is
-    what made an exit look like a pass-by."""
+def test_prompt_keeps_a_strong_pass_by_default_and_a_narrow_exception():
+    """Both halves matter, and the balance was measured. Weakening the pass_by
+    rule to fix exit_vehicle recovered recall (0.556 -> 0.778) but let 4 of 7
+    labeled pass_by events through and left F1 flat (+0.004). The default must
+    stay strong; the exception must be narrow and conditioned on the evidence."""
     c = cand_with([R1_DWELL])
     b = P.build(c, META, frames(range(0, 100)),
                 {i: (100, 100, 140, 200) for i in range(100)},
                 {i: (200, 150, 400, 300) for i in range(100)}, 6, 1.0, 0.25)
+    assert "When in doubt, answer pass_by" in b.user
     assert "does NOT apply" in b.user

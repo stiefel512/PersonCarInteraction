@@ -65,12 +65,15 @@ vehicle across these frames:
 
 {types}
 
-Two rules that override everything else:
-1. If the person walks past the vehicle and carries on - already moving before \
-they reached it, still moving after - the answer is pass_by. This does NOT \
-apply when they first appear at the vehicle or stop being visible at it; that \
-is an exit or an entry.
-2. Judge only what is visible. Do not infer intent, ownership, or whether the \
+Three rules that override everything else:
+1. Proximity is not interaction. If the person walks or runs past the vehicle, \
+or stands near it, without touching it or acting on it, the answer is pass_by - \
+however close they get. When in doubt, answer pass_by.
+2. Rule 1 does NOT apply when the notes above say the person appeared at the \
+vehicle in open view, or was last seen at it in open view. Somebody who is \
+simply there, not having walked in from off-camera, came out of the vehicle; \
+somebody who stops being visible at it, without walking off-camera, got into it.
+3. Judge only what is visible. Do not infer intent, ownership, or whether the \
 action is authorised.
 
 Answer with JSON and nothing else:
@@ -161,14 +164,27 @@ def tracking_evidence(cand: Candidate, meta: ClipMeta) -> str:
     from ..propose.rules import R2_DEATH_NEAR, R3_BIRTH_NEAR, R4_DOOR_CHANGE
 
     lines = []
+    ev = cand.evidence
     if R3_BIRTH_NEAR in cand.rules:
-        lines.append("- The RED person's FIRST appearance anywhere in the clip "
-                     "is here, at the BLUE vehicle. They were never seen "
-                     "approaching it from elsewhere.")
+        if ev.get("born_at_frame_edge"):
+            lines.append("- The RED person first became visible at the EDGE of "
+                         "the picture, so they walked in from off-camera. They "
+                         "did not come out of the BLUE vehicle.")
+        else:
+            lines.append("- The RED person's FIRST appearance anywhere in the "
+                         "clip is here, at the BLUE vehicle, in open view and "
+                         "not at the edge of the picture. They did not walk in "
+                         "from off-camera.")
     if R2_DEATH_NEAR in cand.rules:
-        lines.append("- The RED person's LAST appearance anywhere in the clip "
-                     "is here, at the BLUE vehicle. They are never seen again "
-                     "afterwards.")
+        if ev.get("died_at_frame_edge"):
+            lines.append("- The RED person was last seen at the EDGE of the "
+                         "picture, so they walked off-camera. They did not get "
+                         "into the BLUE vehicle.")
+        else:
+            lines.append("- The RED person's LAST appearance anywhere in the "
+                         "clip is here, at the BLUE vehicle, in open view and "
+                         "not at the edge of the picture. They did not walk "
+                         "off-camera.")
     if R4_DOOR_CHANGE in cand.rules:
         lines.append("- A door of the BLUE vehicle was detected open during "
                      "this span.")
