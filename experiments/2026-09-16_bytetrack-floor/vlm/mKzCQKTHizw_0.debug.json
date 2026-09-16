@@ -1,0 +1,140 @@
+{
+  "clip_id": "mKzCQKTHizw_0",
+  "judge": "vlm",
+  "detector_revision": "f62f7dd5252b61097cbace33886045816dadbde9",
+  "static_camera": false,
+  "tiled": false,
+  "cmc_enabled": true,
+  "n_detections": 1842,
+  "n_detections_above_det_conf": 645,
+  "det_floor": 0.1,
+  "det_conf": 0.5,
+  "n_person_tracks": 4,
+  "n_vehicle_tracks": 2,
+  "n_door_cue_frames": 287,
+  "n_door_detections": 452,
+  "n_candidates": 4,
+  "n_accepted": 2,
+  "tracks": [
+    {
+      "id": 0,
+      "cls": "person",
+      "birth": 0,
+      "death": 104,
+      "n_observed": 105,
+      "span_frames": 105,
+      "gap_frames": 0,
+      "centroid_motion": 0.3177,
+      "is_static": false
+    },
+    {
+      "id": 1,
+      "cls": "person",
+      "birth": 0,
+      "death": 294,
+      "n_observed": 295,
+      "span_frames": 295,
+      "gap_frames": 0,
+      "centroid_motion": 0.732,
+      "is_static": false
+    },
+    {
+      "id": 2,
+      "cls": "person",
+      "birth": 11,
+      "death": 13,
+      "n_observed": 3,
+      "span_frames": 3,
+      "gap_frames": 0,
+      "centroid_motion": 0.0591,
+      "is_static": false
+    },
+    {
+      "id": 3,
+      "cls": "person",
+      "birth": 161,
+      "death": 173,
+      "n_observed": 13,
+      "span_frames": 13,
+      "gap_frames": 0,
+      "centroid_motion": 0.1519,
+      "is_static": false
+    },
+    {
+      "id": 10000,
+      "cls": "car",
+      "birth": 22,
+      "death": 217,
+      "n_observed": 196,
+      "span_frames": 196,
+      "gap_frames": 0,
+      "centroid_motion": 0.3544,
+      "is_static": false
+    },
+    {
+      "id": 10001,
+      "cls": "car",
+      "birth": 249,
+      "death": 299,
+      "n_observed": 51,
+      "span_frames": 51,
+      "gap_frames": 0,
+      "centroid_motion": 0.0725,
+      "is_static": false
+    }
+  ],
+  "rejected": [
+    {
+      "person_id": 1,
+      "vehicle_id": 10000,
+      "frame_start": 47,
+      "frame_end": 211,
+      "rules": [
+        "R1_dwell",
+        "R4_door_change"
+      ],
+      "evidence": {
+        "min_d_norm": 0.0,
+        "dwell_s": 5.506,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 294,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": true,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": true,
+        "max_iou": 0.0725
+      },
+      "verdict_type": "pass_by",
+      "verdict_confidence": 0.9,
+      "reason": "rejected"
+    },
+    {
+      "person_id": 3,
+      "vehicle_id": 10000,
+      "frame_start": 155,
+      "frame_end": 179,
+      "rules": [
+        "R1_dwell",
+        "R2_death_near",
+        "R3_birth_near",
+        "R4_door_change"
+      ],
+      "evidence": {
+        "min_d_norm": 0.0341,
+        "dwell_s": 0.834,
+        "vehicle_is_static": false,
+        "person_birth": 161,
+        "person_death": 173,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": true,
+        "max_iou": 0.0
+      },
+      "verdict_type": "pass_by",
+      "verdict_confidence": 0.9,
+      "reason": "rejected"
+    }
+  ]
+}

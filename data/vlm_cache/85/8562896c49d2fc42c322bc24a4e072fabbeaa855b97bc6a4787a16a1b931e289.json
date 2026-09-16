@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    559,
+    563,
+    566,
+    570,
+    574,
+    577,
+    581,
+    584,
+    588,
+    592,
+    595,
+    599
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The child is seen entering the white car.",
+    "person": "child, black top + jeans, none",
+    "type": "enter_vehicle",
+    "vehicle": "white, car, parked, right side"
+  },
+  "raw": "```json\n{\n  \"type\": \"enter_vehicle\",\n  \"confidence\": 0.9,\n  \"person\": \"child, black top + jeans, none\",\n  \"vehicle\": \"white, car, parked, right side\",\n  \"note\": \"The child is seen entering the white car.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

@@ -28,7 +28,7 @@ import yaml
 
 from pvi import config as C
 from pvi.cli import run_clip, seed_everything
-from pvi.evaluate.metrics import full_report
+from pvi.evaluate.metrics import full_report, full_report_groups
 from pvi.schema import GTEvent, load_ground_truth, write_output
 from pvi.video import probe
 
@@ -73,7 +73,7 @@ def main() -> None:
     reports: dict = {}
 
     for judge in judges:
-        pooled_preds = []
+        groups = []
         for clip in clips:
             jd = outdir / judge
             if args.rescore:
@@ -93,7 +93,7 @@ def main() -> None:
                              C.config_hash(cfg))
                 (jd / f"{meta.clip_id}.debug.json").write_text(
                     json.dumps(debug, indent=2) + "\n")
-            pooled_preds.extend(interactions)
+            groups.append((interactions, gt_by_clip.get(meta.clip_id, [])))
 
             rep = full_report(interactions, gt_by_clip.get(meta.clip_id, []))
             reports[f"{judge}/{meta.clip_id}"] = rep
@@ -119,7 +119,7 @@ def main() -> None:
 
         if args.clips:
             continue          # partial run: a pooled row here would be a lie
-        rep = full_report(pooled_preds, gts)
+        rep = full_report_groups(groups)
         reports[f"{judge}/POOLED"] = rep
         d = rep["primary"]["tier1_detection"]
         pb = rep["primary"]["tier1_pass_by"]

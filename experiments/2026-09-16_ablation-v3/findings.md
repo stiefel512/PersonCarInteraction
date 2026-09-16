@@ -1,5 +1,11 @@
 # Headline ablation — geometric vs VLM judge
 
+> **CORRECTED 2026-09-16.** Every pooled number below was computed with a flat
+> cross-clip matching and is inflated by roughly 55%. Frame spans are clip-local,
+> so a prediction from one clip could satisfy another clip's event. The per-clip
+> numbers are unaffected. Corrected pooled figures and the full explanation:
+> `../2026-09-16_bytetrack-floor/findings.md`. Superseded by that run.
+
 All 8 clips, `config/default.yaml` (untuned), tIoU >= 0.3.
 `comparison.csv` here; the two superseded VLM prompts are in
 `../2026-09-16_ablation/` (v1) and `../2026-09-16_ablation-v2/` (v2).

@@ -111,34 +111,41 @@ Each is written up where it belongs; this is the index.
 **Arm C is decided too** — `experiments/2026-09-16_door-cue-ground-level/findings.md`.
 The open-vocab door cue is adopted; see finding 10 above.
 
-### Full-set baseline — geometric (ablation) judge, untuned defaults
+### Current result — all 8 clips, untuned defaults
 
-`experiments/2026-09-16_run-all/` (`comparison.csv`, `findings.md`).
+`experiments/2026-09-16_bytetrack-floor/` (`comparison.csv`, `findings.md`).
+Scored with **clip-scoped matching**; see the correction note below.
 
-| clip | P | R | F1 | tp/fp/fn | pass_by fired |
+| judge | P | R | F1 | tp/fp/fn | `pass_by` fired |
 |---|---|---|---|---|---|
-| `1THkHYIQ_bY_0` | 0.000 | 0.000 | 0.000 | 0/5/1 | 0/1 |
-| `HIu4lM4B8hA_1` | 0.143 | 0.333 | 0.200 | 1/6/2 | 0/0 |
-| `NmlzoaDcOuI_1` | 0.286 | 0.667 | 0.400 | 2/5/1 | 2/2 |
-| `NmlzoaDcOuI_6` | 0.167 | 1.000 | 0.286 | 1/5/0 | 2/2 |
-| `gt1125_06` | 0.143 | 1.000 | 0.250 | 2/12/0 | 0/0 |
-| `iMGR_0AG3a8_2_3` | 0.375 | 0.500 | 0.429 | 3/5/3 | 0/1 |
-| `mKzCQKTHizw_0` | 0.250 | 1.000 | 0.400 | 1/3/0 | 1/1 |
-| `mKzCQKTHizw_1` | **1.000** | **1.000** | **1.000** | 1/0/0 | 0/0 |
-| **POOLED** | **0.327** | **0.944** | **0.486** | 17/35/1 | **6/7** |
+| geometric (control) | 0.178 | **0.722** | 0.286 | 13/60/5 | 5 of 7 |
+| **VLM (shipped)** | **0.400** | 0.667 | **0.500** | 12/18/6 | **1 of 7** |
 
-17 of 18 positives are proposed at default thresholds, so the recall half of the
-design works. Precision 0.327 and 6 of 7 `pass_by` fired is the control
-behaving as designed -- it accepts everything -- and is exactly what the VLM arm
-has to move. `gt1125_06` finds both positives, so tiling earned its place.
+The VLM more than doubles precision, cuts false positives 60 -> 18 and `pass_by`
+false fires 5 -> 1, paying one true positive. That is the hybrid design's whole
+premise and it holds.
 
-**The single outright miss is a lead, not a mystery**: `1THkHYIQ_bY_0`'s 8.8 s
-`attend_vehicle`. Detection is fine there (2096 detections, 7 person tracks);
-the long event **fragments into four short candidates** overlapping 6-16% each,
-so none reaches tIoU 0.3. `HIu4lM4B8hA_1` shows the same pattern. This is a
-proposer problem -- the hysteresis span breaks when someone leaning into a car
-drifts past `tau_far`, or when their track breaks on hard imagery. `tau_far` is
-in the LOCO search, so tuning may absorb some of it.
+`1THkHYIQ_bY_0` — the clip whose 8.8 s event was previously unfindable — now
+scores **P=1.00 R=1.00** under the VLM. `gt1125_06` carries 11 of the 18
+remaining false positives; it is the 4K aerial clip with ~25 vehicles and ~8
+people per frame, so its pair count dwarfs the rest.
+
+**The fragmentation fix is a win only via the VLM.** On the control arm it
+lowers F1 (0.314 -> 0.286): recall rises but precision falls further. On the
+shipped arm it raises F1 (0.476 -> 0.500), because the extra false positives are
+the kind the VLM rejects well. The control arm therefore prefers a *different*
+proposer configuration than the shipped system — worth remembering before
+tuning against it.
+
+### Correction: pooled numbers were inflated ~55%
+
+`full_report` pooled all predictions and GT into one flat matching, but frame
+spans are clip-local, so a prediction from one clip could satisfy another's
+event. On the real set: 17 pooled true positives where per-clip counts summed to
+11. Fixed (`metrics.report_groups`), with a test asserting the old behaviour
+would have credited the cross-clip match. **Per-clip numbers were always
+correct; only pooled rows were wrong.** All earlier experiment directories carry
+a correction banner and have been rescored from their stored outputs.
 
 ## Next steps
 

@@ -6,26 +6,26 @@
     "width": 1280,
     "height": 720
   },
-  "config_hash": "sha256:4be4c76ae1032160d23f1ef5e4d1c5eca9e16be55712eacb000ebfafb70ca596",
+  "config_hash": "sha256:3bd05983186c6d95f43c429584b45f19b1074ee303712b6acb5ecb07a665bc0b",
   "interactions": [
     {
       "interaction_id": "1THkHYIQ_bY_0__i001",
       "event_group_id": "1THkHYIQ_bY_0__g001",
-      "type": "open_close_door",
+      "type": "load_unload",
       "frame_start": 41,
       "frame_end": 166,
       "time_start_s": 1.367,
       "time_end_s": 5.533,
       "person": {
         "track_id": 0,
-        "description": "man wearing dark jacket + jeans, none"
+        "description": "man wearing dark jacket and jeans, carrying large white bag"
       },
       "vehicle": {
         "track_id": 10002,
-        "description": "silver car, parked, in open view",
+        "description": "silver sedan parked, covered with tarp, positioned on driveway",
         "class": "car"
       },
-      "note": "man opens the door of the silver car",
+      "note": "man drags tarp off car, revealing vehicle underneath",
       "confidence": 0.9,
       "evidence": {
         "rule": "R3_birth_near",
@@ -50,51 +50,6 @@
           0.32096,
           0.72924,
           0.78786
-        ]
-      }
-    },
-    {
-      "interaction_id": "1THkHYIQ_bY_0__i002",
-      "event_group_id": "1THkHYIQ_bY_0__g002",
-      "type": "open_close_door",
-      "frame_start": 222,
-      "frame_end": 249,
-      "time_start_s": 7.4,
-      "time_end_s": 8.3,
-      "person": {
-        "track_id": 1,
-        "description": "man, dark jacket + light pants, none"
-      },
-      "vehicle": {
-        "track_id": 10002,
-        "description": "silver sedan, parked, right side",
-        "class": "car"
-      },
-      "note": "The man opens the driver's side door of the silver sedan.",
-      "confidence": 0.8,
-      "evidence": {
-        "rule": "R2_death_near",
-        "min_d_norm": 0.0,
-        "dwell_s": 0.933,
-        "vehicle_is_static": true,
-        "person_birth": 221,
-        "person_death": 243,
-        "birth_at_clip_start": false,
-        "death_at_clip_end": false,
-        "born_at_frame_edge": false,
-        "died_at_frame_edge": false,
-        "max_iou": 0.0079,
-        "person_box_norm": [
-          0.65094,
-          0.36139,
-          0.82885,
-          0.6887
-        ],
-        "vehicle_box_norm": [
-          0.12338,
-          0.34067,
-          0.65923,
-          0.71323
         ]
       }
     }

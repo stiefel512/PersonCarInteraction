@@ -135,47 +135,125 @@ def localization(preds: Sequence[Interaction], gts: Sequence[GTEvent],
     }
 
 
+Group = tuple[Sequence[Interaction], Sequence[GTEvent]]
+
+
 def report(preds: Sequence[Interaction], gts: Sequence[GTEvent],
            tiou: float = TIOU_PRIMARY, confident_only: bool = False) -> dict[str, Any]:
-    """Full tiered report for one clip or for the pooled set.
+    """Full tiered report for ONE clip."""
+    return report_groups([(preds, gts)], tiou, confident_only)
 
-    `confident_only` drops events flagged `ambiguous` in the GT. The protocol
-    asks for every metric twice -- over all events and over confident ones --
-    because the gap between them states how much residual error is definitional
-    rather than algorithmic.
+
+def report_groups(groups: Sequence[Group], tiou: float = TIOU_PRIMARY,
+                  confident_only: bool = False) -> dict[str, Any]:
+    """Tiered report over one or more clips, **matched within each clip**.
+
+    Pooling predictions and ground truth into one flat matching is wrong, and
+    was wrong here for a while: frame spans are clip-local, so a prediction from
+    one clip can satisfy an event in another purely because the numbers overlap.
+    Demonstrated on the real set -- per-clip true positives summed to 11 while
+    the flat pooled matching reported 17, a 55% inflation of every headline
+    number.
+
+    So matching happens per group and only the COUNTS are aggregated.
+
+    `confident_only` drops events flagged `ambiguous`. The protocol asks for
+    every metric twice -- all events and confident only -- because the gap
+    states how much residual error is definitional rather than algorithmic.
     """
-    if confident_only:
-        gts = [g for g in gts if not g.ambiguous]
-    result = match_events(preds, gts, tiou_thresh=tiou)
-    positives = [g for g in gts if g.is_positive]
+    tp = fp = fn = 0
+    n_pass_by = n_pass_by_hit = 0
+    hit_ids: list[str] = []
+    all_positives: list[GTEvent] = []
+    n_preds = 0
+    confusion = {g: {p: 0 for p in INTERACTION_TYPES} for g in INTERACTION_TYPES}
+    per_type_acc = {t: {"tp": 0, "n_gt": 0, "n_pred": 0} for t in TIER2_TYPES}
+    starts: list[int] = []
+    ends: list[int] = []
+    tious: list[float] = []
 
-    tier3_counts = {t: sum(1 for g in positives if g.type == t) for t in TIER3_TYPES}
+    for preds, gts in groups:
+        if confident_only:
+            gts = [g for g in gts if not g.ambiguous]
+        result = match_events(preds, gts, tiou_thresh=tiou)
+        d = detection_prf(result)
+        tp += d.tp
+        fp += d.fp
+        fn += d.fn
+        n_preds += len(preds)
+        all_positives.extend(g for g in gts if g.is_positive)
+
+        pb = pass_by_report(gts, result)
+        n_pass_by += pb["n_pass_by_labeled"]
+        n_pass_by_hit += pb["n_pass_by_falsely_fired"]
+        hit_ids.extend(pb["hit_event_ids"])
+
+        for gt_t, row in type_confusion(preds, gts, result).items():
+            for pred_t, c in row.items():
+                confusion[gt_t][pred_t] += c
+
+        for t, stats in per_type_prf(preds, gts, result, TIER2_TYPES).items():
+            per_type_acc[t]["tp"] += stats["tp"]
+            per_type_acc[t]["n_gt"] += stats["n_gt"]
+            per_type_acc[t]["n_pred"] += stats["n_pred"]
+
+        s_err, e_err = boundary_errors(preds, gts, result)
+        starts.extend(s_err)
+        ends.extend(e_err)
+        tious.extend(m.tiou for m in result.matches)
+
+    tier2 = {t: PRF(tp=a["tp"], fp=a["n_pred"] - a["tp"],
+                    fn=a["n_gt"] - a["tp"]).as_dict()
+             for t, a in per_type_acc.items()}
+
+    loc: dict[str, Any] = {"n_matched": len(starts)}
+    if starts:
+        loc.update({
+            "median_abs_start_err_frames": statistics.median(abs(v) for v in starts),
+            "median_abs_end_err_frames": statistics.median(abs(v) for v in ends),
+            "median_signed_start_err_frames": statistics.median(starts),
+            "median_signed_end_err_frames": statistics.median(ends),
+            "median_tiou": round(statistics.median(tious), 4),
+        })
 
     return {
         "tiou_threshold": tiou,
         "confident_only": confident_only,
-        "n_gt_positives": len(positives),
-        "n_predictions": len(preds),
-        # Tier 1
-        "tier1_detection": detection_prf(result).as_dict(),
-        "tier1_pass_by": pass_by_report(gts, result),
-        # Tier 2 -- rates are defensible at n=6 and n=7, with counts inline.
-        "tier2_per_type": per_type_prf(preds, gts, result, TIER2_TYPES),
-        # Tier 3 -- counts and confusion only. No rate is computed for these,
-        # by design: n = 2, 2, 1.
-        "tier3_counts": tier3_counts,
+        "n_clips": len(groups),
+        "n_gt_positives": len(all_positives),
+        "n_predictions": n_preds,
+        "tier1_detection": PRF(tp=tp, fp=fp, fn=fn).as_dict(),
+        "tier1_pass_by": {
+            "n_pass_by_labeled": n_pass_by,
+            "n_pass_by_falsely_fired": n_pass_by_hit,
+            "false_fire_rate": round(_safe_div(n_pass_by_hit, n_pass_by), 4),
+            "hit_event_ids": hit_ids,
+        },
+        "tier2_per_type": tier2,
+        "tier3_counts": {t: sum(1 for g in all_positives if g.type == t)
+                         for t in TIER3_TYPES},
         "tier3_note": ("n<=2 per class; reported as confusion-matrix entries only, "
                        "never as a rate (problem-definition.md s3)"),
-        "type_confusion": type_confusion(preds, gts, result),
-        "localization": localization(preds, gts, result),
+        "type_confusion": confusion,
+        "localization": loc,
     }
 
 
 def full_report(preds: Sequence[Interaction], gts: Sequence[GTEvent]) -> dict[str, Any]:
-    """Primary and strict tIoU, each over all events and confident events only."""
+    """Primary and strict tIoU for ONE clip."""
+    return full_report_groups([(preds, gts)])
+
+
+def full_report_groups(groups: Sequence[Group]) -> dict[str, Any]:
+    """Primary and strict tIoU, each over all events and confident events only.
+
+    Takes per-clip groups: matching is clip-scoped, only counts aggregate.
+    """
     return {
-        "primary": report(preds, gts, TIOU_PRIMARY, confident_only=False),
-        "primary_confident_only": report(preds, gts, TIOU_PRIMARY, confident_only=True),
-        "strict": report(preds, gts, TIOU_STRICT, confident_only=False),
-        "strict_confident_only": report(preds, gts, TIOU_STRICT, confident_only=True),
+        "primary": report_groups(groups, TIOU_PRIMARY, confident_only=False),
+        "primary_confident_only": report_groups(groups, TIOU_PRIMARY,
+                                                confident_only=True),
+        "strict": report_groups(groups, TIOU_STRICT, confident_only=False),
+        "strict_confident_only": report_groups(groups, TIOU_STRICT,
+                                               confident_only=True),
     }

@@ -14,7 +14,7 @@
   "n_door_cue_frames": 348,
   "n_door_detections": 851,
   "n_candidates": 3,
-  "n_accepted": 2,
+  "n_accepted": 1,
   "tracks": [
     {
       "id": 0,
@@ -150,6 +150,33 @@
     }
   ],
   "rejected": [
+    {
+      "person_id": 1,
+      "vehicle_id": 10002,
+      "frame_start": 222,
+      "frame_end": 249,
+      "rules": [
+        "R1_dwell",
+        "R2_death_near",
+        "R3_birth_near",
+        "R4_door_change"
+      ],
+      "evidence": {
+        "min_d_norm": 0.0,
+        "dwell_s": 0.933,
+        "vehicle_is_static": true,
+        "person_birth": 221,
+        "person_death": 243,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0079
+      },
+      "verdict_type": "pass_by",
+      "verdict_confidence": 0.8,
+      "reason": "rejected"
+    },
     {
       "person_id": 2,
       "vehicle_id": 10002,

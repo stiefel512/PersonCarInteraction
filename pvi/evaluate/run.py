@@ -17,7 +17,7 @@ from pathlib import Path
 
 from ..schema import (GTEvent, Interaction, PersonRef, VehicleRef,
                       load_ground_truth)
-from .metrics import full_report
+from .metrics import full_report, full_report_groups
 
 # Named in problem-definition.md s3 -- reported individually, never only pooled.
 STRESS_CLIPS = {"mKzCQKTHizw_0": "precision (runners near parked cars)",
@@ -62,13 +62,16 @@ def main() -> None:
     if not pred_files:
         raise SystemExit(f"no prediction files in {args.outputs}/")
 
-    all_preds: list[Interaction] = []
+    groups: list[tuple[list[Interaction], list[GTEvent]]] = []
     per_clip: dict[str, dict] = {}
     covered: set[str] = set()
     for p in pred_files:
         clip_id, preds = load_predictions(p)
         covered.add(clip_id)
-        all_preds.extend(preds)
+        # Per-clip GROUPS, never a flat pool: frame spans are clip-local, so a
+        # flat matching lets a prediction from one clip satisfy another clip's
+        # event. See metrics.report_groups.
+        groups.append((preds, by_clip_gt.get(clip_id, [])))
         per_clip[clip_id] = full_report(preds, by_clip_gt.get(clip_id, []))
         if clip_id in STRESS_CLIPS:
             per_clip[clip_id]["stress_case"] = STRESS_CLIPS[clip_id]
@@ -83,7 +86,7 @@ def main() -> None:
         "clips_without_predictions": missing,
         "n_gt_events_total": len(gts),
         "n_gt_positives_total": sum(1 for g in gts if g.is_positive),
-        "pooled": full_report(all_preds, [g for g in gts if g.clip_id in covered]),
+        "pooled": full_report_groups(groups),
         "per_clip": per_clip,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)

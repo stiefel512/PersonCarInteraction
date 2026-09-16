@@ -1,5 +1,11 @@
 # Full-set baseline — geometric (ablation) judge
 
+> **CORRECTED 2026-09-16.** Every pooled number below was computed with a flat
+> cross-clip matching and is inflated by roughly 55%. Frame spans are clip-local,
+> so a prediction from one clip could satisfy another clip's event. The per-clip
+> numbers are unaffected. Corrected pooled figures and the full explanation:
+> `../2026-09-16_bytetrack-floor/findings.md`. Superseded by that run.
+
 All 8 clips, `config/default.yaml` defaults (untuned), geometric judge.
 Numbers: `comparison.csv`, `results.json`. Outputs: `geometric/`.
 

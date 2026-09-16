@@ -247,3 +247,57 @@ def test_disabling_the_actor_check_changes_only_the_ranking():
     gt = gt_with_anchors(0.15, 0.25, 0.7, 0.5)
     wrong = pred_with_boxes([0.9, 0.9, 0.95, 0.99], [0.0, 0.0, 0.05, 0.05])
     assert match_events([wrong], [gt], require_same_actors=False).n_tp == 1
+
+
+# --- clip-scoped pooling ---
+#
+# Frame spans are clip-local. Pooling predictions and GT into one flat matching
+# lets a prediction from one clip satisfy an event in another purely because the
+# numbers overlap. On the real 8-clip set this inflated pooled true positives
+# from 11 to 17 -- every headline number was ~55% too high.
+
+from pvi.evaluate.metrics import report_groups
+
+
+def gt_in(clip, start, end, idx=1):
+    return GTEvent(event_id=f"{clip}__e{idx:03d}", event_group_id=f"{clip}__e{idx:03d}",
+                   clip_id=clip, type="enter_vehicle", frame_start=start,
+                   frame_end=end, time_start_s=start / 10, time_end_s=end / 10)
+
+
+def test_a_prediction_cannot_match_another_clips_event():
+    """Clip A predicts at 10-20, missing its own event at 200-210. Clip B has an
+    event at 10-20. Flat matching credits a true positive; grouped does not."""
+    a_gt, b_gt = gt_in("A", 200, 210), gt_in("B", 10, 20)
+    a_pred = make_pred(10, 20)
+    grouped = report_groups([([a_pred], [a_gt]), ([], [b_gt])])
+    d = grouped["tier1_detection"]
+    assert d["tp"] == 0, "a cross-clip match was credited"
+    assert d["fp"] == 1 and d["fn"] == 2
+
+
+def test_flat_matching_would_have_credited_it():
+    """Contrast case, pinning the bug this guards against."""
+    a_gt, b_gt = gt_in("A", 200, 210), gt_in("B", 10, 20)
+    flat = match_events([make_pred(10, 20)], [a_gt, b_gt])
+    assert flat.n_tp == 1
+
+
+def test_grouped_counts_are_the_sum_of_per_clip_counts():
+    a = ([make_pred(10, 20)], [gt_in("A", 10, 20)])
+    b = ([make_pred(30, 40)], [gt_in("B", 30, 40)])
+    grouped = report_groups([a, b])["tier1_detection"]
+    assert grouped["tp"] == 2 and grouped["fp"] == 0 and grouped["fn"] == 0
+
+
+def test_pass_by_counts_aggregate_across_clips():
+    a = ([], [make_gt(10, 20, type_="pass_by")])
+    b = ([], [make_gt(30, 40, type_="pass_by", idx=2)])
+    assert report_groups([a, b])["tier1_pass_by"]["n_pass_by_labeled"] == 2
+
+
+def test_single_group_matches_the_one_clip_report():
+    from pvi.evaluate.metrics import report
+    preds, gts = [make_pred(10, 20)], [gt_in("A", 10, 20)]
+    assert report(preds, gts)["tier1_detection"] == \
+           report_groups([(preds, gts)])["tier1_detection"]
