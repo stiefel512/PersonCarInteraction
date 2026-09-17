@@ -235,8 +235,15 @@ rather than replacing them.
    The old range [0.3, 3.0] was contradictory for the same reason. The constraint
    is the binding statement; the default and range were wrong.
 
-2. **LOCO searches four thresholds, not ten.** `det_conf`, `tau_near`, `tau_far`
-   and `vlm_conf_thresh` vary; the other six stay at their documented defaults.
+2. **LOCO searches three thresholds, not ten.** `det_conf`, `tau_near` and
+   `tau_far` vary; the other seven stay at their documented defaults.
+   *(Amended 2026-09-17: the agreed set was four. `vlm_conf_thresh` has been
+   removed because it is **inert** — measured across three full runs it never
+   rejected a single candidate, Qwen answering `pass_by` at 0.86–0.96 rather
+   than near any threshold. Searching it would have spent a third of the budget
+   resolving noise and produced fold-agreement statistics for a knob that does
+   nothing. The freed budget went to a fourth value each on `tau_near` and
+   `tau_far`, which demonstrably bind.)*
    Reason: 18 positives over 8 folds is ~2.25 positives per held-out clip, and
    they are unevenly spread (`iMGR` has 6, `gt1125_06` has 2). A fold's F1 moves
    in very coarse steps, so varying ten knobs fits fold-specific noise rather than

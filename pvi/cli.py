@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -95,10 +96,29 @@ GRAY_MAX_WIDTH = 960
 MAX_JUDGE_FRAME_BYTES = 1_500_000_000
 
 
-def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
-             tiled: bool | None = None, batch: int = 8,
-             skip_door_cue: bool = False
-             ) -> tuple[ClipMeta, list[Interaction], dict]:
+@dataclass
+class ClipTracks:
+    """Output of the expensive half of the pipeline.
+
+    Decoding, detection and tracking depend only on `det_conf` (and the fixed
+    detector settings), not on the proposal or judge thresholds. Holding this
+    lets a sweep vary `tau_near`/`tau_far` without redoing the part that costs
+    minutes per clip.
+    """
+    meta: ClipMeta
+    tracks: list
+    gray: dict
+    gray_scale: float
+    static_camera: bool
+    tiled: bool
+    detector_revision: str
+    n_detections: int
+    n_detections_above_det_conf: int
+
+
+def track_clip(clip_path: Path, cfg: C.Config, tiled: bool | None = None,
+               batch: int = 8) -> ClipTracks:
+    """Decode, detect and track. The reusable half; see ClipTracks."""
     meta = video.probe(clip_path)
     t = cfg.tunable
     tiled = should_tile(meta, tiled)
@@ -157,7 +177,21 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
             flush()
     flush()
 
-    tracks = tracker.finish()
+    return ClipTracks(
+        meta=meta, tracks=tracker.finish(), gray=gray, gray_scale=gray_scale,
+        static_camera=static_camera, tiled=tiled,
+        detector_revision=detector.revision,
+        n_detections=n_dets, n_detections_above_det_conf=n_dets_above_conf,
+    )
+
+
+def judge_tracks(clip_path: Path, ct: ClipTracks, cfg: C.Config,
+                 judge_name: str = "vlm", skip_door_cue: bool = False
+                 ) -> tuple[ClipMeta, list[Interaction], dict]:
+    """Propose candidates from tracks and adjudicate them. The cheap half."""
+    t = cfg.tunable
+    meta, tracks = ct.meta, ct.tracks
+    gray, gray_scale, static_camera = ct.gray, ct.gray_scale, ct.static_camera
     persons = [tr for tr in tracks if tr.is_person]
     vehicles = [tr for tr in tracks if not tr.is_person]
 
@@ -193,7 +227,7 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
                     t.door_conf_thresh)
 
     # --- judge ---
-    detector_revision = detector.revision
+    detector_revision = ct.detector_revision
     _free_gpu()
 
     accepted, rejected = _judge_all(cands, meta, clip_path, cfg, judge_name,
@@ -233,10 +267,10 @@ def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
         "judge": judge_name,
         "detector_revision": detector_revision,
         "static_camera": static_camera,
-        "tiled": tiled,
+        "tiled": ct.tiled,
         "cmc_enabled": not static_camera,
-        "n_detections": n_dets,
-        "n_detections_above_det_conf": n_dets_above_conf,
+        "n_detections": ct.n_detections,
+        "n_detections_above_det_conf": ct.n_detections_above_det_conf,
         "det_floor": cfg.tracker.det_floor,
         "det_conf": t.det_conf,
         "n_person_tracks": len(persons),
@@ -357,6 +391,15 @@ def _span_box_norm(track, span, meta: ClipMeta) -> list[float] | None:
             round(float(a[:, 1].min() / meta.height), 5),
             round(float(a[:, 2].max() / meta.width), 5),
             round(float(a[:, 3].max() / meta.height), 5)]
+
+
+def run_clip(clip_path: Path, cfg: C.Config, judge_name: str = "vlm",
+             tiled: bool | None = None, batch: int = 8,
+             skip_door_cue: bool = False
+             ) -> tuple[ClipMeta, list[Interaction], dict]:
+    """Whole pipeline for one clip. Unchanged public API over the two halves."""
+    ct = track_clip(clip_path, cfg, tiled=tiled, batch=batch)
+    return judge_tracks(clip_path, ct, cfg, judge_name, skip_door_cue)
 
 
 def _free_gpu() -> None:

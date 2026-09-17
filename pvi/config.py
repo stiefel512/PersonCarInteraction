@@ -25,9 +25,15 @@ SHORTEST_POSITIVE_S = 0.75
 # because at 6 fps a 0.4 s window is 2.4 frames (design-plan.md s4).
 MIN_SMOOTH_FRAMES = 3
 
-# The four thresholds leave-one-clip-out is allowed to vary (design-plan s6a.2).
-# The other tunables stay at their defaults for every reported number.
-LOCO_SEARCH_KEYS = ("det_conf", "tau_near", "tau_far", "vlm_conf_thresh")
+# The thresholds leave-one-clip-out is allowed to vary (design-plan s6a.2, as
+# amended 2026-09-17). The other tunables stay at their defaults for every
+# reported number.
+#
+# `vlm_conf_thresh` was in the agreed set and has been REMOVED: measured across
+# three full runs it never rejected a single candidate, because Qwen answers
+# `pass_by` at 0.86-0.96 rather than near the threshold. A knob that never binds
+# cannot be searched meaningfully.
+LOCO_SEARCH_KEYS = ("det_conf", "tau_near", "tau_far")
 
 
 class ConfigError(ValueError):

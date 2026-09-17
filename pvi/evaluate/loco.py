@@ -29,16 +29,21 @@ Two honesty notes that belong in the write-up, not just here:
 
 ## Cost
 
-Re-running detection and tracking per config would dominate, so tracks are
-cached on disk per `(clip, det_conf)`. `tau_near`/`tau_far` then only re-run the
-proposal stage, which is cheap. `vlm_conf_thresh` is **free**: it is a
-post-filter on a verdict already returned, so it never triggers inference.
-The VLM's own response cache (keyed on rendered image bytes) absorbs most of
-what remains, since nearby threshold settings produce identical crops.
+Detection and tracking dominate -- minutes per clip against seconds for the
+proposal stage -- and depend only on `det_conf`. So the sweep groups settings by
+`det_conf` and reuses one `ClipTracks` across every `tau` combination under it.
+That turns 8 clips x 3 det_conf x 10 tau-combinations from 240 tracking runs
+into 24. On `gt1125_06` alone (686 s per tracking run) that is the difference
+between ~4.5 hours and ~35 minutes.
+
+The VLM's own response cache absorbs some of the remainder, though less than
+one might hope: a different `tau` shifts the span, which shifts the crop, which
+changes the cache key by design.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import itertools
 import json
 import pickle
@@ -54,12 +59,15 @@ from .metrics import detection_prf
 # Grid over the four searched knobs. Deliberately coarse: with ~2.25 positives
 # per held-out fold, a finer grid resolves noise, not signal.
 GRID: dict[str, tuple[float, ...]] = {
-    # det_conf is the tracker's high-confidence threshold, not a
-    # pre-filter, so the useful band sits well above tracker.det_floor.
+    # det_conf is the tracker's high-confidence threshold, not a pre-filter, so
+    # the useful band sits well above tracker.det_floor. It is also the only
+    # knob here that changes tracking, hence the sweep's grouping.
     "det_conf": (0.35, 0.50, 0.65),
-    "tau_near": (0.08, 0.15, 0.25),
-    "tau_far": (0.20, 0.30, 0.45),
-    "vlm_conf_thresh": (0.3, 0.5, 0.7),
+    # Freed by dropping vlm_conf_thresh, the two contact thresholds get a
+    # fourth value each: the same number of pipeline runs buys a finer grid on
+    # knobs that demonstrably bind.
+    "tau_near": (0.06, 0.10, 0.15, 0.22),
+    "tau_far": (0.18, 0.25, 0.32, 0.45),
 }
 
 
@@ -115,6 +123,17 @@ def select(fit_clips: Iterable[str], preds_by: dict[tuple[str, str], list[Intera
 
 def setting_key(s: dict[str, float]) -> str:
     return json.dumps(s, sort_keys=True)
+
+
+def _cache_path(cache_dir: Path, clip_id: str, s: dict[str, float]) -> Path:
+    """Stable on-disk name for a (clip, setting) result.
+
+    sha256, not `hash()`: Python randomises string hashing per process, so a
+    `hash()`-derived filename differs every run and the cache can never hit --
+    which is what this code did before, silently re-running the entire sweep.
+    """
+    digest = hashlib.sha256(setting_key(s).encode()).hexdigest()[:16]
+    return cache_dir / f"{clip_id}__{digest}.pkl"
 
 
 def run(preds_by: dict[tuple[str, str], list[Interaction]],
@@ -196,22 +215,34 @@ def sweep(clips: Sequence[Path], cfg: C.Config, judge: str,
 
     Import is local so that `run` and `select` stay usable without torch.
     """
-    from ..cli import run_clip
+    from ..cli import judge_tracks, track_clip
 
     settings = settings or valid_settings()
     cache_dir.mkdir(parents=True, exist_ok=True)
     out: dict[tuple[str, str], list[Interaction]] = {}
 
     for clip in clips:
-        for s in settings:
-            key = setting_key(s)
-            cached = cache_dir / f"{clip.stem}__{abs(hash(key)):016x}.pkl"
-            if cached.exists():
-                out[(clip.stem, key)] = pickle.loads(cached.read_bytes())
+        # Group by det_conf: it is the only searched knob that affects tracking.
+        for dc in sorted({s["det_conf"] for s in settings}):
+            group = [s for s in settings if s["det_conf"] == dc]
+            todo = [s for s in group
+                    if not _cache_path(cache_dir, clip.stem, s).exists()]
+            for s in group:
+                cached = _cache_path(cache_dir, clip.stem, s)
+                if cached.exists():
+                    out[(clip.stem, setting_key(s))] = pickle.loads(
+                        cached.read_bytes())
+            if not todo:
                 continue
-            _, interactions, _ = run_clip(clip, cfg.with_tunables(**s), judge)
-            cached.write_bytes(pickle.dumps(interactions))
-            out[(clip.stem, key)] = interactions
+            # One tracking pass for the whole group.
+            ct = track_clip(clip, cfg.with_tunables(det_conf=dc))
+            for s in todo:
+                _, interactions, _ = judge_tracks(
+                    clip, ct, cfg.with_tunables(**s), judge)
+                _cache_path(cache_dir, clip.stem, s).write_bytes(
+                    pickle.dumps(interactions))
+                out[(clip.stem, setting_key(s))] = interactions
+            del ct
     return out
 
 

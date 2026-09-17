@@ -37,9 +37,25 @@ def test_grid_is_not_empty_after_pruning():
     assert len(valid_settings()) > 0
 
 
-def test_only_the_four_agreed_knobs_are_searched():
-    """design-plan §6a.2: searching all ten fits fold noise at 18 positives."""
-    assert set(GRID) == {"det_conf", "tau_near", "tau_far", "vlm_conf_thresh"}
+def test_only_the_three_agreed_knobs_are_searched():
+    """design-plan §6a.2 as amended 2026-09-17. Searching all ten fits fold
+    noise at 18 positives; vlm_conf_thresh was dropped from the agreed four
+    because it is inert -- across three full runs it never rejected a single
+    candidate, Qwen answering pass_by at 0.86-0.96 rather than near it."""
+    assert set(GRID) == {"det_conf", "tau_near", "tau_far"}
+
+
+def test_the_inert_knob_is_frozen_not_searched():
+    from pvi.config import LOCO_SEARCH_KEYS
+    assert "vlm_conf_thresh" not in LOCO_SEARCH_KEYS
+    assert set(LOCO_SEARCH_KEYS) == set(GRID)
+
+
+def test_grid_and_loco_search_keys_agree():
+    """Two declarations of the same decision; drift between them would mean the
+    report names one set of knobs and the sweep varies another."""
+    from pvi.config import LOCO_SEARCH_KEYS
+    assert sorted(GRID) == sorted(LOCO_SEARCH_KEYS)
 
 
 # --- selection ---
@@ -145,3 +161,29 @@ def test_caveats_are_carried_in_the_report():
     nobody opens next to the results."""
     settings, clips, gt_by, preds_by = _two_setting_world()
     assert len(run(preds_by, gt_by, settings)["caveats"]) >= 3
+
+
+# --- on-disk cache key ---
+
+def test_cache_path_is_stable_across_processes():
+    """The key used to come from hash(), which Python randomises per process, so
+    the filename differed every run and the sweep silently redid all the work."""
+    import subprocess, sys, json as _json
+    code = (
+        "from pathlib import Path;"
+        "from pvi.evaluate.loco import _cache_path;"
+        "print(_cache_path(Path('/tmp'), 'clipA',"
+        " {'det_conf':0.5,'tau_near':0.1,'tau_far':0.3}).name)"
+    )
+    names = {subprocess.run([sys.executable, "-c", code], capture_output=True,
+                            text=True, cwd=".").stdout.strip()
+             for _ in range(3)}
+    assert len(names) == 1, f"cache filename is not stable: {names}"
+
+
+def test_cache_path_differs_between_settings():
+    from pathlib import Path
+    from pvi.evaluate.loco import _cache_path
+    a = _cache_path(Path("/tmp"), "c", {"det_conf": 0.5, "tau_near": 0.1, "tau_far": 0.3})
+    b = _cache_path(Path("/tmp"), "c", {"det_conf": 0.5, "tau_near": 0.2, "tau_far": 0.3})
+    assert a != b

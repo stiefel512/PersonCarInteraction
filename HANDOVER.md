@@ -160,8 +160,13 @@ a correction banner and have been rescored from their stored outputs.
 2. **Chase span fragmentation** (see the baseline table above). It is the single
    remaining recall miss and the likely cause of several false positives, since
    one long event becomes four short wrong ones.
-3. **LOCO threshold selection.** The harness exists (`pvi/evaluate/loco.py`,
-   `python -m pvi.evaluate.loco`) and is tested; it has not been run.
+3. **LOCO threshold selection — ready to run, not yet run.**
+   `python -m pvi.evaluate.loco --judge vlm`. Searches **three** knobs
+   (`det_conf`, `tau_near`, `tau_far`); `vlm_conf_thresh` was dropped from the
+   agreed four because it never binds. 45 valid settings, but only **24
+   tracking passes** — the sweep groups by `det_conf`, the one searched knob
+   that affects tracking, and reuses one `ClipTracks` across every `tau`
+   combination. Expect a few hours, dominated by `gt1125_06`.
 4. ~~Track fragmentation~~ — **checked, and it is not a problem.** The raw count
    (14 person tracks on a 102-frame clip) looked alarming but the inference was
    wrong. Fragmentation means one identity split into temporally *sequential*

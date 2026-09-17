@@ -44,6 +44,11 @@ comparability between runs.
 
 Searched by LOCO threshold selection and any later sweep.
 
+**LOCO varies only `det_conf`, `tau_near` and `tau_far`** (design-plan §6a.2 as
+amended 2026-09-17). `vlm_conf_thresh` is declared tunable but is **inert in
+practice** — across three full runs no candidate was ever rejected by it,
+because the VLM answers `pass_by` at 0.86–0.96 rather than near any threshold.
+
 | name | type | default | range | meaning |
 |---|---|---|---|---|
 | `det_conf` | float | 0.50 | [0.15, 0.80] | **tracker high-confidence threshold, not a pre-filter.** At or above it a detection can start a track and joins the first association pass; between `tracker.det_floor` and here it feeds the second pass. Constraint: `det_conf > tracker.det_floor`. |
