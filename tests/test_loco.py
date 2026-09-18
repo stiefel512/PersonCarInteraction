@@ -181,6 +181,17 @@ def test_cache_path_is_stable_across_processes():
     assert len(names) == 1, f"cache filename is not stable: {names}"
 
 
+def test_cache_path_differs_between_judges():
+    """The judge changes the answer completely. Without it in the key a VLM
+    sweep would load an earlier geometric sweep's results and report them as
+    its own."""
+    from pathlib import Path
+    from pvi.evaluate.loco import _cache_path
+    s = {"det_conf": 0.5, "tau_near": 0.1, "tau_far": 0.3}
+    assert _cache_path(Path("/tmp"), "c", s, "vlm") != \
+           _cache_path(Path("/tmp"), "c", s, "geometric")
+
+
 def test_cache_path_differs_between_settings():
     from pathlib import Path
     from pvi.evaluate.loco import _cache_path

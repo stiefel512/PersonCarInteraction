@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    39,
+    44,
+    50,
+    55,
+    61,
+    66,
+    72,
+    77,
+    83,
+    88,
+    94,
+    99
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "man carries bag towards car, opens trunk, puts bag inside",
+    "person": "man wearing dark jacket + jeans, carrying bag",
+    "type": "load_unload",
+    "vehicle": "black car, parked, in open view"
+  },
+  "raw": "```json\n{\n    \"type\": \"load_unload\",\n    \"confidence\": 0.9,\n    \"person\": \"man wearing dark jacket + jeans, carrying bag\",\n    \"vehicle\": \"black car, parked, in open view\",\n    \"note\": \"man carries bag towards car, opens trunk, puts bag inside\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

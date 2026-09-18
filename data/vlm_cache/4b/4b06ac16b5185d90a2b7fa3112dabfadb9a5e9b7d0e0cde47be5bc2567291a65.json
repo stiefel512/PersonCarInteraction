@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    155,
+    157,
+    158,
+    160,
+    162,
+    163,
+    165,
+    166,
+    168,
+    170,
+    171,
+    173
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "child opens car door",
+    "person": "child, wearing pink dress, black shoes, none",
+    "type": "open_close_door",
+    "vehicle": "white, van, parked, right side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"open_close_door\",\n    \"confidence\": 0.9,\n    \"person\": \"child, wearing pink dress, black shoes, none\",\n    \"vehicle\": \"white, van, parked, right side of frame\",\n    \"note\": \"child opens car door\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

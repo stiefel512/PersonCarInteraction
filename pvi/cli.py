@@ -123,13 +123,6 @@ def track_clip(clip_path: Path, cfg: C.Config, tiled: bool | None = None,
     t = cfg.tunable
     tiled = should_tile(meta, tiled)
 
-    # Fail fast on a missing or truncated VLM checkpoint. The judge is built
-    # only after detection, tracking and the door cue, so without this an
-    # incomplete download surfaces ten minutes into the clip.
-    if judge_name == "vlm":
-        from .judge.vlm import check_weights_available
-        check_weights_available(cfg.vlm.model_id, cfg.vlm.revision)
-
     # Pass 1: decide whether the camera moves, before tracking, because the
     # answer decides whether the tracker runs CMC at all. Unconditional CMC is
     # NOT free -- when feature matching degenerates it corrupts association
@@ -189,6 +182,14 @@ def judge_tracks(clip_path: Path, ct: ClipTracks, cfg: C.Config,
                  judge_name: str = "vlm", skip_door_cue: bool = False
                  ) -> tuple[ClipMeta, list[Interaction], dict]:
     """Propose candidates from tracks and adjudicate them. The cheap half."""
+    # Fail fast on a missing or truncated VLM checkpoint, before the door cue
+    # spends a Grounding DINO pass. (This check used to sit in the tracking
+    # half, where it referenced a judge name that no longer exists there -- a
+    # NameError the geometric smoke run caught immediately.)
+    if judge_name == "vlm":
+        from .judge.vlm import check_weights_available
+        check_weights_available(cfg.vlm.model_id, cfg.vlm.revision)
+
     t = cfg.tunable
     meta, tracks = ct.meta, ct.tracks
     gray, gray_scale, static_camera = ct.gray, ct.gray_scale, ct.static_camera

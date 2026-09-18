@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    445,
+    454,
+    464,
+    473,
+    482,
+    491,
+    501,
+    510,
+    519,
+    528,
+    538,
+    547
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The child enters the green bus.",
+    "person": "child, white shirt + dark pants, none",
+    "type": "enter_vehicle",
+    "vehicle": "green, bus, parked, right side"
+  },
+  "raw": "```json\n{\n    \"type\": \"enter_vehicle\",\n    \"confidence\": 0.9,\n    \"person\": \"child, white shirt + dark pants, none\",\n    \"vehicle\": \"green, bus, parked, right side\",\n    \"note\": \"The child enters the green bus.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    141,
+    145,
+    148,
+    152,
+    156,
+    159,
+    163,
+    166,
+    170,
+    174,
+    177,
+    181
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "child exits vehicle",
+    "person": "child, wearing white top + dark pants, carrying bag",
+    "type": "exit_vehicle",
+    "vehicle": "white, van, parked, in middle of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"exit_vehicle\",\n    \"confidence\": 0.9,\n    \"person\": \"child, wearing white top + dark pants, carrying bag\",\n    \"vehicle\": \"white, van, parked, in middle of frame\",\n    \"note\": \"child exits vehicle\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

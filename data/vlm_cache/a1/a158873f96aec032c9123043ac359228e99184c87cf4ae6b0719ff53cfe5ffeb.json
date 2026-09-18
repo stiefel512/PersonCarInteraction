@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    0,
+    24,
+    47,
+    71,
+    95,
+    118,
+    142,
+    165,
+    189,
+    213,
+    236,
+    260
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "the man walks past the white car",
+    "person": "man, white shirt + black pants, none",
+    "type": "pass_by",
+    "vehicle": "white, small, parked, right side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"pass_by\",\n    \"confidence\": 0.9,\n    \"person\": \"man, white shirt + black pants, none\",\n    \"vehicle\": \"white, small, parked, right side of frame\",\n    \"note\": \"the man walks past the white car\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

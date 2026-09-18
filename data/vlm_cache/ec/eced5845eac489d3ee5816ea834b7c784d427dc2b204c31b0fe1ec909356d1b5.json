@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    9,
+    17,
+    25,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    79,
+    87,
+    95
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.8,
+    "note": "The man approaches the car, opens the driver's side door, and then exits.",
+    "person": "man wearing dark jacket and pants, carrying bag",
+    "type": "open_close_door",
+    "vehicle": "black car, parked, partially covered by tarp, positioned centrally"
+  },
+  "raw": "```json\n{\n  \"type\": \"open_close_door\",\n  \"confidence\": 0.8,\n  \"person\": \"man wearing dark jacket and pants, carrying bag\",\n  \"vehicle\": \"black car, parked, partially covered by tarp, positioned centrally\",\n  \"note\": \"The man approaches the car, opens the driver's side door, and then exits.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

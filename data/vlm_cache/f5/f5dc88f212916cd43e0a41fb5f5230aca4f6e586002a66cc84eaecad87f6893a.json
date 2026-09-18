@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    484,
+    490,
+    497,
+    503,
+    509,
+    515,
+    522,
+    528,
+    534,
+    540,
+    547,
+    553
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "child walks past green bus",
+    "person": "child approx 5 years old, white top + white shorts, none",
+    "type": "pass_by",
+    "vehicle": "green bus, parked, right side of frame"
+  },
+  "raw": "```json\n{\n  \"type\": \"pass_by\",\n  \"confidence\": 0.9,\n  \"person\": \"child approx 5 years old, white top + white shorts, none\",\n  \"vehicle\": \"green bus, parked, right side of frame\",\n  \"note\": \"child walks past green bus\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

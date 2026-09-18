@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    107,
+    109,
+    111,
+    113,
+    115,
+    117,
+    118,
+    120,
+    122,
+    124,
+    126,
+    128
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "the woman opens the driver's side door of the SUV",
+    "person": "woman adult, white top + black pants, stroller",
+    "type": "open_close_door",
+    "vehicle": "white SUV, parked, right side"
+  },
+  "raw": "```json\n{\n    \"type\": \"open_close_door\",\n    \"confidence\": 0.9,\n    \"person\": \"woman adult, white top + black pants, stroller\",\n    \"vehicle\": \"white SUV, parked, right side\",\n    \"note\": \"the woman opens the driver's side door of the SUV\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

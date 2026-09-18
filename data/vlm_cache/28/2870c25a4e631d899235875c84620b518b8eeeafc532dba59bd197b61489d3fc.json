@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    17,
+    24,
+    32,
+    39,
+    47,
+    54,
+    62,
+    69,
+    77,
+    84,
+    92,
+    99
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "man opens the door of the black car",
+    "person": "man wearing blue jeans and brown shoes",
+    "type": "open_close_door",
+    "vehicle": "black car parked, door open"
+  },
+  "raw": "```json\n{\n    \"type\": \"open_close_door\",\n    \"confidence\": 0.9,\n    \"person\": \"man wearing blue jeans and brown shoes\",\n    \"vehicle\": \"black car parked, door open\",\n    \"note\": \"man opens the door of the black car\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

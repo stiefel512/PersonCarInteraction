@@ -125,15 +125,21 @@ def setting_key(s: dict[str, float]) -> str:
     return json.dumps(s, sort_keys=True)
 
 
-def _cache_path(cache_dir: Path, clip_id: str, s: dict[str, float]) -> Path:
-    """Stable on-disk name for a (clip, setting) result.
+def _cache_path(cache_dir: Path, clip_id: str, s: dict[str, float],
+                judge: str = "") -> Path:
+    """Stable on-disk name for a (clip, setting, judge) result.
 
     sha256, not `hash()`: Python randomises string hashing per process, so a
     `hash()`-derived filename differs every run and the cache can never hit --
     which is what this code did before, silently re-running the entire sweep.
+
+    `judge` is part of the key because it changes the answer completely. Without
+    it a VLM sweep would load the geometric sweep's results from an earlier run
+    and report them as its own -- the same failure the VLM response cache needed
+    a salt to avoid.
     """
-    digest = hashlib.sha256(setting_key(s).encode()).hexdigest()[:16]
-    return cache_dir / f"{clip_id}__{digest}.pkl"
+    digest = hashlib.sha256(f"{judge}|{setting_key(s)}".encode()).hexdigest()[:16]
+    return cache_dir / f"{clip_id}__{judge or 'nojudge'}__{digest}.pkl"
 
 
 def run(preds_by: dict[tuple[str, str], list[Interaction]],
@@ -226,9 +232,9 @@ def sweep(clips: Sequence[Path], cfg: C.Config, judge: str,
         for dc in sorted({s["det_conf"] for s in settings}):
             group = [s for s in settings if s["det_conf"] == dc]
             todo = [s for s in group
-                    if not _cache_path(cache_dir, clip.stem, s).exists()]
+                    if not _cache_path(cache_dir, clip.stem, s, judge).exists()]
             for s in group:
-                cached = _cache_path(cache_dir, clip.stem, s)
+                cached = _cache_path(cache_dir, clip.stem, s, judge)
                 if cached.exists():
                     out[(clip.stem, setting_key(s))] = pickle.loads(
                         cached.read_bytes())
@@ -239,7 +245,7 @@ def sweep(clips: Sequence[Path], cfg: C.Config, judge: str,
             for s in todo:
                 _, interactions, _ = judge_tracks(
                     clip, ct, cfg.with_tunables(**s), judge)
-                _cache_path(cache_dir, clip.stem, s).write_bytes(
+                _cache_path(cache_dir, clip.stem, s, judge).write_bytes(
                     pickle.dumps(interactions))
                 out[(clip.stem, setting_key(s))] = interactions
             del ct

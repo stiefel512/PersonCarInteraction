@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    78,
+    80,
+    82,
+    84,
+    86,
+    88,
+    91,
+    93,
+    95,
+    97,
+    99,
+    101
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The woman carrying a baby walks past the parked red car.",
+    "person": "woman, purple top + black pants, baby in arms",
+    "type": "pass_by",
+    "vehicle": "red car, parked, right side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"pass_by\",\n    \"confidence\": 0.9,\n    \"person\": \"woman, purple top + black pants, baby in arms\",\n    \"vehicle\": \"red car, parked, right side of frame\",\n    \"note\": \"The woman carrying a baby walks past the parked red car.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

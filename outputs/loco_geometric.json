@@ -1,0 +1,177 @@
+{
+  "protocol": "leave-one-clip-out, 8 folds, clip as fold unit",
+  "searched": [
+    "det_conf",
+    "tau_far",
+    "tau_near"
+  ],
+  "frozen_at_defaults": [
+    "context_pad_s",
+    "crop_margin",
+    "door_conf_thresh",
+    "min_dwell_s",
+    "n_vlm_frames",
+    "smooth_window_s",
+    "vlm_conf_thresh"
+  ],
+  "n_settings_evaluated": 45,
+  "headline_held_out": {
+    "tp": 18,
+    "fp": 26,
+    "fn": 0,
+    "precision": 0.4091,
+    "recall": 1.0,
+    "f1": 0.5806,
+    "n_gt": 18,
+    "n_pred": 44
+  },
+  "all_data_tuned_NOT_held_out": {
+    "tp": 18,
+    "fp": 26,
+    "fn": 0,
+    "precision": 0.4091,
+    "recall": 1.0,
+    "f1": 0.5806,
+    "n_gt": 18,
+    "n_pred": 44
+  },
+  "all_data_selected": {
+    "det_conf": 0.65,
+    "tau_near": 0.06,
+    "tau_far": 0.18
+  },
+  "overfitting_gap_f1": 0.0,
+  "fold_agreement": {
+    "det_conf": {
+      "values": [
+        0.65,
+        0.65,
+        0.65,
+        0.65,
+        0.65,
+        0.65,
+        0.65,
+        0.65
+      ],
+      "n_distinct": 1,
+      "modal": 0.65
+    },
+    "tau_near": {
+      "values": [
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06,
+        0.06
+      ],
+      "n_distinct": 1,
+      "modal": 0.06
+    },
+    "tau_far": {
+      "values": [
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.25,
+        0.25
+      ],
+      "n_distinct": 2,
+      "modal": 0.18
+    }
+  },
+  "folds": [
+    {
+      "held_out_clip": "1THkHYIQ_bY_0",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.18
+      },
+      "n_predictions": 3,
+      "fold_f1": 0.0
+    },
+    {
+      "held_out_clip": "HIu4lM4B8hA_1",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.18
+      },
+      "n_predictions": 7,
+      "fold_f1": 0.2
+    },
+    {
+      "held_out_clip": "NmlzoaDcOuI_1",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.18
+      },
+      "n_predictions": 6,
+      "fold_f1": 0.4444
+    },
+    {
+      "held_out_clip": "NmlzoaDcOuI_6",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.18
+      },
+      "n_predictions": 6,
+      "fold_f1": 0.2857
+    },
+    {
+      "held_out_clip": "gt1125_06",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.18
+      },
+      "n_predictions": 9,
+      "fold_f1": 0.3636
+    },
+    {
+      "held_out_clip": "iMGR_0AG3a8_2_3",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.18
+      },
+      "n_predictions": 7,
+      "fold_f1": 0.7692
+    },
+    {
+      "held_out_clip": "mKzCQKTHizw_0",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.25
+      },
+      "n_predictions": 4,
+      "fold_f1": 0.4
+    },
+    {
+      "held_out_clip": "mKzCQKTHizw_1",
+      "selected": {
+        "det_conf": 0.65,
+        "tau_near": 0.06,
+        "tau_far": 0.25
+      },
+      "n_predictions": 2,
+      "fold_f1": 0.6667
+    }
+  ],
+  "caveats": [
+    "The pooled held-out number characterises the PROCEDURE, not any single config: folds may select different thresholds.",
+    "config/default.yaml ships the all-data values, whose honest number is the not-held-out one.",
+    "Clips are not independent draws -- two pairs share a camera -- and the thresholds were designed while looking at this data.",
+    "18 positives over 8 folds is ~2.25 per held-out clip, unevenly spread; every number here is indicative, not significant."
+  ],
+  "judge": "geometric"
+}

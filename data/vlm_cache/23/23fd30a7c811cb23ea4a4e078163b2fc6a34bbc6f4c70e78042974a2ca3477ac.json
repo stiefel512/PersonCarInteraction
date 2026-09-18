@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    69,
+    70,
+    72,
+    73,
+    75,
+    76,
+    78,
+    79,
+    81,
+    82,
+    84,
+    85
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The child walks past the parked red sedan.",
+    "person": "child, wearing pink dress, none",
+    "type": "pass_by",
+    "vehicle": "red, sedan, parked, right side of frame"
+  },
+  "raw": "```json\n{\n  \"type\": \"pass_by\",\n  \"confidence\": 0.9,\n  \"person\": \"child, wearing pink dress, none\",\n  \"vehicle\": \"red, sedan, parked, right side of frame\",\n  \"note\": \"The child walks past the parked red sedan.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

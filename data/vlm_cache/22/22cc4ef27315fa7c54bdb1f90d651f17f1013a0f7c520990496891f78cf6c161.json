@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    201,
+    208,
+    215,
+    222,
+    229,
+    236,
+    242,
+    249,
+    256,
+    263,
+    270,
+    277
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The woman interacts with the open car door.",
+    "person": "woman wearing dark top and pants, carrying bag",
+    "type": "open_close_door",
+    "vehicle": "silver sedan parked, door open"
+  },
+  "raw": "```json\n{\n  \"type\": \"open_close_door\",\n  \"confidence\": 0.9,\n  \"person\": \"woman wearing dark top and pants, carrying bag\",\n  \"vehicle\": \"silver sedan parked, door open\",\n  \"note\": \"The woman interacts with the open car door.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

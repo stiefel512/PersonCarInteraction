@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    30,
+    37,
+    44,
+    52,
+    59,
+    66,
+    73,
+    80,
+    87,
+    95,
+    102,
+    109
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The man enters the white sedan.",
+    "person": "man, middle-aged, dark suit, light-colored pants, none",
+    "type": "enter_vehicle",
+    "vehicle": "white sedan, parked, center of frame"
+  },
+  "raw": "```json\n{\n  \"type\": \"enter_vehicle\",\n  \"confidence\": 0.9,\n  \"person\": \"man, middle-aged, dark suit, light-colored pants, none\",\n  \"vehicle\": \"white sedan, parked, center of frame\",\n  \"note\": \"The man enters the white sedan.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

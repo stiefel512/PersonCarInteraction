@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    481,
+    488,
+    495,
+    502,
+    509,
+    516,
+    523,
+    530,
+    537,
+    544,
+    551,
+    558
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "the child walks past the car",
+    "person": "child, white top + shorts, none",
+    "type": "pass_by",
+    "vehicle": "white, car, parked, right side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"pass_by\",\n    \"confidence\": 0.9,\n    \"person\": \"child, white top + shorts, none\",\n    \"vehicle\": \"white, car, parked, right side of frame\",\n    \"note\": \"the child walks past the car\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

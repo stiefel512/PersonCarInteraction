@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    21,
+    41,
+    61,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    199,
+    219,
+    239
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "the woman walks past the silver sedan",
+    "person": "woman brown hair white top yellow pants none",
+    "type": "pass_by",
+    "vehicle": "silver sedan parked left side of frame"
+  },
+  "raw": "```json\n{\n    \"type\": \"pass_by\",\n    \"confidence\": 0.9,\n    \"person\": \"woman brown hair white top yellow pants none\",\n    \"vehicle\": \"silver sedan parked left side of frame\",\n    \"note\": \"the woman walks past the silver sedan\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    500,
+    509,
+    518,
+    527,
+    536,
+    545,
+    554,
+    563,
+    572,
+    581,
+    590,
+    599
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "Child rides scooter past parked car.",
+    "person": "child, white top + black pants, scooter",
+    "type": "pass_by",
+    "vehicle": "white car, parked, right side of frame"
+  },
+  "raw": "```json\n{\n  \"type\": \"pass_by\",\n  \"confidence\": 0.9,\n  \"person\": \"child, white top + black pants, scooter\",\n  \"vehicle\": \"white car, parked, right side of frame\",\n  \"note\": \"Child rides scooter past parked car.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}
