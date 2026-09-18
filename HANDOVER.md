@@ -1,4 +1,4 @@
-# Handover — BlackRover person-vehicle interaction detection
+# Handover — PersonCarInteraction person-vehicle interaction detection
 
 `CLAUDE.md` loads automatically. Read these before doing anything else:
 

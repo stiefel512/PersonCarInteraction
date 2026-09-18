@@ -1,4 +1,4 @@
-# BlackRover — Person-Vehicle Interaction Detection
+# PersonCarInteraction — Person-Vehicle Interaction Detection
 
 Take-home task: given a short silent MP4 clip, output a machine-readable list of
 person-vehicle interactions. Task statement in `HomeTask.docx`.

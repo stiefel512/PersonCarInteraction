@@ -1,4 +1,4 @@
-# BlackRover — Person-Vehicle Interaction Detection
+# PersonCarInteraction — Person-Vehicle Interaction Detection
 
 Given a short silent MP4 clip, emit a machine-readable list of the person-vehicle
 interactions it contains — entering, exiting, opening a door, loading cargo,
