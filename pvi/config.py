@@ -274,6 +274,40 @@ def config_hash(cfg: Config) -> str:
     return "sha256:" + hashlib.sha256(blob.encode()).hexdigest()
 
 
+def environment() -> dict[str, str]:
+    """Library versions that can change numerical output.
+
+    Recorded because they demonstrably do. Reinstalling resolved torch
+    2.14.0+cu130 in place of +cu132 and detection boxes moved by ~0.05 px --
+    harmless to every reported metric, but enough to matter if a result is ever
+    disputed. A config that pins model revisions but not the stack that runs
+    them is only half a record.
+    """
+    from importlib.metadata import PackageNotFoundError, version
+
+    out = {"python": __import__("platform").python_version()}
+    for mod in ("torch", "transformers", "trackers", "numpy",
+                "opencv-python-headless"):
+        try:
+            # importlib.metadata rather than module.__version__: some packages
+            # expose none (trackers), and torch's is a TorchVersion object that
+            # yaml refuses to serialise. str() everything.
+            out[mod] = str(version(mod))
+        except PackageNotFoundError:
+            out[mod] = "unavailable"
+    try:
+        import torch
+        # importlib.metadata reports "2.14.0" and drops the local tag, which is
+        # exactly the part that distinguishes +cu130 from +cu132. torch's own
+        # __version__ keeps it; str() because it is a TorchVersion, not a str,
+        # and yaml refuses to serialise that.
+        out["torch_build"] = str(torch.__version__)
+        out["cuda"] = str(torch.version.cuda or "cpu")
+    except Exception:
+        out["torch_build"] = out["cuda"] = "unavailable"
+    return out
+
+
 def dump_resolved(cfg: Config, path: str | Path) -> None:
     """Write the fully-resolved config next to an output, per the determinism
     requirement in problem-definition.md s4."""
@@ -281,4 +315,5 @@ def dump_resolved(cfg: Config, path: str | Path) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     payload = to_dict(cfg)
     payload["_config_hash"] = config_hash(cfg)
+    payload["_environment"] = environment()
     p.write_text(yaml.safe_dump(payload, sort_keys=True, default_flow_style=False))

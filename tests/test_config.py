@@ -152,3 +152,32 @@ def test_det_conf_range_stays_above_the_floor():
     from pvi.config import TUNABLE_RANGES
     lo, _ = TUNABLE_RANGES["det_conf"]
     assert lo > load("config/default.yaml").tracker.det_floor
+
+
+# --- environment recording ---
+#
+# A config that pins model revisions but not the stack running them is half a
+# record. Reinstalling resolved torch 2.14.0+cu130 where the original had
+# +cu132, which moved detection boxes by ~0.05 px -- harmless to every reported
+# metric, but enough to matter if a result is disputed.
+
+def test_environment_is_yaml_serialisable():
+    """torch.__version__ is a TorchVersion, not a str, and yaml refuses it."""
+    import yaml as _yaml
+    from pvi.config import environment
+    _yaml.safe_dump(environment())
+
+
+def test_environment_records_the_cuda_build():
+    """importlib.metadata drops the local tag (+cu130), which is precisely the
+    part that distinguishes the builds. torch.__version__ keeps it."""
+    from pvi.config import environment
+    env = environment()
+    assert "torch_build" in env and "cuda" in env
+
+
+def test_resolved_config_carries_the_environment(tmp_path):
+    from pvi.config import dump_resolved, load
+    out = tmp_path / "resolved.yaml"
+    dump_resolved(load("config/default.yaml"), out)
+    assert "_environment" in yaml.safe_load(out.read_text())

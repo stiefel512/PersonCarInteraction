@@ -28,3 +28,5 @@ data/ground_truth.pre-idfix.json
 # a reviewer needs; the committed outputs, metrics and VLM cache make the
 # results inspectable without the clips.
 Videos/
+
+HANDOVER.md

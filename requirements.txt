@@ -3,9 +3,15 @@
 #   uv venv --python /usr/bin/python3.12 .venv
 #   VIRTUAL_ENV=.venv uv pip install -r requirements.txt
 #
-# torch/torchvision carry a +cu132 local version tag from the CUDA-matched
-# index. On a different CUDA setup, install those two first with
-# `uv pip install torch torchvision --torch-backend=auto` and then this file.
+# torch/torchvision are pinned by VERSION but not by CUDA build, and the build
+# is not cosmetic: installing from this file resolved 2.14.0+cu130 where the
+# original environment had +cu132, which moved detection boxes by ~0.05 px.
+# Every reported metric was unchanged (type, span, ids, confidence all
+# identical), but it is enough to matter if a result is disputed -- so every
+# run records its resolved stack under `_environment` in the dumped config.
+# For the CUDA-matched build:
+#   uv pip install torch torchvision --torch-backend=auto
+# then install this file for everything else.
 #
 # Also required, outside pip: ffmpeg and ffprobe (>= 9; the code uses
 # `-fps_mode passthrough`, as `-vsync` was removed in ffmpeg 9).

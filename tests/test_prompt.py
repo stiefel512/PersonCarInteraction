@@ -311,3 +311,61 @@ def test_revision_is_in_the_salt():
     a = VLMJudge(revision="aaa", load_model=False)
     b = VLMJudge(revision="bbb", load_model=False)
     assert _bundle().cache_key(a.cache_salt) != _bundle().cache_key(b.cache_salt)
+
+
+# --- cache key robustness to float noise ---
+#
+# Measured failure: reinstalling the environment resolved torch 2.14.0+cu130
+# instead of +cu132, moving detection boxes by ~0.05 px. Every interaction's
+# type, span, ids and confidence were unchanged -- but the byte-hashed cache key
+# changed, the VLM re-ran, and returned a different free-text note. A cache that
+# only survives a byte-identical GPU stack cannot deliver GPU-free reproduction.
+
+def _bundle_with_boxes(pbox, vbox):
+    return P.build(cand(), META, frames(range(15, 46)),
+                   {i: pbox for i in range(15, 46)},
+                   {i: vbox for i in range(15, 46)}, 6, 1.0, 0.25)
+
+
+def test_subpixel_noise_does_not_change_the_key():
+    """The exact regression: a fifth-decimal shift from a different CUDA build."""
+    a = _bundle_with_boxes((100.0, 100.0, 140.0, 200.0), (200.0, 150.0, 400.0, 300.0))
+    b = _bundle_with_boxes((100.02, 99.98, 140.03, 200.01), (200.01, 149.99, 400.02, 300.0))
+    assert a.cache_key("m") == b.cache_key("m")
+
+
+def test_a_whole_pixel_move_does_change_the_key():
+    """Robust to noise, still sensitive to real change -- a cache that ignored
+    genuine box movement would replay verdicts against a different scene."""
+    a = _bundle_with_boxes((100.0, 100.0, 140.0, 200.0), (200.0, 150.0, 400.0, 300.0))
+    b = _bundle_with_boxes((112.0, 100.0, 152.0, 200.0), (200.0, 150.0, 400.0, 300.0))
+    assert a.cache_key("m") != b.cache_key("m")
+
+
+def test_render_version_invalidates_the_cache():
+    """Geometry no longer captures the drawing logic the way pixels did, so a
+    change to rendering must be declared explicitly."""
+    import pvi.judge.prompt as mod
+    b = _bundle_with_boxes((100.0, 100.0, 140.0, 200.0), (200.0, 150.0, 400.0, 300.0))
+    before = b.cache_key("m")
+    old = mod.RENDER_VERSION
+    try:
+        mod.RENDER_VERSION = old + 1
+        assert b.cache_key("m") != before
+    finally:
+        mod.RENDER_VERSION = old
+
+
+def test_key_still_depends_on_frames_sampled():
+    a = P.build(cand(20, 40), META, frames(range(0, 100)),
+                {i: (100, 100, 140, 200) for i in range(100)},
+                {i: (200, 150, 400, 300) for i in range(100)}, 6, 1.0, 0.25)
+    b = P.build(cand(20, 40), META, frames(range(0, 100)),
+                {i: (100, 100, 140, 200) for i in range(100)},
+                {i: (200, 150, 400, 300) for i in range(100)}, 12, 1.0, 0.25)
+    assert a.cache_key("m") != b.cache_key("m")
+
+
+def test_quantize_rounds_to_integers():
+    from pvi.judge.prompt import quantize
+    assert quantize((10.4, 20.6, 30.5, 40.49)) == (10, 21, 30, 40)

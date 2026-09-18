@@ -30,6 +30,12 @@ from ..propose.spans import dilate_span, sample_frames
 PERSON_COLOUR = (255, 40, 40)      # red
 VEHICLE_COLOUR = (40, 120, 255)    # blue
 
+# Bump when draw_boxes() or crop_box() changes what the model is shown. The
+# cache key derives from box GEOMETRY rather than rendered pixels (see
+# PromptBundle.cache_key), so a change to the rendering itself would otherwise
+# be invisible to the key and replay stale verdicts against different images.
+RENDER_VERSION = 1
+
 TYPE_DEFINITIONS = """\
 - enter_vehicle: the person ends up inside the vehicle. They may be seen \
 getting in, or they may simply stop being visible AT the vehicle because they \
@@ -93,32 +99,50 @@ class PromptBundle:
     frame_indices: list[int]
     system: str
     user: str
+    # Integer-quantized geometry the images were rendered from. See cache_key.
+    geometry: tuple = ()
 
     def cache_key(self, salt: str = "") -> str:
-        """Hash of the exact image bytes, the prompt text, and `salt`.
+        """Hash of the QUANTIZED GEOMETRY, the prompt text, and `salt`.
 
-        Keyed on the rendered images rather than on frame indices and box
-        coordinates, because a change in cropping or box drawing must invalidate
-        the entry -- otherwise a cached verdict would be replayed against
-        different pixels. This is what lets the committed cache reproduce
-        results without a GPU (design-plan s7).
+        Not the rendered pixels, and that is a deliberate reversal. Hashing
+        image bytes made the cache correct but useless: any floating-point
+        noise anywhere upstream changes a box in the fifth decimal, shifts a
+        drawn rectangle by a fraction of a pixel, and invalidates the entry.
 
-        `salt` carries everything OUTSIDE the images and prompt that changes the
-        answer: the model id, its revision, and the decode and pixel budgets.
-        Without it the cache is silently wrong across exactly the comparisons
-        this project intends to make -- design-plan s6.4 calls for reporting
-        both Qwen2.5-VL-7B and 32B, and with an unsalted key the 32B run would
-        replay the 7B verdicts. The per-frame pixel cap belongs here too: it
-        changes what the model is shown without changing the PIL image we hash.
+        Measured -- reinstalling the environment resolved torch 2.14.0+cu130
+        instead of +cu132, which moved detection boxes by ~0.05 px. Every
+        interaction's type, span, ids and confidence were unchanged, but the
+        cache missed and the VLM re-ran, returning a different free-text note.
+        A cache that only survives a byte-identical GPU stack cannot deliver
+        what design-plan s7 promises: reproduction by a reviewer without one.
+
+        So the key is what the images are DERIVED from -- frame indices and
+        integer box coordinates -- plus RENDER_VERSION, which stands in for the
+        drawing logic that the pixels used to capture implicitly. Bump that
+        constant when the rendering changes.
+
+        `salt` carries what is outside the prompt entirely: model id, revision,
+        decode and pixel budgets. Without it a 32B run would replay 7B verdicts,
+        which is precisely the comparison design-plan s6.4 asks for.
         """
         h = hashlib.sha256()
-        for im in self.images:
-            h.update(im.tobytes())
-            h.update(f"{im.size}".encode())
+        h.update(f"v{RENDER_VERSION}".encode())
+        h.update(repr(self.geometry).encode())
+        h.update(repr(list(self.frame_indices)).encode())
         h.update(self.system.encode())
         h.update(self.user.encode())
         h.update(salt.encode())
         return h.hexdigest()
+
+
+def quantize(box: Box) -> tuple[int, int, int, int]:
+    """Round a box to integer pixels.
+
+    The unit of quantization is one pixel because that is the unit the image is
+    rasterized in anyway; anything finer is noise the renderer discards.
+    """
+    return tuple(int(round(v)) for v in box)
 
 
 def crop_box(person_boxes: Sequence[Box], vehicle_boxes: Sequence[Box],
@@ -146,11 +170,14 @@ def draw_boxes(frame: np.ndarray, person: Box | None, vehicle: Box | None,
     # Line width scales with frame size so the box is visible at 352x288 and
     # not overwhelming at 4K.
     w = max(2, int(round(min(img.width, img.height) / 180)))
+    # Quantize before drawing: sub-pixel jitter from a different GPU build must
+    # not change the rasterized rectangle, or the rendering is as fragile as the
+    # byte-hash cache key used to be.
     if vehicle is not None:
-        dr.rectangle(vehicle, outline=VEHICLE_COLOUR, width=w)
+        dr.rectangle(quantize(vehicle), outline=VEHICLE_COLOUR, width=w)
     if person is not None:
-        dr.rectangle(person, outline=PERSON_COLOUR, width=w)
-    return img.crop(tuple(int(round(v)) for v in crop))
+        dr.rectangle(quantize(person), outline=PERSON_COLOUR, width=w)
+    return img.crop(quantize(crop))
 
 
 def tracking_evidence(cand: Candidate, meta: ClipMeta) -> str:
@@ -220,6 +247,14 @@ def build(cand: Candidate, meta: ClipMeta, frames: dict[int, np.ndarray],
     images = [draw_boxes(frames[i], person_boxes.get(i), vehicle_boxes.get(i), crop)
               for i in indices]
 
+    # Exactly what the images were rendered from, quantized. Anything affecting
+    # the pixels must appear here or in RENDER_VERSION.
+    geometry = (quantize(crop),
+                tuple(quantize(person_boxes[i]) if i in person_boxes else None
+                      for i in indices),
+                tuple(quantize(vehicle_boxes[i]) if i in vehicle_boxes else None
+                      for i in indices))
+
     user = USER_TEMPLATE.format(
         n=len(images),
         dur=(span[1] - span[0] + 1) / meta.fps,
@@ -228,7 +263,7 @@ def build(cand: Candidate, meta: ClipMeta, frames: dict[int, np.ndarray],
         type_list=", ".join(ALLOWED_TYPES),
     )
     return PromptBundle(images=images, frame_indices=indices,
-                        system=SYSTEM_PROMPT, user=user)
+                        system=SYSTEM_PROMPT, user=user, geometry=geometry)
 
 
 def parse_response(text: str) -> dict | None:
