@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    98,
+    102,
+    106,
+    111,
+    115,
+    119,
+    123,
+    127,
+    131,
+    136,
+    140,
+    144
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "man opens driver's side door",
+    "person": "man adult, white shirt + black pants, none",
+    "type": "open_close_door",
+    "vehicle": "white SUV, parked, right side"
+  },
+  "raw": "```json\n{\n    \"type\": \"open_close_door\",\n    \"confidence\": 0.9,\n    \"person\": \"man adult, white shirt + black pants, none\",\n    \"vehicle\": \"white SUV, parked, right side\",\n    \"note\": \"man opens driver's side door\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

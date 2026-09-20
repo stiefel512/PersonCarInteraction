@@ -1,0 +1,886 @@
+{
+  "artifact": "person_vehicle_interactions",
+  "config_hash": "sha256:9e312c591ab7b7c5d81d05727899f96cd9d6c0a57b2aef11c11302c5f14a5172",
+  "n_clips": 8,
+  "n_interactions": 18,
+  "clips": {
+    "1THkHYIQ_bY_0": {
+      "fps": 30.0,
+      "n_frames": 495,
+      "width": 1280,
+      "height": 720
+    },
+    "HIu4lM4B8hA_1": {
+      "fps": 25.0,
+      "n_frames": 250,
+      "width": 352,
+      "height": 288
+    },
+    "NmlzoaDcOuI_1": {
+      "fps": 6.0,
+      "n_frames": 108,
+      "width": 1280,
+      "height": 720
+    },
+    "NmlzoaDcOuI_6": {
+      "fps": 6.0,
+      "n_frames": 102,
+      "width": 1280,
+      "height": 720
+    },
+    "gt1125_06": {
+      "fps": 29.97002997002997,
+      "n_frames": 600,
+      "width": 3840,
+      "height": 2160
+    },
+    "iMGR_0AG3a8_2_3": {
+      "fps": 6.667,
+      "n_frames": 182,
+      "width": 960,
+      "height": 720
+    },
+    "mKzCQKTHizw_0": {
+      "fps": 29.97002997002997,
+      "n_frames": 300,
+      "width": 640,
+      "height": 360
+    },
+    "mKzCQKTHizw_1": {
+      "fps": 29.97002997002997,
+      "n_frames": 276,
+      "width": 640,
+      "height": 360
+    }
+  },
+  "interactions": [
+    {
+      "clip_id": "1THkHYIQ_bY_0",
+      "interaction_id": "1THkHYIQ_bY_0__i001",
+      "event_group_id": "1THkHYIQ_bY_0__g001",
+      "type": "load_unload",
+      "frame_start": 53,
+      "frame_end": 69,
+      "time_start_s": 1.767,
+      "time_end_s": 2.3,
+      "person": {
+        "track_id": 0,
+        "description": "man wearing dark clothing, carrying large white object"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver car, parked, partially covered by tarp, positioned on driveway",
+        "class": "car"
+      },
+      "note": "The man is seen moving a large white object into the silver car.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 0.567,
+        "vehicle_is_static": true,
+        "person_birth": 59,
+        "person_death": 63,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.2086,
+        "person_box_norm": [
+          0.40925,
+          0.33982,
+          0.55637,
+          0.84047
+        ],
+        "vehicle_box_norm": [
+          0.1219,
+          0.33292,
+          0.66044,
+          0.71591
+        ]
+      }
+    },
+    {
+      "clip_id": "HIu4lM4B8hA_1",
+      "interaction_id": "HIu4lM4B8hA_1__i001",
+      "event_group_id": "HIu4lM4B8hA_1__g001",
+      "type": "open_close_door",
+      "frame_start": 55,
+      "frame_end": 84,
+      "time_start_s": 2.2,
+      "time_end_s": 3.36,
+      "person": {
+        "track_id": 0,
+        "description": "man, brown jacket + jeans, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "white, sedan, parked, center",
+        "class": "car"
+      },
+      "note": "man opens car door",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0006,
+        "dwell_s": 1.2,
+        "vehicle_is_static": false,
+        "person_birth": 60,
+        "person_death": 79,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0357,
+        "person_box_norm": [
+          0.14343,
+          0.19943,
+          0.37587,
+          0.72101
+        ],
+        "vehicle_box_norm": [
+          0.34121,
+          0.06096,
+          0.80161,
+          0.67542
+        ]
+      }
+    },
+    {
+      "clip_id": "HIu4lM4B8hA_1",
+      "interaction_id": "HIu4lM4B8hA_1__i002",
+      "event_group_id": "HIu4lM4B8hA_1__g002",
+      "type": "exit_vehicle",
+      "frame_start": 93,
+      "frame_end": 169,
+      "time_start_s": 3.72,
+      "time_end_s": 6.76,
+      "person": {
+        "track_id": 1,
+        "description": "male, dark clothing, light pants, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "white sedan, parked, center",
+        "class": "car"
+      },
+      "note": "The person exits the vehicle.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.08,
+        "vehicle_is_static": false,
+        "person_birth": 84,
+        "person_death": 164,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0619,
+        "person_box_norm": [
+          0.17059,
+          0.04525,
+          0.41184,
+          0.45851
+        ],
+        "vehicle_box_norm": [
+          0.3174,
+          0.05813,
+          0.80313,
+          0.66713
+        ]
+      }
+    },
+    {
+      "clip_id": "HIu4lM4B8hA_1",
+      "interaction_id": "HIu4lM4B8hA_1__i003",
+      "event_group_id": "HIu4lM4B8hA_1__g003",
+      "type": "exit_vehicle",
+      "frame_start": 145,
+      "frame_end": 173,
+      "time_start_s": 5.8,
+      "time_end_s": 6.92,
+      "person": {
+        "track_id": 3,
+        "description": "female, dark hair, dark top, dark pants, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "white, sedan, parked, center",
+        "class": "car"
+      },
+      "note": "The person exits the vehicle.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 1.16,
+        "vehicle_is_static": false,
+        "person_birth": 150,
+        "person_death": 168,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1581,
+        "person_box_norm": [
+          0.60141,
+          0.26149,
+          0.87223,
+          0.80492
+        ],
+        "vehicle_box_norm": [
+          0.30371,
+          0.05813,
+          0.77966,
+          0.6203
+        ]
+      }
+    },
+    {
+      "clip_id": "NmlzoaDcOuI_1",
+      "interaction_id": "NmlzoaDcOuI_1__i001",
+      "event_group_id": "NmlzoaDcOuI_1__g001",
+      "type": "exit_vehicle",
+      "frame_start": 53,
+      "frame_end": 84,
+      "time_start_s": 8.833,
+      "time_end_s": 14.0,
+      "person": {
+        "track_id": 9,
+        "description": "woman, blonde hair, white top, black pants"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "The woman exits the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 5.333,
+        "vehicle_is_static": true,
+        "person_birth": 54,
+        "person_death": 83,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0521,
+        "person_box_norm": [
+          -4e-05,
+          0.10742,
+          0.11638,
+          0.33337
+        ],
+        "vehicle_box_norm": [
+          0.0001,
+          0.17668,
+          0.47864,
+          0.64785
+        ]
+      }
+    },
+    {
+      "clip_id": "gt1125_06",
+      "interaction_id": "gt1125_06__i001",
+      "event_group_id": "gt1125_06__g001",
+      "type": "enter_vehicle",
+      "frame_start": 192,
+      "frame_end": 314,
+      "time_start_s": 6.406,
+      "time_end_s": 10.477,
+      "person": {
+        "track_id": 1,
+        "description": "man, grey shirt + white shorts, none"
+      },
+      "vehicle": {
+        "track_id": 10037,
+        "description": "white, hatchback, parked, bottom left",
+        "class": "car"
+      },
+      "note": "the man gets into the driver's seat of the white car",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 4.104,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 308,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1225,
+        "person_box_norm": [
+          0.48567,
+          0.51557,
+          0.5075,
+          0.59573
+        ],
+        "vehicle_box_norm": [
+          0.45343,
+          0.47419,
+          0.50562,
+          0.6419
+        ]
+      }
+    },
+    {
+      "clip_id": "gt1125_06",
+      "interaction_id": "gt1125_06__i002",
+      "event_group_id": "gt1125_06__g002",
+      "type": "enter_vehicle",
+      "frame_start": 216,
+      "frame_end": 418,
+      "time_start_s": 7.207,
+      "time_end_s": 13.947,
+      "person": {
+        "track_id": 2,
+        "description": "man, black shirt + shorts, none"
+      },
+      "vehicle": {
+        "track_id": 10038,
+        "description": "black SUV, parked, right side",
+        "class": "car"
+      },
+      "note": "The man enters the black SUV.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 6.773,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 412,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1859,
+        "person_box_norm": [
+          0.55991,
+          0.47332,
+          0.63901,
+          0.60186
+        ],
+        "vehicle_box_norm": [
+          0.57754,
+          0.46112,
+          0.6708,
+          0.5834
+        ]
+      }
+    },
+    {
+      "clip_id": "gt1125_06",
+      "interaction_id": "gt1125_06__i003",
+      "event_group_id": "gt1125_06__g003",
+      "type": "open_close_door",
+      "frame_start": 228,
+      "frame_end": 290,
+      "time_start_s": 7.608,
+      "time_end_s": 9.676,
+      "person": {
+        "track_id": 2,
+        "description": "man, black shirt + white shorts, none"
+      },
+      "vehicle": {
+        "track_id": 10035,
+        "description": "black SUV, parked, right side",
+        "class": "car"
+      },
+      "note": "The man opens the driver's side door of the black SUV.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R1_dwell",
+        "min_d_norm": 0.0,
+        "dwell_s": 2.102,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 412,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.4159,
+        "person_box_norm": [
+          0.56512,
+          0.53816,
+          0.62222,
+          0.6005
+        ],
+        "vehicle_box_norm": [
+          0.57865,
+          0.50404,
+          0.59587,
+          0.60123
+        ]
+      }
+    },
+    {
+      "clip_id": "iMGR_0AG3a8_2_3",
+      "interaction_id": "iMGR_0AG3a8_2_3__i001",
+      "event_group_id": "iMGR_0AG3a8_2_3__g001",
+      "type": "exit_vehicle",
+      "frame_start": 0,
+      "frame_end": 7,
+      "time_start_s": 0.0,
+      "time_end_s": 1.05,
+      "person": {
+        "track_id": 0,
+        "description": "man, white jacket, blue jeans, none"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "white, compact, parked, center",
+        "class": "car"
+      },
+      "note": "The man exits the vehicle.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 1.2,
+        "vehicle_is_static": true,
+        "person_birth": 0,
+        "person_death": 6,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1192,
+        "person_box_norm": [
+          0.08657,
+          0.29736,
+          0.15278,
+          0.46563
+        ],
+        "vehicle_box_norm": [
+          -0.00037,
+          0.23221,
+          0.2502,
+          0.46017
+        ]
+      }
+    },
+    {
+      "clip_id": "iMGR_0AG3a8_2_3",
+      "interaction_id": "iMGR_0AG3a8_2_3__i002",
+      "event_group_id": "iMGR_0AG3a8_2_3__g002",
+      "type": "open_close_door",
+      "frame_start": 10,
+      "frame_end": 62,
+      "time_start_s": 1.5,
+      "time_end_s": 9.3,
+      "person": {
+        "track_id": 1,
+        "description": "man, white shirt + dark pants, none"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "white, minivan, parked, center",
+        "class": "car"
+      },
+      "note": "man opens driver side door",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 7.95,
+        "vehicle_is_static": true,
+        "person_birth": 11,
+        "person_death": 61,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.2107,
+        "person_box_norm": [
+          0.17618,
+          0.22726,
+          0.30704,
+          0.45339
+        ],
+        "vehicle_box_norm": [
+          -2e-05,
+          0.22957,
+          0.25681,
+          0.46733
+        ]
+      }
+    },
+    {
+      "clip_id": "iMGR_0AG3a8_2_3",
+      "interaction_id": "iMGR_0AG3a8_2_3__i003",
+      "event_group_id": "iMGR_0AG3a8_2_3__g003",
+      "type": "enter_vehicle",
+      "frame_start": 86,
+      "frame_end": 105,
+      "time_start_s": 12.899,
+      "time_end_s": 15.749,
+      "person": {
+        "track_id": 2,
+        "description": "man, black jacket + white shirt, black pants, none"
+      },
+      "vehicle": {
+        "track_id": 10007,
+        "description": "black sedan, moving, center",
+        "class": "car"
+      },
+      "note": "The man gets into the black sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0058,
+        "dwell_s": 3.0,
+        "vehicle_is_static": false,
+        "person_birth": 65,
+        "person_death": 104,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0012,
+        "person_box_norm": [
+          0.27069,
+          0.2182,
+          0.32585,
+          0.39039
+        ],
+        "vehicle_box_norm": [
+          0.31673,
+          0.09198,
+          0.65062,
+          0.55446
+        ]
+      }
+    },
+    {
+      "clip_id": "iMGR_0AG3a8_2_3",
+      "interaction_id": "iMGR_0AG3a8_2_3__i004",
+      "event_group_id": "iMGR_0AG3a8_2_3__g004",
+      "type": "open_close_door",
+      "frame_start": 105,
+      "frame_end": 137,
+      "time_start_s": 15.749,
+      "time_end_s": 20.549,
+      "person": {
+        "track_id": 3,
+        "description": "man adult, white shirt + black pants, none"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "white SUV, parked, right side",
+        "class": "car"
+      },
+      "note": "man opens driver's side door",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 4.95,
+        "vehicle_is_static": true,
+        "person_birth": 106,
+        "person_death": 136,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.2115,
+        "person_box_norm": [
+          0.105,
+          0.28506,
+          0.20286,
+          0.50772
+        ],
+        "vehicle_box_norm": [
+          -9e-05,
+          0.23146,
+          0.25059,
+          0.47714
+        ]
+      }
+    },
+    {
+      "clip_id": "iMGR_0AG3a8_2_3",
+      "interaction_id": "iMGR_0AG3a8_2_3__i005",
+      "event_group_id": "iMGR_0AG3a8_2_3__g005",
+      "type": "open_close_door",
+      "frame_start": 105,
+      "frame_end": 137,
+      "time_start_s": 15.749,
+      "time_end_s": 20.549,
+      "person": {
+        "track_id": 3,
+        "description": "man adult, black jacket + jeans, none"
+      },
+      "vehicle": {
+        "track_id": 10008,
+        "description": "white SUV, parked, right side of frame",
+        "class": "truck"
+      },
+      "note": "man opens driver's side door",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 4.95,
+        "vehicle_is_static": true,
+        "person_birth": 106,
+        "person_death": 136,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0172,
+        "person_box_norm": [
+          0.105,
+          0.28506,
+          0.20286,
+          0.50772
+        ],
+        "vehicle_box_norm": [
+          -0.00014,
+          0.43763,
+          0.43627,
+          0.99484
+        ]
+      }
+    },
+    {
+      "clip_id": "iMGR_0AG3a8_2_3",
+      "interaction_id": "iMGR_0AG3a8_2_3__i006",
+      "event_group_id": "iMGR_0AG3a8_2_3__g006",
+      "type": "exit_vehicle",
+      "frame_start": 167,
+      "frame_end": 181,
+      "time_start_s": 25.049,
+      "time_end_s": 27.149,
+      "person": {
+        "track_id": 5,
+        "description": "man, white shirt + black pants, brown bag"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "white van, parked, center",
+        "class": "car"
+      },
+      "note": "The man exits the white van.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 2.25,
+        "vehicle_is_static": true,
+        "person_birth": 168,
+        "person_death": 181,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": true,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1572,
+        "person_box_norm": [
+          0.13115,
+          0.30314,
+          0.20252,
+          0.49655
+        ],
+        "vehicle_box_norm": [
+          -0.00031,
+          0.23066,
+          0.24972,
+          0.47827
+        ]
+      }
+    },
+    {
+      "clip_id": "mKzCQKTHizw_0",
+      "interaction_id": "mKzCQKTHizw_0__i001",
+      "event_group_id": "mKzCQKTHizw_0__g001",
+      "type": "enter_vehicle",
+      "frame_start": 42,
+      "frame_end": 110,
+      "time_start_s": 1.401,
+      "time_end_s": 3.67,
+      "person": {
+        "track_id": 0,
+        "description": "man, black jacket + jeans, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan, parked, right side of frame",
+        "class": "car"
+      },
+      "note": "The man enters the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0022,
+        "dwell_s": 2.302,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 104,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": false,
+        "max_iou": 0.0074,
+        "person_box_norm": [
+          0.25457,
+          0.05992,
+          0.43987,
+          0.60994
+        ],
+        "vehicle_box_norm": [
+          0.37255,
+          6e-05,
+          0.71638,
+          0.11212
+        ]
+      }
+    },
+    {
+      "clip_id": "mKzCQKTHizw_0",
+      "interaction_id": "mKzCQKTHizw_0__i002",
+      "event_group_id": "mKzCQKTHizw_0__g002",
+      "type": "enter_vehicle",
+      "frame_start": 269,
+      "frame_end": 299,
+      "time_start_s": 8.976,
+      "time_end_s": 9.977,
+      "person": {
+        "track_id": 1,
+        "description": "woman, light grey top + dark pants, none"
+      },
+      "vehicle": {
+        "track_id": 10001,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "The woman enters the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 1.034,
+        "vehicle_is_static": false,
+        "person_birth": 0,
+        "person_death": 294,
+        "birth_at_clip_start": true,
+        "death_at_clip_end": true,
+        "born_at_frame_edge": false,
+        "died_at_frame_edge": true,
+        "max_iou": 0.4583,
+        "person_box_norm": [
+          0.37869,
+          0.14336,
+          0.99425,
+          0.94265
+        ],
+        "vehicle_box_norm": [
+          0.54456,
+          0.21547,
+          0.99995,
+          0.879
+        ]
+      }
+    },
+    {
+      "clip_id": "mKzCQKTHizw_1",
+      "interaction_id": "mKzCQKTHizw_1__i001",
+      "event_group_id": "mKzCQKTHizw_1__g001",
+      "type": "enter_vehicle",
+      "frame_start": 59,
+      "frame_end": 157,
+      "time_start_s": 1.969,
+      "time_end_s": 5.239,
+      "person": {
+        "track_id": 0,
+        "description": "woman black hair, white top + green pants, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "The woman enters the silver sedan.",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.303,
+        "vehicle_is_static": false,
+        "person_birth": 65,
+        "person_death": 151,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1623,
+        "person_box_norm": [
+          0.21288,
+          -6e-05,
+          0.49138,
+          0.29357
+        ],
+        "vehicle_box_norm": [
+          0.02019,
+          0.00034,
+          0.60409,
+          0.41624
+        ]
+      }
+    },
+    {
+      "clip_id": "mKzCQKTHizw_1",
+      "interaction_id": "mKzCQKTHizw_1__i002",
+      "event_group_id": "mKzCQKTHizw_1__g002",
+      "type": "enter_vehicle",
+      "frame_start": 110,
+      "frame_end": 199,
+      "time_start_s": 3.67,
+      "time_end_s": 6.64,
+      "person": {
+        "track_id": 1,
+        "description": "woman dark hair, white top, brown pants, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "the woman enters the silver sedan",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.003,
+        "vehicle_is_static": false,
+        "person_birth": 116,
+        "person_death": 193,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.2019,
+        "person_box_norm": [
+          0.09883,
+          0.0003,
+          0.44024,
+          0.99755
+        ],
+        "vehicle_box_norm": [
+          0.00033,
+          0.00051,
+          0.60409,
+          0.47782
+        ]
+      }
+    }
+  ]
+}

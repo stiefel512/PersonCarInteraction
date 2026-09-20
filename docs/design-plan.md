@@ -338,6 +338,55 @@ Each one corrects a statement above.
    "Unrecognized option" and yields **zero frames** rather than an error the
    caller notices. Both use `-fps_mode passthrough`.
 
+## 6d. Corrections after evaluation (2026-09-19)
+
+Each one corrects a statement above, and each changed a reported number.
+
+1. **§6.3's LOCO scoring pooled flat across clips, and every LOCO number it
+   produced was inflated.** `metrics.report_groups` was fixed for exactly this
+   on 2026-09-16 — frame spans are clip-local, so a prediction from one clip can
+   satisfy another clip's event on temporal overlap alone — but
+   `pvi/evaluate/loco.py` was written the next day against the raw
+   `detection_prf(match_events(...))` and never got the fix. Its `select()` and
+   both headline rows concatenated all clips into one matching. Corrected by
+   `metrics.detection_prf_groups`, which is the group-aware single-F1 helper
+   whose absence is why the selection code pooled flat in the first place.
+
+   The correction moves every LOCO figure, and it moves the *selection*: the
+   all-data choice of `tau_near` goes 0.06 -> 0.10.
+
+   | | flat (reported through 2026-09-18) | per-clip (correct) |
+   |---|---|---|
+   | VLM, held out | 0.520 / 0.722 / 0.605 | 0.667 / 0.667 / 0.667 |
+   | VLM, all-data | 0.737 / 0.778 / 0.757 | 0.684 / 0.722 / 0.703 |
+   | geometric, held out | — / — / 0.581 | 0.295 / 0.722 / 0.419 |
+   | overfitting gap | +0.152 | +0.036 |
+
+   Two conclusions reverse with it. The **VLM's margin over the geometric
+   control does not vanish under tuning** — it is +0.248 held out, not +0.024.
+   And **fold agreement is high, not low**: 7 of 8 folds select an identical
+   setting, where the flat scoring made `tau_near` look like it took 4 distinct
+   values.
+
+2. **§7's cache key is no longer the image bytes.** The response cache was keyed
+   on a hash of the rendered image bytes, which a sub-pixel box shift
+   invalidated — so it survived only a byte-identical GPU stack, the opposite of
+   the GPU-free reproduction §7 promises. It is now keyed on what the images are
+   made of: frame indices, integer-quantized box coordinates, and a
+   `RENDER_VERSION` constant standing in for the drawing logic.
+
+3. **§6b's "defaults are first guesses" no longer holds for three of them.**
+   `det_conf`, `tau_near` and `tau_far` in `config/default.yaml` are now the
+   all-data LOCO selection, so the shipped artifact and the reported numbers
+   describe one config. The remaining tunables are still untuned first guesses.
+
+4. **The VLM judge does not reproduce across torch builds.** Re-running the set
+   under torch 2.14.0+cu130, where the LOCO sweep had run under +cu132,
+   reproduced every proposal span exactly but flipped the judge's verdict on 4
+   candidates. Tracking and proposal are deterministic; the semantic layer is
+   only as stable as the stack under it, and the response cache — not the seed —
+   is what actually pins it.
+
 ## 6b. Configuration schema
 
 Full schema in `config/schema.md`; defaults in `config/default.yaml`. The
@@ -361,8 +410,9 @@ revision hashes, output dirs, decode settings.
 | `crop_margin` | 0.25 | [0.0, 0.6] | box dilation before cropping |
 | `vlm_conf_thresh` | 0.5 | [0.0, 0.9] | the main precision/recall dial |
 
-Defaults are first guesses from the GT's geometry, not tuned values — LOCO sets
-the reported ones. Two are structurally constrained rather than freely searchable:
+Defaults were first guesses from the GT's geometry; `det_conf`, `tau_near` and
+`tau_far` are now the all-data LOCO selection (§6d.3) and the rest still are
+guesses. Two are structurally constrained rather than freely searchable:
 `tau_far > tau_near` (hysteresis is meaningless otherwise) and
 `min_dwell_s < 0.75` (or R1 cannot fire on the shortest true event).
 
@@ -371,7 +421,8 @@ the reported ones. Two are structurally constrained rather than freely searchabl
 - **VLM determinism.** Greedy decoding is not sufficient on its own; batching and
   attention-kernel nondeterminism can still shift outputs. Mitigation: batch size
   1, deterministic algorithms where available, and a response cache keyed by a
-  hash of the exact image bytes + prompt, committed to the repo. A reviewer can
+  hash of the prompt plus quantized frame/box geometry (image bytes originally —
+  see §6d.2), committed to the repo. A reviewer can
   then reproduce results without a GPU. This is the strongest reproducibility
   lever available and I'd rather commit to it up front.
 - **Night and CIF-grayscale detection.** `1THkHYIQ_bY_0` (blown highlights, heavy

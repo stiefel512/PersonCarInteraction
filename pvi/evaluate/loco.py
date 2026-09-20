@@ -53,8 +53,7 @@ from typing import Any, Iterable, Sequence
 
 from .. import config as C
 from ..schema import GTEvent, Interaction, load_ground_truth
-from .match import match_events
-from .metrics import detection_prf
+from .metrics import detection_prf_groups
 
 # Grid over the four searched knobs. Deliberately coarse: with ~2.25 positives
 # per held-out fold, a finer grid resolves noise, not signal.
@@ -88,15 +87,28 @@ def valid_settings(grid: dict[str, tuple[float, ...]] = GRID) -> list[dict[str, 
     return out
 
 
-def score(preds: Sequence[Interaction], gts: Sequence[GTEvent]) -> float:
+def score(groups: Sequence[tuple[Sequence[Interaction], Sequence[GTEvent]]]) -> float:
     """Selection objective: aggregate detection F1 at the primary tIoU.
 
     F1 rather than precision, despite the task's precision-over-recall stance.
     Selecting on precision alone rewards predicting nothing, which scores 0/0;
     the operating point is moved by `vlm_conf_thresh`, which is *in* the search,
     so the objective does not also need to encode the preference.
+
+    **Takes GROUPS, one per clip, and never a flat pool.** Frame spans are
+    clip-local, so matching a concatenation of clips lets a prediction from one
+    clip satisfy an event in another. This file pooled flat until 2026-09-19 and
+    every number it produced was inflated by it -- see metrics.report_groups,
+    which had already been fixed for exactly this on 2026-09-16.
     """
-    return detection_prf(match_events(preds, gts)).f1
+    return detection_prf_groups(groups).f1
+
+
+def _groups(clips: Iterable[str], key: str,
+            preds_by: dict[tuple[str, str], list[Interaction]],
+            gt_by_clip: dict[str, list[GTEvent]]):
+    """(predictions, ground truth) per clip for one setting."""
+    return [(preds_by.get((c, key), []), gt_by_clip.get(c, [])) for c in clips]
 
 
 def select(fit_clips: Iterable[str], preds_by: dict[tuple[str, str], list[Interaction]],
@@ -108,14 +120,10 @@ def select(fit_clips: Iterable[str], preds_by: dict[tuple[str, str], list[Intera
     not depend on dict ordering -- determinism is graded, and a tie is common
     at this sample size.
     """
+    fit = list(fit_clips)
     best, best_f1 = None, -1.0
     for s in settings:
-        key = setting_key(s)
-        preds, gts = [], []
-        for clip in fit_clips:
-            preds.extend(preds_by.get((clip, key), []))
-            gts.extend(gt_by_clip.get(clip, []))
-        f1 = score(preds, gts)
+        f1 = score(_groups(fit, setting_key(s), preds_by, gt_by_clip))
         if f1 > best_f1:
             best, best_f1 = s, f1
     return best or settings[0]
@@ -155,29 +163,26 @@ def run(preds_by: dict[tuple[str, str], list[Interaction]],
     clips = sorted(gt_by_clip)
 
     folds = []
-    held_out_preds: list[Interaction] = []
-    held_out_gts: list[GTEvent] = []
+    held_out_groups: list[tuple[Sequence[Interaction], Sequence[GTEvent]]] = []
     for held in clips:
         fit = [c for c in clips if c != held]
         chosen = select(fit, preds_by, gt_by_clip, settings)
         preds = preds_by.get((held, setting_key(chosen)), [])
-        held_out_preds.extend(preds)
-        held_out_gts.extend(gt_by_clip[held])
+        # One group per held-out clip. Each fold contributes its own clip, so
+        # the pooled held-out number never matches across clip boundaries.
+        held_out_groups.append((preds, gt_by_clip[held]))
         folds.append({
             "held_out_clip": held,
             "selected": chosen,
             "n_predictions": len(preds),
-            "fold_f1": round(score(preds, gt_by_clip[held]), 4),
+            "fold_f1": round(score([(preds, gt_by_clip[held])]), 4),
         })
 
     all_data = select(clips, preds_by, gt_by_clip, settings)
-    all_preds, all_gts = [], []
-    for c in clips:
-        all_preds.extend(preds_by.get((c, setting_key(all_data)), []))
-        all_gts.extend(gt_by_clip[c])
 
-    loco_prf = detection_prf(match_events(held_out_preds, held_out_gts))
-    tuned_prf = detection_prf(match_events(all_preds, all_gts))
+    loco_prf = detection_prf_groups(held_out_groups)
+    tuned_prf = detection_prf_groups(
+        _groups(clips, setting_key(all_data), preds_by, gt_by_clip))
 
     # How often the folds agree. If every fold picks something different, the
     # selection is fitting fold noise and the pooled number is describing a

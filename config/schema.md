@@ -49,11 +49,17 @@ amended 2026-09-17). `vlm_conf_thresh` is declared tunable but is **inert in
 practice** — across three full runs no candidate was ever rejected by it,
 because the VLM answers `pass_by` at 0.86–0.96 rather than near any threshold.
 
+The defaults for those three **are** the all-data LOCO selection
+(`outputs/loco_vlm.json`, `all_data_selected`), so `outputs/` and WRITEUP.md
+describe one config. All-data selection is not held out: F1 0.703 on the same 8
+clips that chose it, against a held-out LOCO estimate of 0.667. Every other
+default below is an untuned first guess.
+
 | name | type | default | range | meaning |
 |---|---|---|---|---|
-| `det_conf` | float | 0.50 | [0.15, 0.80] | **tracker high-confidence threshold, not a pre-filter.** At or above it a detection can start a track and joins the first association pass; between `tracker.det_floor` and here it feeds the second pass. Constraint: `det_conf > tracker.det_floor`. |
-| `tau_near` | float | 0.15 | [0.05, 0.40] | contact-enter, in vehicle-diagonal units |
-| `tau_far` | float | 0.30 | [0.10, 0.80] | contact-leave (hysteresis) |
+| `det_conf` | float | 0.65 | [0.15, 0.80] | **tracker high-confidence threshold, not a pre-filter.** At or above it a detection can start a track and joins the first association pass; between `tracker.det_floor` and here it feeds the second pass. Constraint: `det_conf > tracker.det_floor`. |
+| `tau_near` | float | 0.10 | [0.05, 0.40] | contact-enter, in vehicle-diagonal units |
+| `tau_far` | float | 0.25 | [0.10, 0.80] | contact-leave (hysteresis) |
 | `min_dwell_s` | float | 0.5 | [0.3, 0.7] | R1 dwell trigger, seconds |
 | `smooth_window_s` | float | 0.4 | [0.0, 0.8] | feature smoothing, seconds |
 | `door_conf_thresh` | float | 0.30 | [0.20, 0.70] | R4 open-vocab 'open car door' confidence. Replaced `door_delta_thresh` (pixel-change) after the door-cue probe; observed hits cluster at 0.28-0.60, so the usable range is narrow. |

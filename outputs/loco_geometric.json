@@ -16,31 +16,31 @@
   ],
   "n_settings_evaluated": 45,
   "headline_held_out": {
-    "tp": 18,
-    "fp": 26,
-    "fn": 0,
-    "precision": 0.4091,
-    "recall": 1.0,
-    "f1": 0.5806,
+    "tp": 13,
+    "fp": 31,
+    "fn": 5,
+    "precision": 0.2955,
+    "recall": 0.7222,
+    "f1": 0.4194,
     "n_gt": 18,
     "n_pred": 44
   },
   "all_data_tuned_NOT_held_out": {
-    "tp": 18,
-    "fp": 26,
-    "fn": 0,
-    "precision": 0.4091,
-    "recall": 1.0,
-    "f1": 0.5806,
+    "tp": 14,
+    "fp": 30,
+    "fn": 4,
+    "precision": 0.3182,
+    "recall": 0.7778,
+    "f1": 0.4516,
     "n_gt": 18,
     "n_pred": 44
   },
   "all_data_selected": {
     "det_conf": 0.65,
     "tau_near": 0.06,
-    "tau_far": 0.18
+    "tau_far": 0.25
   },
-  "overfitting_gap_f1": 0.0,
+  "overfitting_gap_f1": 0.0323,
   "fold_agreement": {
     "det_conf": {
       "values": [
@@ -72,17 +72,17 @@
     },
     "tau_far": {
       "values": [
-        0.18,
-        0.18,
-        0.18,
-        0.18,
-        0.18,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
         0.18,
         0.25,
         0.25
       ],
       "n_distinct": 2,
-      "modal": 0.18
+      "modal": 0.25
     }
   },
   "folds": [
@@ -91,7 +91,7 @@
       "selected": {
         "det_conf": 0.65,
         "tau_near": 0.06,
-        "tau_far": 0.18
+        "tau_far": 0.25
       },
       "n_predictions": 3,
       "fold_f1": 0.0
@@ -101,7 +101,7 @@
       "selected": {
         "det_conf": 0.65,
         "tau_near": 0.06,
-        "tau_far": 0.18
+        "tau_far": 0.25
       },
       "n_predictions": 7,
       "fold_f1": 0.2
@@ -111,7 +111,7 @@
       "selected": {
         "det_conf": 0.65,
         "tau_near": 0.06,
-        "tau_far": 0.18
+        "tau_far": 0.25
       },
       "n_predictions": 6,
       "fold_f1": 0.4444
@@ -121,7 +121,7 @@
       "selected": {
         "det_conf": 0.65,
         "tau_near": 0.06,
-        "tau_far": 0.18
+        "tau_far": 0.25
       },
       "n_predictions": 6,
       "fold_f1": 0.2857
@@ -131,7 +131,7 @@
       "selected": {
         "det_conf": 0.65,
         "tau_near": 0.06,
-        "tau_far": 0.18
+        "tau_far": 0.25
       },
       "n_predictions": 9,
       "fold_f1": 0.3636

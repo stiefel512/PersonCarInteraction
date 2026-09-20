@@ -72,6 +72,25 @@ def detection_prf(result: MatchResult) -> PRF:
                fn=result.n_fn)
 
 
+def detection_prf_groups(groups: "Sequence[Group]",
+                        tiou: float = TIOU_PRIMARY) -> PRF:
+    """Aggregate detection PRF, **matched within each group**.
+
+    The bare `detection_prf` takes one MatchResult, so calling it on a flat
+    concatenation of several clips silently does cross-clip matching -- the
+    failure `report_groups` documents. Selection code wants the single F1
+    number rather than a tiered report, and had no group-aware way to get it,
+    so it pooled flat. This is that way.
+    """
+    tp = fp = fn = 0
+    for preds, gts in groups:
+        d = detection_prf(match_events(preds, gts, tiou_thresh=tiou))
+        tp += d.tp
+        fp += d.fp
+        fn += d.fn
+    return PRF(tp=tp, fp=fp, fn=fn)
+
+
 def pass_by_report(gts: Sequence[GTEvent], result: MatchResult) -> dict[str, Any]:
     """Of N labeled near-misses, how many did the system falsely fire on.
 

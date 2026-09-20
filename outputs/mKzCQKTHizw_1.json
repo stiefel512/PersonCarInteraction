@@ -6,48 +6,95 @@
     "width": 640,
     "height": 360
   },
-  "config_hash": "sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b",
+  "config_hash": "sha256:9e312c591ab7b7c5d81d05727899f96cd9d6c0a57b2aef11c11302c5f14a5172",
   "interactions": [
     {
       "interaction_id": "mKzCQKTHizw_1__i001",
       "event_group_id": "mKzCQKTHizw_1__g001",
       "type": "enter_vehicle",
-      "frame_start": 110,
-      "frame_end": 191,
-      "time_start_s": 3.67,
-      "time_end_s": 6.373,
+      "frame_start": 59,
+      "frame_end": 157,
+      "time_start_s": 1.969,
+      "time_end_s": 5.239,
       "person": {
         "track_id": 0,
-        "description": "woman, white shirt + black jacket, khaki pants, brown bag"
+        "description": "woman black hair, white top + green pants, none"
       },
       "vehicle": {
         "track_id": 10000,
         "description": "silver sedan, parked, right side",
         "class": "car"
       },
-      "note": "The woman enters the silver sedan by opening the driver's side door.",
+      "note": "The woman enters the silver sedan.",
       "confidence": 0.9,
       "evidence": {
         "rule": "R2_death_near",
         "min_d_norm": 0.0,
-        "dwell_s": 2.736,
+        "dwell_s": 3.303,
         "vehicle_is_static": false,
-        "person_birth": 116,
-        "person_death": 185,
+        "person_birth": 65,
+        "person_death": 151,
         "birth_at_clip_start": false,
         "death_at_clip_end": false,
-        "max_iou": 0.202,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.1623,
         "person_box_norm": [
-          0.09884,
-          0.0003,
-          0.43003,
-          0.99756
+          0.21288,
+          -6e-05,
+          0.49138,
+          0.29357
         ],
         "vehicle_box_norm": [
-          0.00032,
-          0.00052,
-          0.60408,
-          0.46441
+          0.02019,
+          0.00034,
+          0.60409,
+          0.41624
+        ]
+      }
+    },
+    {
+      "interaction_id": "mKzCQKTHizw_1__i002",
+      "event_group_id": "mKzCQKTHizw_1__g002",
+      "type": "enter_vehicle",
+      "frame_start": 110,
+      "frame_end": 199,
+      "time_start_s": 3.67,
+      "time_end_s": 6.64,
+      "person": {
+        "track_id": 1,
+        "description": "woman dark hair, white top, brown pants, none"
+      },
+      "vehicle": {
+        "track_id": 10000,
+        "description": "silver sedan, parked, right side",
+        "class": "car"
+      },
+      "note": "the woman enters the silver sedan",
+      "confidence": 0.9,
+      "evidence": {
+        "rule": "R2_death_near",
+        "min_d_norm": 0.0,
+        "dwell_s": 3.003,
+        "vehicle_is_static": false,
+        "person_birth": 116,
+        "person_death": 193,
+        "birth_at_clip_start": false,
+        "death_at_clip_end": false,
+        "born_at_frame_edge": true,
+        "died_at_frame_edge": false,
+        "max_iou": 0.2019,
+        "person_box_norm": [
+          0.09883,
+          0.0003,
+          0.44024,
+          0.99755
+        ],
+        "vehicle_box_norm": [
+          0.00033,
+          0.00051,
+          0.60409,
+          0.47782
         ]
       }
     }

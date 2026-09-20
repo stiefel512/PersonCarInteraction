@@ -1,0 +1,27 @@
+{
+  "frame_indices": [
+    29,
+    43,
+    58,
+    72,
+    86,
+    101,
+    115,
+    130,
+    144,
+    158,
+    173,
+    187
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "confidence": 0.9,
+    "note": "The woman enters the silver sedan.",
+    "person": "woman black hair, white top + green pants, none",
+    "type": "enter_vehicle",
+    "vehicle": "silver sedan, parked, right side"
+  },
+  "raw": "```json\n{\n    \"type\": \"enter_vehicle\",\n    \"confidence\": 0.9,\n    \"person\": \"woman black hair, white top + green pants, none\",\n    \"vehicle\": \"silver sedan, parked, right side\",\n    \"note\": \"The woman enters the silver sedan.\"\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

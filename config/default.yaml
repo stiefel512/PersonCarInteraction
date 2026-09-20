@@ -1,10 +1,15 @@
 # Default configuration. Schema and rationale: config/schema.md
 #
-# The `tunable` values below are FIRST GUESSES derived from the ground truth's
-# geometry -- they are not tuned results. Reported numbers come from the
-# leave-one-clip-out selection described in docs/design-plan.md s6.3, which
-# varies only det_conf, tau_near, tau_far and vlm_conf_thresh (s6a.2).
-# Do not read this file as a result.
+# `det_conf`, `tau_near` and `tau_far` are the ALL-DATA leave-one-clip-out
+# selection (outputs/loco_vlm.json, `all_data_selected`), so that the shipped
+# artifact in outputs/ and the numbers in WRITEUP.md come from one config.
+#
+# READ THE DENOMINATOR BEFORE READING THESE AS A RESULT. All-data selection is
+# not held out: it scores F1 0.703 on the same 8 clips that chose it, while the
+# held-out LOCO estimate for the same procedure is 0.667. The 0.036 gap is the
+# overfitting this config carries. The remaining tunables below are untuned
+# first guesses derived from the ground truth's geometry; LOCO varied only the
+# three (design-plan s6a.2).
 
 seed: 0
 device: cuda:0
@@ -53,9 +58,10 @@ openvocab:
   text_threshold: 0.25
 
 tunable:
-  det_conf: 0.50         # tracker high-confidence threshold, NOT a pre-filter
-  tau_near: 0.15
-  tau_far: 0.30          # constraint: must exceed tau_near
+  # The three LOCO-selected knobs. Previous untuned guesses: 0.50/0.15/0.30.
+  det_conf: 0.65         # tracker high-confidence threshold, NOT a pre-filter
+  tau_near: 0.10
+  tau_far: 0.25          # constraint: must exceed tau_near
   min_dwell_s: 0.5       # constraint: must be < 0.75 (shortest GT positive)
   smooth_window_s: 0.4   # floored at 3 frames per clip at runtime
   door_conf_thresh: 0.30    # open-vocab 'open car door' confidence

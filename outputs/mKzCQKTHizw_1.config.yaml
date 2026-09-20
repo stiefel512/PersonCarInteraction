@@ -1,4 +1,13 @@
-_config_hash: sha256:a625e6f4503e668213a9e0cfa8c808bc451144b66624ad26a513e72637f4ed7b
+_config_hash: sha256:9e312c591ab7b7c5d81d05727899f96cd9d6c0a57b2aef11c11302c5f14a5172
+_environment:
+  cuda: '13.0'
+  numpy: 2.5.3
+  opencv-python-headless: 5.0.0.93
+  python: 3.12.14
+  torch: 2.14.0
+  torch_build: 2.14.0+cu130
+  trackers: 2.6.0
+  transformers: 5.17.0
 detector:
   classes:
   - 0
@@ -23,23 +32,25 @@ paths:
   vlm_cache: data/vlm_cache
 seed: 0
 tracker:
+  det_floor: 0.1
   gmc: orb
   impl: roboflow-trackers
   name: bytetrack
 tunable:
   context_pad_s: 1.0
   crop_margin: 0.25
-  det_conf: 0.35
+  det_conf: 0.65
   door_conf_thresh: 0.3
   min_dwell_s: 0.5
   n_vlm_frames: 12
   smooth_window_s: 0.4
-  tau_far: 0.3
-  tau_near: 0.15
+  tau_far: 0.25
+  tau_near: 0.1
   vlm_conf_thresh: 0.5
 vlm:
   batch_size: 1
   max_new_tokens: 512
+  max_pixels_per_frame: 401408
   model_id: Qwen/Qwen2.5-VL-7B-Instruct
   revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
   temperature: 0.0

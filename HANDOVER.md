@@ -111,7 +111,10 @@ Each is written up where it belongs; this is the index.
 **Arm C is decided too** — `experiments/2026-09-16_door-cue-ground-level/findings.md`.
 The open-vocab door cue is adopted; see finding 10 above.
 
-### Current result — all 8 clips, untuned defaults
+### Baseline — all 8 clips, UNTUNED defaults (superseded as the headline)
+
+Kept as the untuned reference point. The shipped configuration is now the
+all-data LOCO selection; see "Corrected 2026-09-19" below.
 
 `experiments/2026-09-16_bytetrack-floor/` (`comparison.csv`, `findings.md`).
 Scored with **clip-scoped matching**; see the correction note below.
@@ -119,7 +122,7 @@ Scored with **clip-scoped matching**; see the correction note below.
 | judge | P | R | F1 | tp/fp/fn | `pass_by` fired |
 |---|---|---|---|---|---|
 | geometric (control) | 0.178 | **0.722** | 0.286 | 13/60/5 | 5 of 7 |
-| **VLM (shipped)** | **0.400** | 0.667 | **0.500** | 12/18/6 | **1 of 7** |
+| **VLM** | **0.400** | 0.667 | **0.500** | 12/18/6 | **1 of 7** |
 
 The VLM more than doubles precision, cuts false positives 60 -> 18 and `pass_by`
 false fires 5 -> 1, paying one true positive. That is the hybrid design's whole
@@ -147,20 +150,42 @@ would have credited the cross-clip match. **Per-clip numbers were always
 correct; only pooled rows were wrong.** All earlier experiment directories carry
 a correction banner and have been rescored from their stored outputs.
 
+## Corrected 2026-09-19: LOCO pooled flat across clips
+
+The same cross-clip matching bug as above, in a second place. `metrics.
+report_groups` was fixed on 09-16, but `pvi/evaluate/loco.py` was written on
+09-17 against the raw `detection_prf(match_events(...))` and never got the fix.
+Its `select()` and both headline rows concatenated all 8 clips into one
+matching, so LOCO credited predictions against other clips' events.
+
+Fixed by `metrics.detection_prf_groups` (the group-aware single-F1 helper whose
+absence is why selection pooled flat), with a test asserting the cross-clip
+credit is not given. Both LOCO reports were recomputed from `outputs/loco_cache/`
+— no GPU, since all 45 settings x 8 clips were already cached.
+
+| | flat (reported through 09-18) | per-clip (correct) |
+|---|---|---|
+| VLM, held out | 0.520 / 0.722 / 0.605 | 0.667 / 0.667 / 0.667 |
+| VLM, all-data | 0.737 / 0.778 / 0.757 | 0.684 / 0.722 / 0.703 |
+| geometric, held out | 0.581 | 0.295 / 0.722 / 0.419 |
+| overfitting gap | +0.152 | +0.036 |
+| all-data `tau_near` | 0.06 | **0.10** |
+
+**Two conclusions reversed.** The VLM's margin over the geometric control does
+not vanish under tuning (+0.248 held out, not +0.024), and fold agreement is
+high rather than low (7 of 8 folds identical; `tau_near` unanimous).
+
+`config/default.yaml` now carries the corrected selection and `outputs/` was
+regenerated at it.
+
 ## Next steps
 
-1. **Run the VLM arm** -- the only thing standing between here and the headline
-   ablation. Blocked on bandwidth, not code: Qwen2.5-VL-7B is a 16 GB download
-   and three of five shards were still missing at hand-off. Check with
-   `python -c "from pvi.judge.vlm import check_weights_available as c; c('Qwen/Qwen2.5-VL-7B-Instruct','cc594898137f460bfe9f0759e9844b3ce807cfb5')"`,
-   resume with `snapshot_download(..., revision=...)`, then
-   `tools/run_all.py --judges geometric,vlm`.
-   Note each interrupted attempt starts a NEW `.incomplete` blob rather than
-   resuming the old one, so avoid killing it.
+1. ~~Run the VLM arm~~ — **done.** Weights complete; all 8 clips run under the
+   VLM judge. `outputs/` holds the shipped artifact.
 2. **Chase span fragmentation** (see the baseline table above). It is the single
    remaining recall miss and the likely cause of several false positives, since
    one long event becomes four short wrong ones.
-3. **LOCO threshold selection — ready to run, not yet run.**
+3. ~~LOCO threshold selection~~ — **done, then corrected** (see above).
    `python -m pvi.evaluate.loco --judge vlm`. Searches **three** knobs
    (`det_conf`, `tau_near`, `tau_far`); `vlm_conf_thresh` was dropped from the
    agreed four because it never binds. 45 valid settings, but only **24
@@ -178,7 +203,16 @@ a correction banner and have been rescored from their stored outputs.
    several background pedestrians at once. Vehicle `centroid_motion` of 0.2-0.6
    is likewise legitimate: the red sedan drives off, as the clip inventory says.
    No action needed; recorded so the next session does not re-raise it.
-5. **Write-up** (≤2 pages) and push the public repo.
+5. **Write-up** (≤2 pages) and push the public repo. The user is writing
+   WRITEUP.md themselves; `docs/writeup-outline.md` carries the corrected
+   numbers and flags which conclusions changed.
+6. **Re-centre the LOCO grid.** `det_conf` selects 0.65 — the top edge of
+   `(0.35, 0.50, 0.65)` — in **8 of 8** folds, so the search never bracketed the
+   optimum. `tau_near` at 0.10 is properly interior now.
+7. **The VLM judge does not reproduce across torch builds.** Re-running under
+   +cu130 where the sweep ran under +cu132 reproduced every span exactly but
+   flipped 4 verdicts. The response cache, not the seed, is what pins this —
+   keep `data/vlm_cache/` committed.
 
 ## Settled: `Videos/` is not shipped
 

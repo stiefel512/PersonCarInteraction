@@ -60,7 +60,7 @@ What *is* committed, so the results stay inspectable without the clips:
 |---|---|
 | `outputs/` and `experiments/*/` | every reported number, plus per-clip debug artifacts |
 | `data/ground_truth.json` | the 25 hand-labeled events |
-| `data/vlm_cache/` | every VLM response, keyed by image+prompt hash |
+| `data/vlm_cache/` | every VLM response, keyed by prompt + quantized frame/box geometry |
 | `experiments/*/frames/` | annotated frames from the probes |
 
 Re-running the pipeline needs the clips. Re-reading what it concluded does not.
@@ -88,15 +88,34 @@ Produces:
 
 | file | contents |
 |---|---|
-| `outputs/<clip_id>.json` | the deliverable: one record per (person, vehicle, event) |
+| `outputs/<clip_id>.json` | one record per (person, vehicle, event) |
 | `outputs/<clip_id>.debug.json` | rejected candidates and their features |
 | `outputs/<clip_id>.config.yaml` | the fully resolved config, including model revisions |
+
+Once every clip has been run, pool the per-clip files into the single artifact
+the task asks for:
+
+```bash
+python3 tools/pool_outputs.py          # stdlib only; no venv needed
+```
+
+| file | contents |
+|---|---|
+| `outputs/interactions.json` | **the deliverable**: every interaction in the clip set, `clip_id` on each record |
+
+Pooling recomputes nothing. It refuses to run if a clip is missing an output, or
+if the per-clip files carry different `config_hash` values — a list merged from
+two configs is not one result, and pooling them would erase the only evidence of
+that.
 
 Evaluate against the frozen ground truth:
 
 ```bash
-.venv/bin/python -m pvi.evaluate.run --config config/default.yaml
+.venv/bin/python -m pvi.evaluate.run
 ```
+
+It scores whatever is in `outputs/`, so it takes no `--config`: the config that
+produced those files is recorded in `outputs/<clip_id>.config.yaml`.
 
 Tests (the numerical pieces — geometry, hysteresis, matching, GMC, config
 constraints):
@@ -131,6 +150,21 @@ constraints):
 anyone asks about a reported interaction is *"why did it think that"*, and the
 answer should not require rerunning the pipeline.
 
+`outputs/interactions.json` is the same records concatenated across clips, with
+`clip_id` lifted out of the file header and onto each one, since the task asks
+for it per interaction:
+
+```json
+{
+  "artifact": "person_vehicle_interactions",
+  "config_hash": "sha256:...",
+  "n_clips": 8,
+  "n_interactions": 18,
+  "clips": {"NmlzoaDcOuI_6": {"fps": 6.0, "n_frames": 102, "width": 1280, "height": 720}},
+  "interactions": [{"clip_id": "NmlzoaDcOuI_6", "interaction_id": "NmlzoaDcOuI_6__i001", "...": "..."}]
+}
+```
+
 ## Determinism
 
 Required by the task and treated as a hard constraint:
@@ -142,10 +176,16 @@ Required by the task and treated as a hard constraint:
 - Fixed seeds; float32 detection rather than fp16, since accumulation order can
   move borderline boxes across the confidence threshold.
 - Fixed frame-sampling schedule; no seeking during decode.
-- Every VLM response cached under `data/vlm_cache/`, keyed by a hash of the exact
-  rendered image bytes plus the prompt text, and **committed to the repo** — so
-  results reproduce with no GPU, and a cache miss is visible rather than
-  silently re-rolled.
+- Every VLM response cached under `data/vlm_cache/`, keyed by the prompt text
+  plus the frame indices and integer-quantized box coordinates the images are
+  drawn from, and **committed to the repo** — so results reproduce with no GPU,
+  and a cache miss is visible rather than silently re-rolled. Keying on the
+  rendered bytes, as this did originally, meant a sub-pixel box shift from a
+  different torch build invalidated the entry and silently re-ran the VLM.
+- That matters more than the seed: re-running the set under a rebuilt torch
+  reproduced every proposal span exactly but flipped the judge on 4 candidates.
+  Tracking and proposal are deterministic; the VLM is reproducible only through
+  the cache.
 - The fully resolved config is written next to every output.
 
 ## Evaluation

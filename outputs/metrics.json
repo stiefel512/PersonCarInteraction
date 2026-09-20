@@ -1,265 +1,255 @@
 {
-  "n_clips_scored": 2,
-  "clips_without_predictions": [
-    "1THkHYIQ_bY_0",
-    "HIu4lM4B8hA_1",
-    "NmlzoaDcOuI_1",
-    "gt1125_06",
-    "iMGR_0AG3a8_2_3",
-    "mKzCQKTHizw_0"
-  ],
+  "n_clips_scored": 8,
+  "clips_without_predictions": [],
   "n_gt_events_total": 25,
   "n_gt_positives_total": 18,
   "pooled": {
     "primary": {
       "tiou_threshold": 0.3,
       "confident_only": false,
-      "n_gt_positives": 2,
-      "n_predictions": 7,
+      "n_clips": 8,
+      "n_gt_positives": 18,
+      "n_predictions": 18,
       "tier1_detection": {
-        "tp": 2,
-        "fp": 5,
-        "fn": 0,
-        "precision": 0.2857,
-        "recall": 1.0,
-        "f1": 0.4444,
-        "n_gt": 2,
-        "n_pred": 7
+        "tp": 12,
+        "fp": 6,
+        "fn": 6,
+        "precision": 0.6667,
+        "recall": 0.6667,
+        "f1": 0.6667,
+        "n_gt": 18,
+        "n_pred": 18
       },
       "tier1_pass_by": {
-        "n_pass_by_labeled": 2,
-        "n_pass_by_falsely_fired": 2,
-        "false_fire_rate": 1.0,
-        "hit_event_ids": [
-          "NmlzoaDcOuI_6__e002",
-          "NmlzoaDcOuI_6__e003"
-        ]
+        "n_pass_by_labeled": 7,
+        "n_pass_by_falsely_fired": 0,
+        "false_fire_rate": 0.0,
+        "hit_event_ids": []
       },
       "tier2_per_type": {
         "enter_vehicle": {
-          "tp": 1,
-          "fp": 2,
-          "fn": 0,
-          "precision": 0.3333,
-          "recall": 1.0,
-          "f1": 0.5,
-          "n_gt": 1,
-          "n_pred": 3
+          "tp": 4,
+          "fp": 3,
+          "fn": 2,
+          "precision": 0.5714,
+          "recall": 0.6667,
+          "f1": 0.6154,
+          "n_gt": 6,
+          "n_pred": 7
         },
         "exit_vehicle": {
-          "tp": 1,
-          "fp": 1,
-          "fn": 0,
-          "precision": 0.5,
-          "recall": 1.0,
-          "f1": 0.6667,
-          "n_gt": 1,
-          "n_pred": 2
+          "tp": 2,
+          "fp": 3,
+          "fn": 5,
+          "precision": 0.4,
+          "recall": 0.2857,
+          "f1": 0.3333,
+          "n_gt": 7,
+          "n_pred": 5
         }
       },
       "tier3_counts": {
-        "attend_vehicle": 0,
-        "open_close_door": 0,
-        "load_unload": 0
+        "attend_vehicle": 2,
+        "open_close_door": 2,
+        "load_unload": 1
       },
       "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
       "type_confusion": {
         "enter_vehicle": {
-          "enter_vehicle": 1,
-          "exit_vehicle": 0,
-          "open_close_door": 0,
-          "load_unload": 0,
-          "attend_vehicle": 0
-        },
-        "exit_vehicle": {
-          "enter_vehicle": 0,
+          "enter_vehicle": 4,
           "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
         },
-        "open_close_door": {
+        "exit_vehicle": {
           "enter_vehicle": 0,
+          "exit_vehicle": 2,
+          "open_close_door": 1,
+          "load_unload": 0,
+          "attend_vehicle": 0
+        },
+        "open_close_door": {
+          "enter_vehicle": 1,
           "exit_vehicle": 0,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
         "load_unload": {
           "enter_vehicle": 0,
           "exit_vehicle": 0,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
         "attend_vehicle": {
           "enter_vehicle": 0,
-          "exit_vehicle": 0,
+          "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
         }
       },
       "localization": {
-        "n_matched": 2,
-        "median_abs_start_err_frames": 4.0,
-        "median_abs_end_err_frames": 7.5,
-        "median_signed_start_err_frames": -4.0,
-        "median_signed_end_err_frames": -1.5
+        "n_matched": 12,
+        "median_abs_start_err_frames": 9.5,
+        "median_abs_end_err_frames": 6.0,
+        "median_signed_start_err_frames": 0.0,
+        "median_signed_end_err_frames": -3.0,
+        "median_tiou": 0.5795
       }
     },
     "primary_confident_only": {
       "tiou_threshold": 0.3,
       "confident_only": true,
-      "n_gt_positives": 2,
-      "n_predictions": 7,
+      "n_clips": 8,
+      "n_gt_positives": 18,
+      "n_predictions": 18,
       "tier1_detection": {
-        "tp": 2,
-        "fp": 5,
-        "fn": 0,
-        "precision": 0.2857,
-        "recall": 1.0,
-        "f1": 0.4444,
-        "n_gt": 2,
-        "n_pred": 7
+        "tp": 12,
+        "fp": 6,
+        "fn": 6,
+        "precision": 0.6667,
+        "recall": 0.6667,
+        "f1": 0.6667,
+        "n_gt": 18,
+        "n_pred": 18
       },
       "tier1_pass_by": {
-        "n_pass_by_labeled": 2,
-        "n_pass_by_falsely_fired": 2,
-        "false_fire_rate": 1.0,
-        "hit_event_ids": [
-          "NmlzoaDcOuI_6__e002",
-          "NmlzoaDcOuI_6__e003"
-        ]
+        "n_pass_by_labeled": 6,
+        "n_pass_by_falsely_fired": 0,
+        "false_fire_rate": 0.0,
+        "hit_event_ids": []
       },
       "tier2_per_type": {
         "enter_vehicle": {
-          "tp": 1,
-          "fp": 2,
-          "fn": 0,
-          "precision": 0.3333,
-          "recall": 1.0,
-          "f1": 0.5,
-          "n_gt": 1,
-          "n_pred": 3
+          "tp": 4,
+          "fp": 3,
+          "fn": 2,
+          "precision": 0.5714,
+          "recall": 0.6667,
+          "f1": 0.6154,
+          "n_gt": 6,
+          "n_pred": 7
         },
         "exit_vehicle": {
-          "tp": 1,
-          "fp": 1,
-          "fn": 0,
-          "precision": 0.5,
-          "recall": 1.0,
-          "f1": 0.6667,
-          "n_gt": 1,
-          "n_pred": 2
+          "tp": 2,
+          "fp": 3,
+          "fn": 5,
+          "precision": 0.4,
+          "recall": 0.2857,
+          "f1": 0.3333,
+          "n_gt": 7,
+          "n_pred": 5
         }
       },
       "tier3_counts": {
-        "attend_vehicle": 0,
-        "open_close_door": 0,
-        "load_unload": 0
+        "attend_vehicle": 2,
+        "open_close_door": 2,
+        "load_unload": 1
       },
       "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
       "type_confusion": {
         "enter_vehicle": {
-          "enter_vehicle": 1,
-          "exit_vehicle": 0,
-          "open_close_door": 0,
-          "load_unload": 0,
-          "attend_vehicle": 0
-        },
-        "exit_vehicle": {
-          "enter_vehicle": 0,
+          "enter_vehicle": 4,
           "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
         },
-        "open_close_door": {
+        "exit_vehicle": {
           "enter_vehicle": 0,
+          "exit_vehicle": 2,
+          "open_close_door": 1,
+          "load_unload": 0,
+          "attend_vehicle": 0
+        },
+        "open_close_door": {
+          "enter_vehicle": 1,
           "exit_vehicle": 0,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
         "load_unload": {
           "enter_vehicle": 0,
           "exit_vehicle": 0,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
         "attend_vehicle": {
           "enter_vehicle": 0,
-          "exit_vehicle": 0,
+          "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
         }
       },
       "localization": {
-        "n_matched": 2,
-        "median_abs_start_err_frames": 4.0,
-        "median_abs_end_err_frames": 7.5,
-        "median_signed_start_err_frames": -4.0,
-        "median_signed_end_err_frames": -1.5
+        "n_matched": 12,
+        "median_abs_start_err_frames": 9.5,
+        "median_abs_end_err_frames": 6.0,
+        "median_signed_start_err_frames": 0.0,
+        "median_signed_end_err_frames": -3.0,
+        "median_tiou": 0.5795
       }
     },
     "strict": {
       "tiou_threshold": 0.5,
       "confident_only": false,
-      "n_gt_positives": 2,
-      "n_predictions": 7,
+      "n_clips": 8,
+      "n_gt_positives": 18,
+      "n_predictions": 18,
       "tier1_detection": {
-        "tp": 2,
-        "fp": 5,
-        "fn": 0,
-        "precision": 0.2857,
-        "recall": 1.0,
-        "f1": 0.4444,
-        "n_gt": 2,
-        "n_pred": 7
+        "tp": 9,
+        "fp": 9,
+        "fn": 9,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "n_gt": 18,
+        "n_pred": 18
       },
       "tier1_pass_by": {
-        "n_pass_by_labeled": 2,
-        "n_pass_by_falsely_fired": 1,
-        "false_fire_rate": 0.5,
-        "hit_event_ids": [
-          "NmlzoaDcOuI_6__e002"
-        ]
+        "n_pass_by_labeled": 7,
+        "n_pass_by_falsely_fired": 0,
+        "false_fire_rate": 0.0,
+        "hit_event_ids": []
       },
       "tier2_per_type": {
         "enter_vehicle": {
-          "tp": 1,
-          "fp": 2,
-          "fn": 0,
-          "precision": 0.3333,
-          "recall": 1.0,
-          "f1": 0.5,
-          "n_gt": 1,
-          "n_pred": 3
+          "tp": 4,
+          "fp": 3,
+          "fn": 2,
+          "precision": 0.5714,
+          "recall": 0.6667,
+          "f1": 0.6154,
+          "n_gt": 6,
+          "n_pred": 7
         },
         "exit_vehicle": {
           "tp": 1,
-          "fp": 1,
-          "fn": 0,
-          "precision": 0.5,
-          "recall": 1.0,
-          "f1": 0.6667,
-          "n_gt": 1,
-          "n_pred": 2
+          "fp": 4,
+          "fn": 6,
+          "precision": 0.2,
+          "recall": 0.1429,
+          "f1": 0.1667,
+          "n_gt": 7,
+          "n_pred": 5
         }
       },
       "tier3_counts": {
-        "attend_vehicle": 0,
-        "open_close_door": 0,
-        "load_unload": 0
+        "attend_vehicle": 2,
+        "open_close_door": 2,
+        "load_unload": 1
       },
       "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
       "type_confusion": {
         "enter_vehicle": {
-          "enter_vehicle": 1,
-          "exit_vehicle": 0,
+          "enter_vehicle": 4,
+          "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
@@ -267,7 +257,7 @@
         "exit_vehicle": {
           "enter_vehicle": 0,
           "exit_vehicle": 1,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
@@ -281,81 +271,81 @@
         "load_unload": {
           "enter_vehicle": 0,
           "exit_vehicle": 0,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
         "attend_vehicle": {
           "enter_vehicle": 0,
-          "exit_vehicle": 0,
+          "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
         }
       },
       "localization": {
-        "n_matched": 2,
-        "median_abs_start_err_frames": 4.0,
-        "median_abs_end_err_frames": 7.5,
-        "median_signed_start_err_frames": -4.0,
-        "median_signed_end_err_frames": -1.5
+        "n_matched": 9,
+        "median_abs_start_err_frames": 8,
+        "median_abs_end_err_frames": 6,
+        "median_signed_start_err_frames": 0,
+        "median_signed_end_err_frames": -5,
+        "median_tiou": 0.7241
       }
     },
     "strict_confident_only": {
       "tiou_threshold": 0.5,
       "confident_only": true,
-      "n_gt_positives": 2,
-      "n_predictions": 7,
+      "n_clips": 8,
+      "n_gt_positives": 18,
+      "n_predictions": 18,
       "tier1_detection": {
-        "tp": 2,
-        "fp": 5,
-        "fn": 0,
-        "precision": 0.2857,
-        "recall": 1.0,
-        "f1": 0.4444,
-        "n_gt": 2,
-        "n_pred": 7
+        "tp": 9,
+        "fp": 9,
+        "fn": 9,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "n_gt": 18,
+        "n_pred": 18
       },
       "tier1_pass_by": {
-        "n_pass_by_labeled": 2,
-        "n_pass_by_falsely_fired": 1,
-        "false_fire_rate": 0.5,
-        "hit_event_ids": [
-          "NmlzoaDcOuI_6__e002"
-        ]
+        "n_pass_by_labeled": 6,
+        "n_pass_by_falsely_fired": 0,
+        "false_fire_rate": 0.0,
+        "hit_event_ids": []
       },
       "tier2_per_type": {
         "enter_vehicle": {
-          "tp": 1,
-          "fp": 2,
-          "fn": 0,
-          "precision": 0.3333,
-          "recall": 1.0,
-          "f1": 0.5,
-          "n_gt": 1,
-          "n_pred": 3
+          "tp": 4,
+          "fp": 3,
+          "fn": 2,
+          "precision": 0.5714,
+          "recall": 0.6667,
+          "f1": 0.6154,
+          "n_gt": 6,
+          "n_pred": 7
         },
         "exit_vehicle": {
           "tp": 1,
-          "fp": 1,
-          "fn": 0,
-          "precision": 0.5,
-          "recall": 1.0,
-          "f1": 0.6667,
-          "n_gt": 1,
-          "n_pred": 2
+          "fp": 4,
+          "fn": 6,
+          "precision": 0.2,
+          "recall": 0.1429,
+          "f1": 0.1667,
+          "n_gt": 7,
+          "n_pred": 5
         }
       },
       "tier3_counts": {
-        "attend_vehicle": 0,
-        "open_close_door": 0,
-        "load_unload": 0
+        "attend_vehicle": 2,
+        "open_close_door": 2,
+        "load_unload": 1
       },
       "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
       "type_confusion": {
         "enter_vehicle": {
-          "enter_vehicle": 1,
-          "exit_vehicle": 0,
+          "enter_vehicle": 4,
+          "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
@@ -363,7 +353,7 @@
         "exit_vehicle": {
           "enter_vehicle": 0,
           "exit_vehicle": 1,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
@@ -377,77 +367,76 @@
         "load_unload": {
           "enter_vehicle": 0,
           "exit_vehicle": 0,
-          "open_close_door": 0,
+          "open_close_door": 1,
           "load_unload": 0,
           "attend_vehicle": 0
         },
         "attend_vehicle": {
           "enter_vehicle": 0,
-          "exit_vehicle": 0,
+          "exit_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0,
           "attend_vehicle": 0
         }
       },
       "localization": {
-        "n_matched": 2,
-        "median_abs_start_err_frames": 4.0,
-        "median_abs_end_err_frames": 7.5,
-        "median_signed_start_err_frames": -4.0,
-        "median_signed_end_err_frames": -1.5
+        "n_matched": 9,
+        "median_abs_start_err_frames": 8,
+        "median_abs_end_err_frames": 6,
+        "median_signed_start_err_frames": 0,
+        "median_signed_end_err_frames": -5,
+        "median_tiou": 0.7241
       }
     }
   },
   "per_clip": {
-    "NmlzoaDcOuI_6": {
+    "1THkHYIQ_bY_0": {
       "primary": {
         "tiou_threshold": 0.3,
         "confident_only": false,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 6,
+        "n_predictions": 1,
         "tier1_detection": {
-          "tp": 1,
-          "fp": 5,
-          "fn": 0,
-          "precision": 0.1667,
-          "recall": 1.0,
-          "f1": 0.2857,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
           "n_gt": 1,
-          "n_pred": 6
+          "n_pred": 1
         },
         "tier1_pass_by": {
-          "n_pass_by_labeled": 2,
-          "n_pass_by_falsely_fired": 2,
-          "false_fire_rate": 1.0,
-          "hit_event_ids": [
-            "NmlzoaDcOuI_6__e002",
-            "NmlzoaDcOuI_6__e003"
-          ]
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
         },
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 0,
-            "fp": 2,
+            "fp": 0,
             "fn": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0,
             "n_gt": 0,
-            "n_pred": 2
+            "n_pred": 0
           },
           "exit_vehicle": {
-            "tp": 1,
-            "fp": 1,
+            "tp": 0,
+            "fp": 0,
             "fn": 0,
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.6667,
-            "n_gt": 1,
-            "n_pred": 2
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
           }
         },
         "tier3_counts": {
-          "attend_vehicle": 0,
+          "attend_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0
         },
@@ -462,7 +451,7 @@
           },
           "exit_vehicle": {
             "enter_vehicle": 0,
-            "exit_vehicle": 1,
+            "exit_vehicle": 0,
             "open_close_door": 0,
             "load_unload": 0,
             "attend_vehicle": 0
@@ -490,61 +479,55 @@
           }
         },
         "localization": {
-          "n_matched": 1,
-          "median_abs_start_err_frames": 0,
-          "median_abs_end_err_frames": 6,
-          "median_signed_start_err_frames": 0,
-          "median_signed_end_err_frames": 6
+          "n_matched": 0
         }
       },
       "primary_confident_only": {
         "tiou_threshold": 0.3,
         "confident_only": true,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 6,
+        "n_predictions": 1,
         "tier1_detection": {
-          "tp": 1,
-          "fp": 5,
-          "fn": 0,
-          "precision": 0.1667,
-          "recall": 1.0,
-          "f1": 0.2857,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
           "n_gt": 1,
-          "n_pred": 6
+          "n_pred": 1
         },
         "tier1_pass_by": {
-          "n_pass_by_labeled": 2,
-          "n_pass_by_falsely_fired": 2,
-          "false_fire_rate": 1.0,
-          "hit_event_ids": [
-            "NmlzoaDcOuI_6__e002",
-            "NmlzoaDcOuI_6__e003"
-          ]
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
         },
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 0,
-            "fp": 2,
+            "fp": 0,
             "fn": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0,
             "n_gt": 0,
-            "n_pred": 2
+            "n_pred": 0
           },
           "exit_vehicle": {
-            "tp": 1,
-            "fp": 1,
+            "tp": 0,
+            "fp": 0,
             "fn": 0,
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.6667,
-            "n_gt": 1,
-            "n_pred": 2
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
           }
         },
         "tier3_counts": {
-          "attend_vehicle": 0,
+          "attend_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0
         },
@@ -559,7 +542,7 @@
           },
           "exit_vehicle": {
             "enter_vehicle": 0,
-            "exit_vehicle": 1,
+            "exit_vehicle": 0,
             "open_close_door": 0,
             "load_unload": 0,
             "attend_vehicle": 0
@@ -587,60 +570,55 @@
           }
         },
         "localization": {
-          "n_matched": 1,
-          "median_abs_start_err_frames": 0,
-          "median_abs_end_err_frames": 6,
-          "median_signed_start_err_frames": 0,
-          "median_signed_end_err_frames": 6
+          "n_matched": 0
         }
       },
       "strict": {
         "tiou_threshold": 0.5,
         "confident_only": false,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 6,
+        "n_predictions": 1,
         "tier1_detection": {
-          "tp": 1,
-          "fp": 5,
-          "fn": 0,
-          "precision": 0.1667,
-          "recall": 1.0,
-          "f1": 0.2857,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
           "n_gt": 1,
-          "n_pred": 6
+          "n_pred": 1
         },
         "tier1_pass_by": {
-          "n_pass_by_labeled": 2,
-          "n_pass_by_falsely_fired": 1,
-          "false_fire_rate": 0.5,
-          "hit_event_ids": [
-            "NmlzoaDcOuI_6__e002"
-          ]
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
         },
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 0,
-            "fp": 2,
+            "fp": 0,
             "fn": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0,
             "n_gt": 0,
-            "n_pred": 2
+            "n_pred": 0
           },
           "exit_vehicle": {
-            "tp": 1,
-            "fp": 1,
+            "tp": 0,
+            "fp": 0,
             "fn": 0,
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.6667,
-            "n_gt": 1,
-            "n_pred": 2
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
           }
         },
         "tier3_counts": {
-          "attend_vehicle": 0,
+          "attend_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0
         },
@@ -655,7 +633,7 @@
           },
           "exit_vehicle": {
             "enter_vehicle": 0,
-            "exit_vehicle": 1,
+            "exit_vehicle": 0,
             "open_close_door": 0,
             "load_unload": 0,
             "attend_vehicle": 0
@@ -683,60 +661,55 @@
           }
         },
         "localization": {
-          "n_matched": 1,
-          "median_abs_start_err_frames": 0,
-          "median_abs_end_err_frames": 6,
-          "median_signed_start_err_frames": 0,
-          "median_signed_end_err_frames": 6
+          "n_matched": 0
         }
       },
       "strict_confident_only": {
         "tiou_threshold": 0.5,
         "confident_only": true,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 6,
+        "n_predictions": 1,
         "tier1_detection": {
-          "tp": 1,
-          "fp": 5,
-          "fn": 0,
-          "precision": 0.1667,
-          "recall": 1.0,
-          "f1": 0.2857,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
           "n_gt": 1,
-          "n_pred": 6
+          "n_pred": 1
         },
         "tier1_pass_by": {
-          "n_pass_by_labeled": 2,
-          "n_pass_by_falsely_fired": 1,
-          "false_fire_rate": 0.5,
-          "hit_event_ids": [
-            "NmlzoaDcOuI_6__e002"
-          ]
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
         },
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 0,
-            "fp": 2,
+            "fp": 0,
             "fn": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0,
             "n_gt": 0,
-            "n_pred": 2
+            "n_pred": 0
           },
           "exit_vehicle": {
-            "tp": 1,
-            "fp": 1,
+            "tp": 0,
+            "fp": 0,
             "fn": 0,
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.6667,
-            "n_gt": 1,
-            "n_pred": 2
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
           }
         },
         "tier3_counts": {
-          "attend_vehicle": 0,
+          "attend_vehicle": 1,
           "open_close_door": 0,
           "load_unload": 0
         },
@@ -751,7 +724,486 @@
           },
           "exit_vehicle": {
             "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 0
+        }
+      }
+    },
+    "HIu4lM4B8hA_1": {
+      "primary": {
+        "tiou_threshold": 0.3,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 2,
+          "precision": 0.3333,
+          "recall": 0.3333,
+          "f1": 0.3333,
+          "n_gt": 3,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 1,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
             "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 55,
+          "median_abs_end_err_frames": 18,
+          "median_signed_start_err_frames": 55,
+          "median_signed_end_err_frames": -18,
+          "median_tiou": 0.5133
+        }
+      },
+      "primary_confident_only": {
+        "tiou_threshold": 0.3,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 2,
+          "precision": 0.3333,
+          "recall": 0.3333,
+          "f1": 0.3333,
+          "n_gt": 3,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 1,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 55,
+          "median_abs_end_err_frames": 18,
+          "median_signed_start_err_frames": 55,
+          "median_signed_end_err_frames": -18,
+          "median_tiou": 0.5133
+        }
+      },
+      "strict": {
+        "tiou_threshold": 0.5,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 2,
+          "precision": 0.3333,
+          "recall": 0.3333,
+          "f1": 0.3333,
+          "n_gt": 3,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 1,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 55,
+          "median_abs_end_err_frames": 18,
+          "median_signed_start_err_frames": 55,
+          "median_signed_end_err_frames": -18,
+          "median_tiou": 0.5133
+        }
+      },
+      "strict_confident_only": {
+        "tiou_threshold": 0.5,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 2,
+          "precision": 0.3333,
+          "recall": 0.3333,
+          "f1": 0.3333,
+          "n_gt": 3,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 1,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 55,
+          "median_abs_end_err_frames": 18,
+          "median_signed_start_err_frames": 55,
+          "median_signed_end_err_frames": -18,
+          "median_tiou": 0.5133
+        }
+      }
+    },
+    "NmlzoaDcOuI_1": {
+      "primary": {
+        "tiou_threshold": 0.3,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 1,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.3333,
+          "f1": 0.5,
+          "n_gt": 3,
+          "n_pred": 1
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 2,
+            "n_pred": 1
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
             "open_close_door": 0,
             "load_unload": 0,
             "attend_vehicle": 0
@@ -783,25 +1235,1841 @@
           "median_abs_start_err_frames": 0,
           "median_abs_end_err_frames": 6,
           "median_signed_start_err_frames": 0,
-          "median_signed_end_err_frames": 6
+          "median_signed_end_err_frames": 6,
+          "median_tiou": 0.8125
+        }
+      },
+      "primary_confident_only": {
+        "tiou_threshold": 0.3,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 1,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.3333,
+          "f1": 0.5,
+          "n_gt": 3,
+          "n_pred": 1
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 2,
+            "n_pred": 1
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 6,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 6,
+          "median_tiou": 0.8125
+        }
+      },
+      "strict": {
+        "tiou_threshold": 0.5,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 1,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.3333,
+          "f1": 0.5,
+          "n_gt": 3,
+          "n_pred": 1
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 2,
+            "n_pred": 1
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 6,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 6,
+          "median_tiou": 0.8125
+        }
+      },
+      "strict_confident_only": {
+        "tiou_threshold": 0.5,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 3,
+        "n_predictions": 1,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.3333,
+          "f1": 0.5,
+          "n_gt": 3,
+          "n_pred": 1
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 2,
+            "n_pred": 1
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 6,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 6,
+          "median_tiou": 0.8125
         }
       }
+    },
+    "NmlzoaDcOuI_6": {
+      "primary": {
+        "tiou_threshold": 0.3,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 0,
+        "tier1_detection": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "n_gt": 1,
+          "n_pred": 0
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 0
+        }
+      },
+      "primary_confident_only": {
+        "tiou_threshold": 0.3,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 0,
+        "tier1_detection": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "n_gt": 1,
+          "n_pred": 0
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 0
+        }
+      },
+      "strict": {
+        "tiou_threshold": 0.5,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 0,
+        "tier1_detection": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "n_gt": 1,
+          "n_pred": 0
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 0
+        }
+      },
+      "strict_confident_only": {
+        "tiou_threshold": 0.5,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 0,
+        "tier1_detection": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "n_gt": 1,
+          "n_pred": 0
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 2,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 1,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 0
+        }
+      }
+    },
+    "gt1125_06": {
+      "primary": {
+        "tiou_threshold": 0.3,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 2,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8,
+          "n_gt": 2,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "n_gt": 2,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 2,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 2,
+          "median_abs_start_err_frames": 26.5,
+          "median_abs_end_err_frames": 75.5,
+          "median_signed_start_err_frames": -26.5,
+          "median_signed_end_err_frames": -75.5,
+          "median_tiou": 0.5795
+        }
+      },
+      "primary_confident_only": {
+        "tiou_threshold": 0.3,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 2,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8,
+          "n_gt": 2,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "n_gt": 2,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 2,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 2,
+          "median_abs_start_err_frames": 26.5,
+          "median_abs_end_err_frames": 75.5,
+          "median_signed_start_err_frames": -26.5,
+          "median_signed_end_err_frames": -75.5,
+          "median_tiou": 0.5795
+        }
+      },
+      "strict": {
+        "tiou_threshold": 0.5,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 2,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8,
+          "n_gt": 2,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "n_gt": 2,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 2,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 2,
+          "median_abs_start_err_frames": 26.5,
+          "median_abs_end_err_frames": 75.5,
+          "median_signed_start_err_frames": -26.5,
+          "median_signed_end_err_frames": -75.5,
+          "median_tiou": 0.5795
+        }
+      },
+      "strict_confident_only": {
+        "tiou_threshold": 0.5,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 2,
+        "n_predictions": 3,
+        "tier1_detection": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8,
+          "n_gt": 2,
+          "n_pred": 3
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "n_gt": 2,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 2,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 2,
+          "median_abs_start_err_frames": 26.5,
+          "median_abs_end_err_frames": 75.5,
+          "median_signed_start_err_frames": -26.5,
+          "median_signed_end_err_frames": -75.5,
+          "median_tiou": 0.5795
+        }
+      },
+      "stress_case": "recall (moving camera, oblique overhead)"
+    },
+    "iMGR_0AG3a8_2_3": {
+      "primary": {
+        "tiou_threshold": 0.3,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 6,
+        "n_predictions": 6,
+        "tier1_detection": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n_gt": 6,
+          "n_pred": 6
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 1
+          },
+          "exit_vehicle": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1.0,
+            "recall": 0.6667,
+            "f1": 0.8,
+            "n_gt": 3,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 2,
+          "load_unload": 1
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 2,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 1,
+            "exit_vehicle": 0,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 6,
+          "median_abs_start_err_frames": 5.5,
+          "median_abs_end_err_frames": 5.5,
+          "median_signed_start_err_frames": 0.0,
+          "median_signed_end_err_frames": -2.5,
+          "median_tiou": 0.481
+        }
+      },
+      "primary_confident_only": {
+        "tiou_threshold": 0.3,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 6,
+        "n_predictions": 6,
+        "tier1_detection": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n_gt": 6,
+          "n_pred": 6
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 1
+          },
+          "exit_vehicle": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1.0,
+            "recall": 0.6667,
+            "f1": 0.8,
+            "n_gt": 3,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 2,
+          "load_unload": 1
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 2,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 1,
+            "exit_vehicle": 0,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 6,
+          "median_abs_start_err_frames": 5.5,
+          "median_abs_end_err_frames": 5.5,
+          "median_signed_start_err_frames": 0.0,
+          "median_signed_end_err_frames": -2.5,
+          "median_tiou": 0.481
+        }
+      },
+      "strict": {
+        "tiou_threshold": 0.5,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 6,
+        "n_predictions": 6,
+        "tier1_detection": {
+          "tp": 3,
+          "fp": 3,
+          "fn": 3,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5,
+          "n_gt": 6,
+          "n_pred": 6
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 1
+          },
+          "exit_vehicle": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.5,
+            "recall": 0.3333,
+            "f1": 0.4,
+            "n_gt": 3,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 2,
+          "load_unload": 1
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 3,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 6,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": -5,
+          "median_tiou": 0.7241
+        }
+      },
+      "strict_confident_only": {
+        "tiou_threshold": 0.5,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 6,
+        "n_predictions": 6,
+        "tier1_detection": {
+          "tp": 3,
+          "fp": 3,
+          "fn": 3,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5,
+          "n_gt": 6,
+          "n_pred": 6
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 0,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 1
+          },
+          "exit_vehicle": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.5,
+            "recall": 0.3333,
+            "f1": 0.4,
+            "n_gt": 3,
+            "n_pred": 2
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 2,
+          "load_unload": 1
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 1,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 1,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 3,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 6,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": -5,
+          "median_tiou": 0.7241
+        }
+      }
+    },
+    "mKzCQKTHizw_0": {
+      "primary": {
+        "tiou_threshold": 0.3,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 2,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667,
+          "n_gt": 1,
+          "n_pred": 2
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "n_gt": 1,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 1,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 0,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 0,
+          "median_tiou": 1.0
+        }
+      },
+      "primary_confident_only": {
+        "tiou_threshold": 0.3,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 2,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667,
+          "n_gt": 1,
+          "n_pred": 2
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "n_gt": 1,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 1,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 0,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 0,
+          "median_tiou": 1.0
+        }
+      },
+      "strict": {
+        "tiou_threshold": 0.5,
+        "confident_only": false,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 2,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667,
+          "n_gt": 1,
+          "n_pred": 2
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "n_gt": 1,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 1,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 0,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 0,
+          "median_tiou": 1.0
+        }
+      },
+      "strict_confident_only": {
+        "tiou_threshold": 0.5,
+        "confident_only": true,
+        "n_clips": 1,
+        "n_gt_positives": 1,
+        "n_predictions": 2,
+        "tier1_detection": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667,
+          "n_gt": 1,
+          "n_pred": 2
+        },
+        "tier1_pass_by": {
+          "n_pass_by_labeled": 1,
+          "n_pass_by_falsely_fired": 0,
+          "false_fire_rate": 0.0,
+          "hit_event_ids": []
+        },
+        "tier2_per_type": {
+          "enter_vehicle": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "n_gt": 1,
+            "n_pred": 2
+          },
+          "exit_vehicle": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "n_gt": 0,
+            "n_pred": 0
+          }
+        },
+        "tier3_counts": {
+          "attend_vehicle": 0,
+          "open_close_door": 0,
+          "load_unload": 0
+        },
+        "tier3_note": "n<=2 per class; reported as confusion-matrix entries only, never as a rate (problem-definition.md s3)",
+        "type_confusion": {
+          "enter_vehicle": {
+            "enter_vehicle": 1,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "exit_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "open_close_door": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "load_unload": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          },
+          "attend_vehicle": {
+            "enter_vehicle": 0,
+            "exit_vehicle": 0,
+            "open_close_door": 0,
+            "load_unload": 0,
+            "attend_vehicle": 0
+          }
+        },
+        "localization": {
+          "n_matched": 1,
+          "median_abs_start_err_frames": 0,
+          "median_abs_end_err_frames": 0,
+          "median_signed_start_err_frames": 0,
+          "median_signed_end_err_frames": 0,
+          "median_tiou": 1.0
+        }
+      },
+      "stress_case": "precision (runners near parked cars)"
     },
     "mKzCQKTHizw_1": {
       "primary": {
         "tiou_threshold": 0.3,
         "confident_only": false,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 1,
+        "n_predictions": 2,
         "tier1_detection": {
           "tp": 1,
-          "fp": 0,
+          "fp": 1,
           "fn": 0,
-          "precision": 1.0,
+          "precision": 0.5,
           "recall": 1.0,
-          "f1": 1.0,
+          "f1": 0.6667,
           "n_gt": 1,
-          "n_pred": 1
+          "n_pred": 2
         },
         "tier1_pass_by": {
           "n_pass_by_labeled": 0,
@@ -812,13 +3080,13 @@
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 1,
-            "fp": 0,
+            "fp": 1,
             "fn": 0,
-            "precision": 1.0,
+            "precision": 0.5,
             "recall": 1.0,
-            "f1": 1.0,
+            "f1": 0.6667,
             "n_gt": 1,
-            "n_pred": 1
+            "n_pred": 2
           },
           "exit_vehicle": {
             "tp": 0,
@@ -877,25 +3145,27 @@
         "localization": {
           "n_matched": 1,
           "median_abs_start_err_frames": 8,
-          "median_abs_end_err_frames": 9,
+          "median_abs_end_err_frames": 1,
           "median_signed_start_err_frames": -8,
-          "median_signed_end_err_frames": -9
+          "median_signed_end_err_frames": -1,
+          "median_tiou": 0.9011
         }
       },
       "primary_confident_only": {
         "tiou_threshold": 0.3,
         "confident_only": true,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 1,
+        "n_predictions": 2,
         "tier1_detection": {
           "tp": 1,
-          "fp": 0,
+          "fp": 1,
           "fn": 0,
-          "precision": 1.0,
+          "precision": 0.5,
           "recall": 1.0,
-          "f1": 1.0,
+          "f1": 0.6667,
           "n_gt": 1,
-          "n_pred": 1
+          "n_pred": 2
         },
         "tier1_pass_by": {
           "n_pass_by_labeled": 0,
@@ -906,13 +3176,13 @@
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 1,
-            "fp": 0,
+            "fp": 1,
             "fn": 0,
-            "precision": 1.0,
+            "precision": 0.5,
             "recall": 1.0,
-            "f1": 1.0,
+            "f1": 0.6667,
             "n_gt": 1,
-            "n_pred": 1
+            "n_pred": 2
           },
           "exit_vehicle": {
             "tp": 0,
@@ -971,25 +3241,27 @@
         "localization": {
           "n_matched": 1,
           "median_abs_start_err_frames": 8,
-          "median_abs_end_err_frames": 9,
+          "median_abs_end_err_frames": 1,
           "median_signed_start_err_frames": -8,
-          "median_signed_end_err_frames": -9
+          "median_signed_end_err_frames": -1,
+          "median_tiou": 0.9011
         }
       },
       "strict": {
         "tiou_threshold": 0.5,
         "confident_only": false,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 1,
+        "n_predictions": 2,
         "tier1_detection": {
           "tp": 1,
-          "fp": 0,
+          "fp": 1,
           "fn": 0,
-          "precision": 1.0,
+          "precision": 0.5,
           "recall": 1.0,
-          "f1": 1.0,
+          "f1": 0.6667,
           "n_gt": 1,
-          "n_pred": 1
+          "n_pred": 2
         },
         "tier1_pass_by": {
           "n_pass_by_labeled": 0,
@@ -1000,13 +3272,13 @@
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 1,
-            "fp": 0,
+            "fp": 1,
             "fn": 0,
-            "precision": 1.0,
+            "precision": 0.5,
             "recall": 1.0,
-            "f1": 1.0,
+            "f1": 0.6667,
             "n_gt": 1,
-            "n_pred": 1
+            "n_pred": 2
           },
           "exit_vehicle": {
             "tp": 0,
@@ -1065,25 +3337,27 @@
         "localization": {
           "n_matched": 1,
           "median_abs_start_err_frames": 8,
-          "median_abs_end_err_frames": 9,
+          "median_abs_end_err_frames": 1,
           "median_signed_start_err_frames": -8,
-          "median_signed_end_err_frames": -9
+          "median_signed_end_err_frames": -1,
+          "median_tiou": 0.9011
         }
       },
       "strict_confident_only": {
         "tiou_threshold": 0.5,
         "confident_only": true,
+        "n_clips": 1,
         "n_gt_positives": 1,
-        "n_predictions": 1,
+        "n_predictions": 2,
         "tier1_detection": {
           "tp": 1,
-          "fp": 0,
+          "fp": 1,
           "fn": 0,
-          "precision": 1.0,
+          "precision": 0.5,
           "recall": 1.0,
-          "f1": 1.0,
+          "f1": 0.6667,
           "n_gt": 1,
-          "n_pred": 1
+          "n_pred": 2
         },
         "tier1_pass_by": {
           "n_pass_by_labeled": 0,
@@ -1094,13 +3368,13 @@
         "tier2_per_type": {
           "enter_vehicle": {
             "tp": 1,
-            "fp": 0,
+            "fp": 1,
             "fn": 0,
-            "precision": 1.0,
+            "precision": 0.5,
             "recall": 1.0,
-            "f1": 1.0,
+            "f1": 0.6667,
             "n_gt": 1,
-            "n_pred": 1
+            "n_pred": 2
           },
           "exit_vehicle": {
             "tp": 0,
@@ -1159,9 +3433,10 @@
         "localization": {
           "n_matched": 1,
           "median_abs_start_err_frames": 8,
-          "median_abs_end_err_frames": 9,
+          "median_abs_end_err_frames": 1,
           "median_signed_start_err_frames": -8,
-          "median_signed_end_err_frames": -9
+          "median_signed_end_err_frames": -1,
+          "median_tiou": 0.9011
         }
       }
     }

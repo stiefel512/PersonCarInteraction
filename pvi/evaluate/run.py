@@ -57,8 +57,23 @@ def main() -> None:
     for g in gts:
         by_clip_gt.setdefault(g.clip_id, []).append(g)
 
-    pred_files = sorted(p for p in args.outputs.glob("*.json")
-                        if not p.name.endswith((".debug.json", "metrics.json")))
+    # Selected by SHAPE, not by filename. outputs/ also holds metrics.json, the
+    # LOCO reports and the pooled interactions.json, none of which are per-clip
+    # predictions; an exclusion list has to be extended every time one of those
+    # is added, and silently raised KeyError when it was not.
+    pred_files, skipped = [], []
+    for f in sorted(args.outputs.glob("*.json")):
+        if f.name.endswith(".debug.json"):
+            continue
+        try:
+            raw = json.loads(f.read_text())
+        except json.JSONDecodeError:
+            skipped.append(f.name)
+            continue
+        if isinstance(raw, dict) and "clip_id" in raw and "interactions" in raw:
+            pred_files.append(f)
+        else:
+            skipped.append(f.name)
     if not pred_files:
         raise SystemExit(f"no prediction files in {args.outputs}/")
 
@@ -96,6 +111,8 @@ def main() -> None:
     pb = report["pooled"]["primary"]["tier1_pass_by"]
     print(f"scored {len(covered)} clip(s)"
           + (f"; NOT RUN: {missing}" if missing else ""))
+    if skipped:
+        print(f"not predictions, skipped: {', '.join(skipped)}")
     print(f"pooled tIoU>=0.3  P={pooled['precision']:.3f} R={pooled['recall']:.3f} "
           f"F1={pooled['f1']:.3f}  (tp={pooled['tp']} fp={pooled['fp']} fn={pooled['fn']}, "
           f"n_gt={pooled['n_gt']})")

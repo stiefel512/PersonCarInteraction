@@ -83,7 +83,30 @@ def test_select_is_deterministic_under_setting_order():
 
 
 def test_score_of_no_predictions_is_zero_not_undefined():
-    assert score([], [gt("c1", 10, 20)]) == 0.0
+    assert score([([], [gt("c1", 10, 20)])]) == 0.0
+
+
+def test_score_never_matches_across_clips():
+    """The bug this file shipped with until 2026-09-19.
+
+    Frame spans are clip-local. Two clips each with one event at [10, 20] and
+    one prediction at [10, 20] must score a perfect 1.0 either way -- but give
+    clip c2 a prediction that lands nowhere near its own event and the flat
+    pooling that `score` used to do would let c1's event absorb it. Scored per
+    clip, c2 contributes one FP and one FN and the F1 falls.
+    """
+    gts = {"c1": [gt("c1", 10, 20)], "c2": [gt("c2", 200, 210)]}
+    # c2's prediction overlaps C1's event numerically, not its own.
+    groups = [([pred("c1", 10, 20)], gts["c1"]),
+              ([pred("c2", 10, 20)], gts["c2"])]
+    f1 = score(groups)
+    assert f1 == pytest.approx(0.5), (
+        "a prediction from c2 was credited against c1's event")
+
+    # Sanity: when each clip's prediction lands on its own event, it is 1.0.
+    ok = [([pred("c1", 10, 20)], gts["c1"]),
+          ([pred("c2", 200, 210)], gts["c2"])]
+    assert score(ok) == pytest.approx(1.0)
 
 
 # --- the protocol itself ---

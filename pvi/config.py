@@ -104,9 +104,11 @@ class Tunables:
     # above it a detection can start a track and joins the first association
     # pass; between `tracker.det_floor` and here it still feeds the second
     # association pass. See TrackerCfg.det_floor.
-    det_conf: float = 0.50
-    tau_near: float = 0.15
-    tau_far: float = 0.30
+    # det_conf, tau_near and tau_far are the all-data LOCO selection
+    # (outputs/loco_vlm.json). Not held out -- see config/default.yaml.
+    det_conf: float = 0.65
+    tau_near: float = 0.10
+    tau_far: float = 0.25
     min_dwell_s: float = 0.5
     smooth_window_s: float = 0.4
     door_conf_thresh: float = 0.30
