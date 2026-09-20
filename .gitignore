@@ -29,4 +29,10 @@ data/ground_truth.pre-idfix.json
 # results inspectable without the clips.
 Videos/
 
+# Internal session handover -- notes, not deliverable. It was tracked before this
+# line existed, so the rule did nothing until it was untracked (2026-09-20).
 HANDOVER.md
+
+# LibreOffice lock files, created whenever HomeTask.docx is open. One was
+# tracked and committed as noise on every edit.
+.~lock.*#
