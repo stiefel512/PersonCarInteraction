@@ -18,11 +18,25 @@
       "time_end_s": 1.05,
       "person": {
         "track_id": 0,
-        "description": "man, white jacket, blue jeans, none"
+        "description": "adult male, white jacket, black jeans",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white, compact, parked, center",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man exits the vehicle.",
@@ -63,11 +77,25 @@
       "time_end_s": 9.3,
       "person": {
         "track_id": 1,
-        "description": "man, white shirt + dark pants, none"
+        "description": "adult female, white shirt, black jeans",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "shirt",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white, minivan, parked, center",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "man opens driver side door",
@@ -108,11 +136,25 @@
       "time_end_s": 15.749,
       "person": {
         "track_id": 2,
-        "description": "man, black jacket + white shirt, black pants, none"
+        "description": "person",
+        "attributes": {
+          "sex": "unknown",
+          "age": "unknown",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "unknown",
+          "upper_garment": "unknown",
+          "lower_garment": "unknown"
+        }
       },
       "vehicle": {
         "track_id": 10007,
-        "description": "black sedan, moving, center",
+        "description": "vehicle",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "unknown",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The man gets into the black sedan.",
@@ -153,11 +195,25 @@
       "time_end_s": 20.549,
       "person": {
         "track_id": 3,
-        "description": "man adult, white shirt + black pants, none"
+        "description": "adult male, white shirt, black trousers, carrying an object",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "yes",
+          "upper_garment": "shirt",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white SUV, parked, right side",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "man opens driver's side door",
@@ -198,11 +254,25 @@
       "time_end_s": 20.549,
       "person": {
         "track_id": 3,
-        "description": "man adult, black jacket + jeans, none"
+        "description": "adult male, black jacket, black jeans",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10008,
-        "description": "white SUV, parked, right side of frame",
+        "description": "white, suv, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "suv",
+          "state": "parked"
+        },
         "class": "truck"
       },
       "note": "man opens driver's side door",
@@ -243,11 +313,25 @@
       "time_end_s": 27.149,
       "person": {
         "track_id": 5,
-        "description": "man, white shirt + black pants, brown bag"
+        "description": "adult male, white jacket, black trousers, carrying an object",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "yes",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white van, parked, center",
+        "description": "white, van, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "van",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man exits the white van.",

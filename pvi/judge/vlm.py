@@ -23,6 +23,7 @@ import torch
 from ..geometry import Box
 from ..propose.rules import Candidate
 from ..schema import ClipMeta
+from . import describe as D
 from . import prompt as P
 from .base import Judge, Verdict
 
@@ -186,7 +187,8 @@ class VLMJudge(Judge):
             self.max_pixels_per_frame,
         ))
 
-    def judge_bundle(self, bundle: P.PromptBundle) -> dict | None:
+    def judge_bundle(self, bundle: P.PromptBundle,
+                     parse=P.parse_response) -> dict | None:
         key = bundle.cache_key(self.cache_salt)
         hit = self._cached(key)
         if hit is not None:
@@ -195,7 +197,7 @@ class VLMJudge(Judge):
 
         self.n_cache_misses += 1
         raw = self._generate(bundle)
-        parsed = P.parse_response(raw)
+        parsed = parse(raw)
         self._store(key, {
             "model_id": self.model_id,
             "revision": self._revision,
@@ -233,3 +235,18 @@ class VLMJudge(Judge):
             note=parsed["note"],
             confidence=parsed["confidence"],
         )
+
+    def describe(self, cand: Candidate, meta: ClipMeta,
+                 frames: dict[int, np.ndarray],
+                 person_boxes: dict[int, Box],
+                 vehicle_boxes: dict[int, Box]) -> dict | None:
+        """Structured person/vehicle slots for one candidate (see describe.py).
+
+        Rebuilds the judge's bundle rather than taking it as an argument: the
+        build is deterministic, so the images are the ones the verdict saw.
+        """
+        bundle = P.build(cand, meta, frames, person_boxes, vehicle_boxes,
+                         self.n_frames, self.context_pad_s, self.crop_margin)
+        if not bundle.images:
+            return None
+        return self.judge_bundle(D.rebundle(bundle), parse=D.parse_response)

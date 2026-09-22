@@ -17,6 +17,7 @@ from pathlib import Path
 
 from ..schema import (GTEvent, Interaction, PersonRef, VehicleRef,
                       load_ground_truth)
+from .descriptions import description_report
 from .metrics import full_report, full_report_groups
 
 # Named in problem-definition.md s3 -- reported individually, never only pooled.
@@ -36,9 +37,11 @@ def load_predictions(path: Path) -> tuple[str, list[Interaction]]:
             frame_start=r["frame_start"], frame_end=r["frame_end"],
             time_start_s=r["time_start_s"], time_end_s=r["time_end_s"],
             person=PersonRef(track_id=r["person"]["track_id"],
-                             description=r["person"].get("description", "")),
+                             description=r["person"].get("description", ""),
+                             attributes=r["person"].get("attributes")),
             vehicle=VehicleRef(track_id=v["track_id"], cls=v.get("class", ""),
-                               description=v.get("description", "")),
+                               description=v.get("description", ""),
+                               attributes=v.get("attributes")),
             note=r.get("note", ""), confidence=r.get("confidence", 0.0),
             evidence=r.get("evidence", {}),
         ))
@@ -102,6 +105,7 @@ def main() -> None:
         "n_gt_events_total": len(gts),
         "n_gt_positives_total": sum(1 for g in gts if g.is_positive),
         "pooled": full_report_groups(groups),
+        "descriptions": description_report(groups),
         "per_clip": per_clip,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
@@ -118,6 +122,16 @@ def main() -> None:
           f"n_gt={pooled['n_gt']})")
     print(f"pass_by false fires: {pb['n_pass_by_falsely_fired']}"
           f"/{pb['n_pass_by_labeled']}")
+    ds = report["descriptions"]
+    print(f"descriptions: {ds['n_scored']}/{ds['n_matched']} matched pairs scored "
+          f"({ds['n_actor_mismatch']} actor mismatch, "
+          f"{ds['n_without_attributes']} without attributes)")
+    for side in ("person", "vehicle"):
+        a = ds[f"{side}_all_slots"]
+        if a["accuracy"] is not None:
+            print(f"  {side:7s} slot accuracy {a['accuracy']:.3f} "
+                  f"({a['correct']}/{a['correct'] + a['wrong']}), "
+                  f"coverage {a['coverage']:.3f}")
     print(f"wrote {args.report}")
 
 

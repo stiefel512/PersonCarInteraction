@@ -249,7 +249,7 @@ def sweep(clips: Sequence[Path], cfg: C.Config, judge: str,
             ct = track_clip(clip, cfg.with_tunables(det_conf=dc))
             for s in todo:
                 _, interactions, _ = judge_tracks(
-                    clip, ct, cfg.with_tunables(**s), judge)
+                    clip, ct, cfg.with_tunables(**s), judge, describe=False)
                 _cache_path(cache_dir, clip.stem, s, judge).write_bytes(
                     pickle.dumps(interactions))
                 out[(clip.stem, setting_key(s))] = interactions

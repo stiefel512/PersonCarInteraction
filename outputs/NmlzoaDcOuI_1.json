@@ -18,11 +18,25 @@
       "time_end_s": 14.0,
       "person": {
         "track_id": 9,
-        "description": "woman, blonde hair, white top, black pants"
+        "description": "adult female, white t-shirt, black jeans, carrying an object",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "yes",
+          "upper_garment": "t-shirt",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The woman exits the silver sedan.",

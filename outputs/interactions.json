@@ -65,11 +65,25 @@
       "time_end_s": 2.3,
       "person": {
         "track_id": 0,
-        "description": "man wearing dark clothing, carrying large white object"
+        "description": "person, <jacket>, <trousers>",
+        "attributes": {
+          "sex": "unknown",
+          "age": "unknown",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "unknown",
+          "upper_garment": "<jacket>",
+          "lower_garment": "<trousers>"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "silver car, parked, partially covered by tarp, positioned on driveway",
+        "description": "vehicle",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "unknown",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The man is seen moving a large white object into the silver car.",
@@ -111,11 +125,25 @@
       "time_end_s": 3.36,
       "person": {
         "track_id": 0,
-        "description": "man, brown jacket + jeans, none"
+        "description": "adult male, black jacket, black trousers",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "white, sedan, parked, center",
+        "description": "white, sedan, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "man opens car door",
@@ -157,11 +185,25 @@
       "time_end_s": 6.76,
       "person": {
         "track_id": 1,
-        "description": "male, dark clothing, light pants, none"
+        "description": "adult male, black jacket, black trousers",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "white sedan, parked, center",
+        "description": "white, sedan, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The person exits the vehicle.",
@@ -203,11 +245,25 @@
       "time_end_s": 6.92,
       "person": {
         "track_id": 3,
-        "description": "female, dark hair, dark top, dark pants, none"
+        "description": "adult female",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "no",
+          "upper_garment": "unknown",
+          "lower_garment": "unknown"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "white, sedan, parked, center",
+        "description": "sedan",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "sedan",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The person exits the vehicle.",
@@ -249,11 +305,25 @@
       "time_end_s": 14.0,
       "person": {
         "track_id": 9,
-        "description": "woman, blonde hair, white top, black pants"
+        "description": "adult female, white t-shirt, black jeans, carrying an object",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "yes",
+          "upper_garment": "t-shirt",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The woman exits the silver sedan.",
@@ -295,11 +365,25 @@
       "time_end_s": 10.477,
       "person": {
         "track_id": 1,
-        "description": "man, grey shirt + white shorts, none"
+        "description": "adult male, white t-shirt, white shorts",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "white",
+          "carrying": "no",
+          "upper_garment": "t-shirt",
+          "lower_garment": "shorts"
+        }
       },
       "vehicle": {
         "track_id": 10037,
-        "description": "white, hatchback, parked, bottom left",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "the man gets into the driver's seat of the white car",
@@ -341,11 +425,25 @@
       "time_end_s": 13.947,
       "person": {
         "track_id": 2,
-        "description": "man, black shirt + shorts, none"
+        "description": "adult male, black t-shirt, light shorts",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "light",
+          "carrying": "no",
+          "upper_garment": "t-shirt",
+          "lower_garment": "shorts"
+        }
       },
       "vehicle": {
         "track_id": 10038,
-        "description": "black SUV, parked, right side",
+        "description": "black, suv, parked",
+        "attributes": {
+          "color": "black",
+          "body_type": "suv",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man enters the black SUV.",
@@ -387,11 +485,25 @@
       "time_end_s": 9.676,
       "person": {
         "track_id": 2,
-        "description": "man, black shirt + white shorts, none"
+        "description": "person, <t-shirt>, <shorts>",
+        "attributes": {
+          "sex": "unknown",
+          "age": "unknown",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "unknown",
+          "upper_garment": "<t-shirt>",
+          "lower_garment": "<shorts>"
+        }
       },
       "vehicle": {
         "track_id": 10035,
-        "description": "black SUV, parked, right side",
+        "description": "vehicle",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "unknown",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The man opens the driver's side door of the black SUV.",
@@ -433,11 +545,25 @@
       "time_end_s": 1.05,
       "person": {
         "track_id": 0,
-        "description": "man, white jacket, blue jeans, none"
+        "description": "adult male, white jacket, black jeans",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white, compact, parked, center",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man exits the vehicle.",
@@ -479,11 +605,25 @@
       "time_end_s": 9.3,
       "person": {
         "track_id": 1,
-        "description": "man, white shirt + dark pants, none"
+        "description": "adult female, white shirt, black jeans",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "shirt",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white, minivan, parked, center",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "man opens driver side door",
@@ -525,11 +665,25 @@
       "time_end_s": 15.749,
       "person": {
         "track_id": 2,
-        "description": "man, black jacket + white shirt, black pants, none"
+        "description": "person",
+        "attributes": {
+          "sex": "unknown",
+          "age": "unknown",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "unknown",
+          "upper_garment": "unknown",
+          "lower_garment": "unknown"
+        }
       },
       "vehicle": {
         "track_id": 10007,
-        "description": "black sedan, moving, center",
+        "description": "vehicle",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "unknown",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The man gets into the black sedan.",
@@ -571,11 +725,25 @@
       "time_end_s": 20.549,
       "person": {
         "track_id": 3,
-        "description": "man adult, white shirt + black pants, none"
+        "description": "adult male, white shirt, black trousers, carrying an object",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "yes",
+          "upper_garment": "shirt",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white SUV, parked, right side",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "man opens driver's side door",
@@ -617,11 +785,25 @@
       "time_end_s": 20.549,
       "person": {
         "track_id": 3,
-        "description": "man adult, black jacket + jeans, none"
+        "description": "adult male, black jacket, black jeans",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "jeans"
+        }
       },
       "vehicle": {
         "track_id": 10008,
-        "description": "white SUV, parked, right side of frame",
+        "description": "white, suv, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "suv",
+          "state": "parked"
+        },
         "class": "truck"
       },
       "note": "man opens driver's side door",
@@ -663,11 +845,25 @@
       "time_end_s": 27.149,
       "person": {
         "track_id": 5,
-        "description": "man, white shirt + black pants, brown bag"
+        "description": "adult male, white jacket, black trousers, carrying an object",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "black",
+          "carrying": "yes",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "white van, parked, center",
+        "description": "white, van, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "van",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man exits the white van.",
@@ -709,11 +905,25 @@
       "time_end_s": 3.67,
       "person": {
         "track_id": 0,
-        "description": "man, black jacket + jeans, none"
+        "description": "adult female, white jacket, brown trousers, carrying an object",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "brown",
+          "carrying": "yes",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side of frame",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man enters the silver sedan.",
@@ -755,11 +965,25 @@
       "time_end_s": 9.977,
       "person": {
         "track_id": 1,
-        "description": "woman, light grey top + dark pants, none"
+        "description": "adult female, white jacket, brown trousers, carrying an object",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "brown",
+          "carrying": "yes",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The woman enters the silver sedan.",
@@ -801,11 +1025,25 @@
       "time_end_s": 5.239,
       "person": {
         "track_id": 0,
-        "description": "woman black hair, white top + green pants, none"
+        "description": "adult female, white shirt, brown pants",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "brown",
+          "carrying": "no",
+          "upper_garment": "shirt",
+          "lower_garment": "pants"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The woman enters the silver sedan.",
@@ -847,11 +1085,25 @@
       "time_end_s": 6.64,
       "person": {
         "track_id": 1,
-        "description": "woman dark hair, white top, brown pants, none"
+        "description": "adult female, white jacket, beige trousers, carrying an object",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "beige",
+          "carrying": "yes",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "the woman enters the silver sedan",

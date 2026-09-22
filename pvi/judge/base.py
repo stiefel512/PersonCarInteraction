@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import abc
 from dataclasses import dataclass
+from typing import Any
 
 from ..propose.rules import Candidate
 from ..schema import ClipMeta
@@ -22,6 +23,9 @@ class Verdict:
     vehicle_desc: str
     note: str
     confidence: float
+    # Structured slots from judge/describe.py, when a description pass ran.
+    person_attrs: dict[str, Any] | None = None
+    vehicle_attrs: dict[str, Any] | None = None
 
 
 class Judge(abc.ABC):

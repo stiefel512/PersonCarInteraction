@@ -18,11 +18,25 @@
       "time_end_s": 5.239,
       "person": {
         "track_id": 0,
-        "description": "woman black hair, white top + green pants, none"
+        "description": "adult female, white shirt, brown pants",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "brown",
+          "carrying": "no",
+          "upper_garment": "shirt",
+          "lower_garment": "pants"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The woman enters the silver sedan.",
@@ -63,11 +77,25 @@
       "time_end_s": 6.64,
       "person": {
         "track_id": 1,
-        "description": "woman dark hair, white top, brown pants, none"
+        "description": "adult female, white jacket, beige trousers, carrying an object",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "beige",
+          "carrying": "yes",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "silver sedan, parked, right side",
+        "description": "silver, sedan, parked",
+        "attributes": {
+          "color": "silver",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "the woman enters the silver sedan",

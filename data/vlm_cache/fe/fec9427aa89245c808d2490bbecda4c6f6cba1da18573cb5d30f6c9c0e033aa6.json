@@ -1,0 +1,36 @@
+{
+  "frame_indices": [
+    0,
+    1,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    13,
+    14
+  ],
+  "max_pixels_per_frame": 401408,
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "parsed": {
+    "person": {
+      "age": "adult",
+      "carrying": "no",
+      "lower_color": "black",
+      "lower_garment": "jeans",
+      "sex": "male",
+      "upper_color": "white",
+      "upper_garment": "jacket"
+    },
+    "vehicle": {
+      "body_type": "hatchback",
+      "color": "white",
+      "state": "parked"
+    }
+  },
+  "raw": "```json\n{\n   \"person\": {\n      \"sex\": \"male\",\n      \"age\": \"adult\",\n      \"upper_color\": \"white\",\n      \"upper_garment\": \"jacket\",\n      \"lower_color\": \"black\",\n      \"lower_garment\": \"jeans\",\n      \"carrying\": \"no\"\n   },\n   \"vehicle\": {\n      \"color\": \"white\",\n      \"body_type\": \"hatchback\",\n      \"state\": \"parked\"\n   }\n}\n```",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+}

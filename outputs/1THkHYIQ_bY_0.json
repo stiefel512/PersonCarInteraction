@@ -18,11 +18,25 @@
       "time_end_s": 2.3,
       "person": {
         "track_id": 0,
-        "description": "man wearing dark clothing, carrying large white object"
+        "description": "person, <jacket>, <trousers>",
+        "attributes": {
+          "sex": "unknown",
+          "age": "unknown",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "unknown",
+          "upper_garment": "<jacket>",
+          "lower_garment": "<trousers>"
+        }
       },
       "vehicle": {
         "track_id": 10001,
-        "description": "silver car, parked, partially covered by tarp, positioned on driveway",
+        "description": "vehicle",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "unknown",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The man is seen moving a large white object into the silver car.",

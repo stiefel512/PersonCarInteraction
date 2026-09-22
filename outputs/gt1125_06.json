@@ -18,11 +18,25 @@
       "time_end_s": 10.477,
       "person": {
         "track_id": 1,
-        "description": "man, grey shirt + white shorts, none"
+        "description": "adult male, white t-shirt, white shorts",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "white",
+          "lower_color": "white",
+          "carrying": "no",
+          "upper_garment": "t-shirt",
+          "lower_garment": "shorts"
+        }
       },
       "vehicle": {
         "track_id": 10037,
-        "description": "white, hatchback, parked, bottom left",
+        "description": "white, hatchback, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "hatchback",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "the man gets into the driver's seat of the white car",
@@ -63,11 +77,25 @@
       "time_end_s": 13.947,
       "person": {
         "track_id": 2,
-        "description": "man, black shirt + shorts, none"
+        "description": "adult male, black t-shirt, light shorts",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "light",
+          "carrying": "no",
+          "upper_garment": "t-shirt",
+          "lower_garment": "shorts"
+        }
       },
       "vehicle": {
         "track_id": 10038,
-        "description": "black SUV, parked, right side",
+        "description": "black, suv, parked",
+        "attributes": {
+          "color": "black",
+          "body_type": "suv",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The man enters the black SUV.",
@@ -108,11 +136,25 @@
       "time_end_s": 9.676,
       "person": {
         "track_id": 2,
-        "description": "man, black shirt + white shorts, none"
+        "description": "person, <t-shirt>, <shorts>",
+        "attributes": {
+          "sex": "unknown",
+          "age": "unknown",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "unknown",
+          "upper_garment": "<t-shirt>",
+          "lower_garment": "<shorts>"
+        }
       },
       "vehicle": {
         "track_id": 10035,
-        "description": "black SUV, parked, right side",
+        "description": "vehicle",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "unknown",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The man opens the driver's side door of the black SUV.",

@@ -179,9 +179,15 @@ def track_clip(clip_path: Path, cfg: C.Config, tiled: bool | None = None,
 
 
 def judge_tracks(clip_path: Path, ct: ClipTracks, cfg: C.Config,
-                 judge_name: str = "vlm", skip_door_cue: bool = False
+                 judge_name: str = "vlm", skip_door_cue: bool = False,
+                 describe: bool = True
                  ) -> tuple[ClipMeta, list[Interaction], dict]:
-    """Propose candidates from tracks and adjudicate them. The cheap half."""
+    """Propose candidates from tracks and adjudicate them. The cheap half.
+
+    `describe` runs the structured description pass (judge/describe.py) on
+    accepted candidates. LOCO turns it off: it scores detection only, and a
+    description call per accepted candidate per setting is pure cost there.
+    """
     # Fail fast on a missing or truncated VLM checkpoint, before the door cue
     # spends a Grounding DINO pass. (This check used to sit in the tracking
     # half, where it referenced a judge name that no longer exists there -- a
@@ -232,7 +238,7 @@ def judge_tracks(clip_path: Path, ct: ClipTracks, cfg: C.Config,
     _free_gpu()
 
     accepted, rejected = _judge_all(cands, meta, clip_path, cfg, judge_name,
-                                    feats, persons, vehicles)
+                                    feats, persons, vehicles, describe)
 
     track_by_id = {tr.id: tr for tr in tracks}
 
@@ -245,10 +251,13 @@ def judge_tracks(clip_path: Path, ct: ClipTracks, cfg: C.Config,
             frame_start=cand.frame_start, frame_end=cand.frame_end,
             time_start_s=round(meta.to_s(cand.frame_start), 3),
             time_end_s=round(meta.to_s(cand.frame_end), 3),
-            person=PersonRef(track_id=cand.person_id, description=verdict.person_desc),
+            person=PersonRef(track_id=cand.person_id,
+                             description=verdict.person_desc,
+                             attributes=verdict.person_attrs),
             vehicle=VehicleRef(track_id=cand.vehicle_id,
                                cls=_cls_name(cand.vehicle_cls),
-                               description=verdict.vehicle_desc),
+                               description=verdict.vehicle_desc,
+                               attributes=verdict.vehicle_attrs),
             note=verdict.note, confidence=round(verdict.confidence, 4),
             evidence={
                 "rule": primary_rule(cand), **cand.evidence,
@@ -476,7 +485,8 @@ def _camera_is_static(gray: dict[int, np.ndarray], meta: ClipMeta,
     return float(np.median(mags)) < thresh_frac
 
 
-def _judge_all(cands, meta, clip_path, cfg, judge_name, feats, persons, vehicles):
+def _judge_all(cands, meta, clip_path, cfg, judge_name, feats, persons, vehicles,
+               describe: bool = True):
     accepted: list[tuple[Candidate, Verdict]] = []
     rejected: list[tuple[Candidate, Verdict | None]] = []
 
@@ -530,9 +540,11 @@ def _judge_all(cands, meta, clip_path, cfg, judge_name, feats, persons, vehicles
             return
         frames = video.read_frames(clip_path, sorted(pending_frames), meta)
         for c in pending:
+            pb, vb = pbox.get(c.person_id, {}), vbox.get(c.vehicle_id, {})
             v = judge.judge(c, meta, frames=frames,
-                            person_boxes=pbox.get(c.person_id, {}),
-                            vehicle_boxes=vbox.get(c.vehicle_id, {}))
+                            person_boxes=pb, vehicle_boxes=vb)
+            if v and v.is_interaction and describe:
+                _attach_description(v, judge.describe(c, meta, frames, pb, vb))
             (accepted if v and v.is_interaction else rejected).append((c, v))
         pending.clear()
         pending_frames.clear()
@@ -546,6 +558,21 @@ def _judge_all(cands, meta, clip_path, cfg, judge_name, feats, persons, vehicles
         pending_frames.update(need)
     run_chunk()
     return accepted, rejected
+
+
+def _attach_description(v: Verdict, desc: dict | None) -> None:
+    """Replace the judge's free-text descriptions with slot-derived ones.
+
+    On a failed parse the judge's free text stays and `*_attrs` stays None, so
+    the record is still complete and the evaluator sees it as unscorable rather
+    than as wrong.
+    """
+    if desc is None:
+        return
+    from .judge import describe as D
+    v.person_attrs, v.vehicle_attrs = desc["person"], desc["vehicle"]
+    v.person_desc = D.render_person(desc["person"])
+    v.vehicle_desc = D.render_vehicle(desc["vehicle"])
 
 
 def main() -> None:

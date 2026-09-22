@@ -1,0 +1,14 @@
+slot,correct,wrong,abstain,accuracy,coverage
+person.age,9,1,0,0.9,1.0
+person.carrying,4,6,0,0.4,1.0
+person.lower_color.hue,2,3,1,0.4,0.8333
+person.lower_color.lightness,7,3,0,0.7,1.0
+person.sex,6,4,0,0.6,1.0
+person.upper_color.hue,3,3,0,0.5,1.0
+person.upper_color.lightness,10,0,0,1.0,1.0
+vehicle.body_type,9,1,0,0.9,1.0
+vehicle.color.hue,9,1,0,0.9,1.0
+vehicle.color.lightness,10,0,0,1.0,1.0
+vehicle.state,9,1,0,0.9,1.0
+person_all_slots,41,20,1,0.6721,0.9839
+vehicle_all_slots,37,3,0,0.925,1.0

@@ -107,6 +107,9 @@ def load_ground_truth(path: str | Path) -> list[GTEvent]:
 class PersonRef:
     track_id: int
     description: str = ""
+    # Closed-vocabulary slots (judge/describe.py); `description` is rendered
+    # from them. None when no description pass ran (e.g. the geometric judge).
+    attributes: dict[str, Any] | None = None
 
 
 @dataclass
@@ -114,6 +117,7 @@ class VehicleRef:
     track_id: int
     cls: str = ""
     description: str = ""
+    attributes: dict[str, Any] | None = None
 
 
 @dataclass

@@ -389,6 +389,310 @@
       }
     }
   },
+  "descriptions": {
+    "tiou_threshold": 0.3,
+    "n_matched": 12,
+    "n_scored": 10,
+    "n_actor_mismatch": 2,
+    "n_without_attributes": 0,
+    "person_all_slots": {
+      "correct": 41,
+      "wrong": 20,
+      "abstain": 1,
+      "accuracy": 0.6721,
+      "coverage": 0.9839
+    },
+    "vehicle_all_slots": {
+      "correct": 37,
+      "wrong": 3,
+      "abstain": 0,
+      "accuracy": 0.925,
+      "coverage": 1.0
+    },
+    "per_slot": {
+      "person.age": {
+        "correct": 9,
+        "wrong": 1,
+        "abstain": 0,
+        "accuracy": 0.9,
+        "coverage": 1.0
+      },
+      "person.carrying": {
+        "correct": 4,
+        "wrong": 6,
+        "abstain": 0,
+        "accuracy": 0.4,
+        "coverage": 1.0
+      },
+      "person.lower_color.hue": {
+        "correct": 2,
+        "wrong": 3,
+        "abstain": 1,
+        "accuracy": 0.4,
+        "coverage": 0.8333
+      },
+      "person.lower_color.lightness": {
+        "correct": 7,
+        "wrong": 3,
+        "abstain": 0,
+        "accuracy": 0.7,
+        "coverage": 1.0
+      },
+      "person.sex": {
+        "correct": 6,
+        "wrong": 4,
+        "abstain": 0,
+        "accuracy": 0.6,
+        "coverage": 1.0
+      },
+      "person.upper_color.hue": {
+        "correct": 3,
+        "wrong": 3,
+        "abstain": 0,
+        "accuracy": 0.5,
+        "coverage": 1.0
+      },
+      "person.upper_color.lightness": {
+        "correct": 10,
+        "wrong": 0,
+        "abstain": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "vehicle.body_type": {
+        "correct": 9,
+        "wrong": 1,
+        "abstain": 0,
+        "accuracy": 0.9,
+        "coverage": 1.0
+      },
+      "vehicle.color.hue": {
+        "correct": 9,
+        "wrong": 1,
+        "abstain": 0,
+        "accuracy": 0.9,
+        "coverage": 1.0
+      },
+      "vehicle.color.lightness": {
+        "correct": 10,
+        "wrong": 0,
+        "abstain": 0,
+        "accuracy": 1.0,
+        "coverage": 1.0
+      },
+      "vehicle.state": {
+        "correct": 9,
+        "wrong": 1,
+        "abstain": 0,
+        "accuracy": 0.9,
+        "coverage": 1.0
+      }
+    },
+    "pairs": [
+      {
+        "gt_event_id": "HIu4lM4B8hA_1__e002",
+        "interaction_id": "HIu4lM4B8hA_1__i002",
+        "gt_person": "adult woman, dark shirt, light pants",
+        "pred_person": "adult male, black jacket, black trousers",
+        "gt_vehicle": "white, sedan, parked",
+        "pred_vehicle": "white, sedan, parked",
+        "outcomes": {
+          "person.sex": "wrong",
+          "person.age": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.lightness": "wrong",
+          "person.carrying": "correct",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "NmlzoaDcOuI_1__e002",
+        "interaction_id": "NmlzoaDcOuI_1__i001",
+        "gt_person": "adult woman, white shirt, black pants",
+        "pred_person": "adult female, white t-shirt, black jeans, carrying an object",
+        "gt_vehicle": "grey, sedan, parked",
+        "pred_vehicle": "silver, sedan, parked",
+        "outcomes": {
+          "person.sex": "correct",
+          "person.age": "correct",
+          "person.upper_color.hue": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.hue": "correct",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "wrong",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "gt1125_06__e001",
+        "interaction_id": "gt1125_06__i001",
+        "gt_person": "adult man, grey shirt, white pants",
+        "pred_person": "adult male, white t-shirt, white shorts",
+        "gt_vehicle": "white and black, hatchback, parked",
+        "pred_vehicle": "white, hatchback, parked",
+        "outcomes": {
+          "person.sex": "correct",
+          "person.age": "correct",
+          "person.upper_color.hue": "wrong",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.hue": "correct",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "correct",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "gt1125_06__e002",
+        "interaction_id": "gt1125_06__i002",
+        "gt_person": "adult man, black shirt, beige pants",
+        "pred_person": "adult male, black t-shirt, light shorts",
+        "gt_vehicle": "grey, suv, parked",
+        "pred_vehicle": "black, suv, parked",
+        "outcomes": {
+          "person.sex": "correct",
+          "person.age": "correct",
+          "person.upper_color.hue": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.hue": "abstain",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "correct",
+          "vehicle.color.hue": "wrong",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "iMGR_0AG3a8_2_3__e002",
+        "interaction_id": "iMGR_0AG3a8_2_3__i002",
+        "gt_person": "adult woman, light shirt, dark pants, stroller",
+        "pred_person": "adult female, white shirt, black jeans",
+        "gt_vehicle": "white, hatchback, parked",
+        "pred_vehicle": "white, hatchback, parked",
+        "outcomes": {
+          "person.sex": "correct",
+          "person.age": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "wrong",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "iMGR_0AG3a8_2_3__e001",
+        "interaction_id": "iMGR_0AG3a8_2_3__i001",
+        "gt_person": "adult woman, light shirt, dark pants",
+        "pred_person": "adult male, white jacket, black jeans",
+        "gt_vehicle": "white, hatchback, parked",
+        "pred_vehicle": "white, hatchback, parked",
+        "outcomes": {
+          "person.sex": "wrong",
+          "person.age": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "correct",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "iMGR_0AG3a8_2_3__e006",
+        "interaction_id": "iMGR_0AG3a8_2_3__i004",
+        "gt_person": "adult woman, light shirt, dark pants",
+        "pred_person": "adult male, white shirt, black trousers, carrying an object",
+        "gt_vehicle": "white, hatchback, parked",
+        "pred_vehicle": "white, hatchback, parked",
+        "outcomes": {
+          "person.sex": "wrong",
+          "person.age": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "wrong",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "iMGR_0AG3a8_2_3__e007",
+        "interaction_id": "iMGR_0AG3a8_2_3__i006",
+        "gt_person": "young girl, white shirt, pink pants",
+        "pred_person": "adult male, white jacket, black trousers, carrying an object",
+        "gt_vehicle": "white, hatchback, parked",
+        "pred_vehicle": "white, van, parked",
+        "outcomes": {
+          "person.sex": "wrong",
+          "person.age": "wrong",
+          "person.upper_color.hue": "correct",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.hue": "wrong",
+          "person.lower_color.lightness": "wrong",
+          "person.carrying": "wrong",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "wrong",
+          "vehicle.state": "correct"
+        }
+      },
+      {
+        "gt_event_id": "mKzCQKTHizw_0__e002",
+        "interaction_id": "mKzCQKTHizw_0__i002",
+        "gt_person": "adult woman, grey shirt, yellow pants",
+        "pred_person": "adult female, white jacket, brown trousers, carrying an object",
+        "gt_vehicle": "grey, sedan, starting to drive",
+        "pred_vehicle": "silver, sedan, parked",
+        "outcomes": {
+          "person.sex": "correct",
+          "person.age": "correct",
+          "person.upper_color.hue": "wrong",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.hue": "wrong",
+          "person.lower_color.lightness": "wrong",
+          "person.carrying": "wrong",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "wrong"
+        }
+      },
+      {
+        "gt_event_id": "mKzCQKTHizw_1__e001",
+        "interaction_id": "mKzCQKTHizw_1__i002",
+        "gt_person": "adult woman, grey shirt, yellow pants",
+        "pred_person": "adult female, white jacket, beige trousers, carrying an object",
+        "gt_vehicle": "grey, sedan, stopped",
+        "pred_vehicle": "silver, sedan, parked",
+        "outcomes": {
+          "person.sex": "correct",
+          "person.age": "correct",
+          "person.upper_color.hue": "wrong",
+          "person.upper_color.lightness": "correct",
+          "person.lower_color.hue": "wrong",
+          "person.lower_color.lightness": "correct",
+          "person.carrying": "wrong",
+          "vehicle.color.hue": "correct",
+          "vehicle.color.lightness": "correct",
+          "vehicle.body_type": "correct",
+          "vehicle.state": "correct"
+        }
+      }
+    ]
+  },
   "per_clip": {
     "1THkHYIQ_bY_0": {
       "primary": {

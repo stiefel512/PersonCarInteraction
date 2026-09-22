@@ -18,11 +18,25 @@
       "time_end_s": 3.36,
       "person": {
         "track_id": 0,
-        "description": "man, brown jacket + jeans, none"
+        "description": "adult male, black jacket, black trousers",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "white, sedan, parked, center",
+        "description": "white, sedan, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "man opens car door",
@@ -63,11 +77,25 @@
       "time_end_s": 6.76,
       "person": {
         "track_id": 1,
-        "description": "male, dark clothing, light pants, none"
+        "description": "adult male, black jacket, black trousers",
+        "attributes": {
+          "sex": "male",
+          "age": "adult",
+          "upper_color": "black",
+          "lower_color": "black",
+          "carrying": "no",
+          "upper_garment": "jacket",
+          "lower_garment": "trousers"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "white sedan, parked, center",
+        "description": "white, sedan, parked",
+        "attributes": {
+          "color": "white",
+          "body_type": "sedan",
+          "state": "parked"
+        },
         "class": "car"
       },
       "note": "The person exits the vehicle.",
@@ -108,11 +136,25 @@
       "time_end_s": 6.92,
       "person": {
         "track_id": 3,
-        "description": "female, dark hair, dark top, dark pants, none"
+        "description": "adult female",
+        "attributes": {
+          "sex": "female",
+          "age": "adult",
+          "upper_color": "unknown",
+          "lower_color": "unknown",
+          "carrying": "no",
+          "upper_garment": "unknown",
+          "lower_garment": "unknown"
+        }
       },
       "vehicle": {
         "track_id": 10000,
-        "description": "white, sedan, parked, center",
+        "description": "sedan",
+        "attributes": {
+          "color": "unknown",
+          "body_type": "sedan",
+          "state": "unknown"
+        },
         "class": "car"
       },
       "note": "The person exits the vehicle.",
