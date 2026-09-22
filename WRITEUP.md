@@ -45,7 +45,7 @@ The VLM judge adds +0.248 F1 over geometry alone, mostly through precision: 0.66
 
 - **Small sample:** 18 positives, so one event is 5.6% of recall, and descriptions rest on 10 scored pairs. No confidence intervals.
 
-- **The VLM judge is not reproducible across torch builds:** 4 verdicts flipped between CUDA builds. The committed cache is what makes the outputs reproducible.
+- **The VLM judge is not reproducible across torch builds:** The committed cache is what makes the outputs reproducible.
 
 - **The judge prompt was chosen on the evaluation set,** outside the LOCO loop.
 
