@@ -2,7 +2,7 @@
 #
 # `det_conf`, `tau_near` and `tau_far` are the ALL-DATA leave-one-clip-out
 # selection (outputs/loco_vlm.json, `all_data_selected`), so that the shipped
-# artifact in outputs/ and the numbers in WRITEUP.md come from one config.
+# artifact in outputs/ and the numbers in RESULT_ANALYSIS.md come from one config.
 #
 # READ THE DENOMINATOR BEFORE READING THESE AS A RESULT. All-data selection is
 # not held out: it scores F1 0.703 on the same 8 clips that chose it, while the

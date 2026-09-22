@@ -50,7 +50,7 @@ practice** — across three full runs no candidate was ever rejected by it,
 because the VLM answers `pass_by` at 0.86–0.96 rather than near any threshold.
 
 The defaults for those three **are** the all-data LOCO selection
-(`outputs/loco_vlm.json`, `all_data_selected`), so `outputs/` and WRITEUP.md
+(`outputs/loco_vlm.json`, `all_data_selected`), so `outputs/` and RESULT_ANALYSIS.md
 describe one config. All-data selection is not held out: F1 0.703 on the same 8
 clips that chose it, against a held-out LOCO estimate of 0.667. Every other
 default below is an untuned first guess.

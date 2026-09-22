@@ -2,7 +2,7 @@
 
 A SEPARATE VLM call from the adjudication, not extra fields on it. The judge
 prompt's text is part of its cache key, so any edit there re-rolls every cached
-verdict -- and the detection numbers in WRITEUP.md with them -- to change a field
+verdict -- and the detection numbers in RESULT_ANALYSIS.md with them -- to change a field
 the verdict does not depend on. Keeping description out of the judge prompt
 means a description change can never move detection F1, and vice versa.
 
